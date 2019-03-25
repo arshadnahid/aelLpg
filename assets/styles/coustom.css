@@ -1,0 +1,137 @@
+.body{
+    height:700px;
+}
+.headerbackground{
+    background:#ededed;
+}
+
+.login{
+    margin:10px;
+}
+.pad {
+    padding:6px 0 0 0;
+}
+.log{
+    height:37px;
+    width:117px;
+}
+.orange{
+    color:#f77a19;
+
+}
+.blue{
+    color:#419de4;
+}
+.butt{
+    height:101px;
+    width:300px;
+	margin-bottom:20px;
+}
+
+.sell{
+    margin:37px 0 0 0;
+}
+.font{
+    font-size:30px;
+}
+.footer{
+    height:85px;
+    background:#ededed;
+    color:#419de4;
+}
+
+.sell2{
+    padding:35px;
+}
+
+.main continer{
+    height:1000px;
+}
+.sell3{
+    margin:90px 0 0 0;
+}
+
+.container_header{
+    width:100%;
+}
+
+
+.btn-lg, .btn-group-lg > .btn {
+    border-radius: 9px;
+
+}
+
+.btn-warning {
+    color: #fff;
+    background-color: #f77a19;
+    border-color: #eea236;
+}
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning.active,
+.open .dropdown-toggle.btn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #d58512;
+}
+
+.navcontainer 
+{
+    margin-left: 1;
+    padding-left: 1;
+    font-family:tahoma,"Segoe UI","Lucida Grande",Tahoma,Arial,sans-serif;
+    font-size:18px;
+    text-align: left;
+    padding:0px 10px 0px 50px;
+}
+
+.tex2{
+    font-size:18px;
+    color:#f77a19;
+}
+.tex3{
+    font-size:18px;
+    color:#419de4;
+}
+.check_box_span
+{
+
+    display: inline-block;
+    width: 100%;
+}
+
+.acc_check_box{
+    display: inline-block;
+    width: 16%;
+    float: left;
+    margin:0 !important;
+}
+.acc_check_box_label{
+    display: inline-block;
+    float: left;
+    text-align: left;
+    width: 82%;
+}
+#add_item_form label.error {
+    display: inline-block;
+    font-weight: 700;
+    left: 98%;
+    margin-bottom: 5px;
+    position: absolute;
+    top: 5px;
+    color: red;
+}
+label.error {
+
+    color: red;
+}
+@media (min-width:770px) and (max-width:1200px) {
+.but2{
+	width:100%;
+	margin-bottom:5px;
+}
+}
+
+
+
