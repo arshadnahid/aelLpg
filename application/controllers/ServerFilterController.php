@@ -642,7 +642,10 @@ class ServerFilterController extends CI_Controller {
                 $row[] = '';
             endif;
             if ($products->dist_id != 1):
-                $row[] = '<a class="blue inventoryEditPermission" href="' . site_url('productPackageEdit/' . $products->package_id) . '">
+                $row[] = '<a class="inventoryEditPermission" href="' . site_url('productPackageView/' . $products->package_id) . '">
+                        <i class="ace-icon fa fa-search-plus bigger-130"></i> 
+                    </a>
+                    <a class="blue inventoryEditPermission" href="' . site_url('productPackageEdit/' . $products->package_id) . '">
                 <i class="ace-icon fa fa-pencil bigger-130"></i></a>
                 <a class="red inventoryDeletePermission" href="javascript:void(0)" onclick="deleteProductpackage(' . $products->package_id . ',2)">
                   <i class="ace-icon fa fa-trash-o bigger-130"></i>

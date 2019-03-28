@@ -98,7 +98,7 @@
                                                 <select  name="loader"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Loader">
                                                     <option></option>
                                                     <?php foreach ($employeeList as $key => $eachEmp): ?>
-                                                        <option value="<?php echo $eachEmp->id; ?>"><?php echo $eachEmp->personalMobile.' [ '. $eachEmp->name .']'; ?></option>
+                                                        <option value="<?php echo $eachEmp->id; ?>"><?php echo $eachEmp->personalMobile . ' [ ' . $eachEmp->name . ']'; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -111,7 +111,7 @@
                                                 <select  name="transportation"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Transportation">
                                                     <option></option>
                                                     <?php foreach ($vehicleList as $key => $eachVehicle): ?>
-                                                        <option value="<?php echo $eachVehicle->id; ?>"><?php echo $eachVehicle->vehicleName.' [ '. $eachVehicle->vehicleModel .' ]'; ?></option>
+                                                        <option value="<?php echo $eachVehicle->id; ?>"><?php echo $eachVehicle->vehicleName . ' [ ' . $eachVehicle->vehicleModel . ' ]'; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -168,17 +168,23 @@
                             </tr>
                             <tr>
                                 <td style="padding: 10px!important;">
+
                                     <div class="col-md-12">
                                         <div class="col-md-8">
                                             <div class="panel panel-default">
                                                 <div class="panel-body">
                                                     <div class="table-header">
-                                                        Sales Item
+                                                        Sales Item 
+                                                    </div>
+                                                    <div class="">
+                                                        <button type="button" class="btn btn-info" onclick="showHideTd(1)">Package</button>
+                                                        <button type="button" class="btn btn-success" onclick="showHideTd(2)">Product</button>
                                                     </div>
                                                     <table class="table table-bordered table-hover tableAddItem" id="show_item">
                                                         <thead>
                                                             <tr>
-                                                                <th nowrap  align="center"><strong>Product <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap  align="center" id="package_th"><strong>Package <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap  align="center" id="product_th"><strong>Product <span style="color:red;"> *</span></strong></th>
                                                                 <th nowrap  align="center"><strong>Quantity <span style="color:red;"> *</span></strong></th>
                                                                 <th nowrap  align="center"><strong>Receivable(Qty)</strong></th>
                                                                 <th nowrap  align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
@@ -188,7 +194,30 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td>
+                                                                <td id="package_td">
+                                                                    <select id="" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
+                                                                        <option value=""></option>
+                                                                        <?php foreach ($productList as $key => $eachProduct):
+                                                                            ?>
+                                                                            <optgroup label="<?php echo $eachProduct['categoryName']; ?>">
+                                                                                <?php
+                                                                                foreach ($eachProduct['productInfo'] as $eachInfo) :
+
+                                                                                    $productPreFix = substr($eachInfo->productName, 0, 5);
+                                                                                    //  if ($productPreFix != 'Empty'):
+                                                                                    ?>
+                                                                                    <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
+                                                                                    <?php
+                                                                                    //  endif;
+                                                                                endforeach;
+                                                                                ?>
+                                                                            </optgroup>
+                                                                            <?php
+                                                                        endforeach;
+                                                                        ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td id="product_td">
                                                                     <select id="productID" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
                                                                         <option value=""></option>
                                                                         <?php foreach ($productList as $key => $eachProduct):
@@ -198,11 +227,11 @@
                                                                                 foreach ($eachProduct['productInfo'] as $eachInfo) :
 
                                                                                     $productPreFix = substr($eachInfo->productName, 0, 5);
-                                                                                  //  if ($productPreFix != 'Empty'):
-                                                                                        ?>
-                                                                                        <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
-                                                                                        <?php
-                                                                                  //  endif;
+                                                                                    //  if ($productPreFix != 'Empty'):
+                                                                                    ?>
+                                                                                    <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
+                                                                                    <?php
+                                                                                    //  endif;
                                                                                 endforeach;
                                                                                 ?>
                                                                             </optgroup>
@@ -253,9 +282,9 @@
                                                             <tr>
                                                                 <td nowrap    align="right"><strong>VAT(%) ( + )</strong></td>
                                                                 <td><input type="text" id="vatAmount"  style="text-align: right" name="vat" readonly value="<?php
-                                                                        if (!empty($configInfo->vat)): echo $configInfo->vat;
-                                                                        endif;
-                                                                        ?>" class="form-control totalVatAmount"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
+                                                                    if (!empty($configInfo->vat)): echo $configInfo->vat;
+                                                                    endif;
+                                                                    ?>" class="form-control totalVatAmount"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
 
                                                             </tr>
                                                             <tr>
@@ -287,8 +316,12 @@
                                                                                     <?php
                                                                                     foreach ($head['Accountledger'] as $eachLedger) :
                                                                                         ?>
-                                                                                        <option <?php if($eachLedger->chartId == '54'){ echo "selected";}?> value="<?php echo $eachLedger->chartId; ?>"><?php echo $eachLedger->title . " ( " . $eachLedger->code . " ) "; ?></option>
-                                                                                    <?php endforeach; ?>
+                                                                                        <option <?php
+                                                                                        if ($eachLedger->chartId == '54') {
+                                                                                            echo "selected";
+                                                                                        }
+                                                                                        ?> value="<?php echo $eachLedger->chartId; ?>"><?php echo $eachLedger->title . " ( " . $eachLedger->code . " ) "; ?></option>
+                                                                                <?php endforeach; ?>
                                                                                 </optgroup>
                                                                                 <?php
                                                                             }
@@ -329,7 +362,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                     </div>
+                                    </div>
 
                                 </td>
                             </tr>
@@ -361,7 +394,7 @@
                                                                             if ($productPreFix == 'Empty'):
                                                                                 ?>
                                                                                 <option productName="<?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>" value="<?php echo $eachProduct->product_id; ?>">
-                                                                                    <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
+                                                                                <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
                                                                                 </option>
                                                                                 <?php
                                                                             endif;
@@ -413,61 +446,73 @@
 <script>
 
 
+function showHideTd(i){
+    if(i==1){
+        $('#package_th').show();
+        $('#package_td').show();
+        $('#product_th').hide();
+        $('#product_td').hide();
+    }else{
+        $('#package_th').hide();
+        $('#package_td').hide();
+        $('#product_th').show();
+        $('#product_td').show();
+    }
+}
+
+    function isconfirm2() {
 
 
-    function isconfirm2(){
 
 
-
-
-        var customerid=$("#customerid").val();
-        var saleDate=$("#saleDate").val();
-        var paymentType=$("#paymentType").val();
-        var paymentType=$("#paymentType").val();
-        var dueDate=$("#dueDate").val();
-        var partialHead=$("#partialHead").val();
-        var thisAllotment=$("#payment").val();
-        var bankName=$("#bankName").val();
-        var branchName=$("#branchName").val();
-        var checkNo=$("#checkNo").val();
-        var checkDate=$("#checkDate").val();
-        var cylinder=0;
+        var customerid = $("#customerid").val();
+        var saleDate = $("#saleDate").val();
+        var paymentType = $("#paymentType").val();
+        var paymentType = $("#paymentType").val();
+        var dueDate = $("#dueDate").val();
+        var partialHead = $("#partialHead").val();
+        var thisAllotment = $("#payment").val();
+        var bankName = $("#bankName").val();
+        var branchName = $("#branchName").val();
+        var checkNo = $("#checkNo").val();
+        var checkDate = $("#checkDate").val();
+        var cylinder = 0;
         if ($("#culinderReceive").css('display') == 'none') {
-            cylinder=0;
-        }else{
-          //  var cylinderItem=parseFloat($(".total_quantity2").text());
-          var rowCount = $('#show_item2 tfoot tr').length;
-            cylinder=1;
+            cylinder = 0;
+        } else {
+            //  var cylinderItem=parseFloat($(".total_quantity2").text());
+            var rowCount = $('#show_item2 tfoot tr').length;
+            cylinder = 1;
         }
-        var totalPrice=parseFloat($(".total_price").text());
-        if(isNaN(totalPrice)){
-            totalPrice=0;
+        var totalPrice = parseFloat($(".total_price").text());
+        if (isNaN(totalPrice)) {
+            totalPrice = 0;
         }
-        if(customerid == ''){
+        if (customerid == '') {
             swal("Select Customer Name!", "Validation Error!", "error");
-        }else if(saleDate == ''){
+        } else if (saleDate == '') {
             swal("Select Sale Date!", "Validation Error!", "error");
-        }else if(paymentType == ''){
+        } else if (paymentType == '') {
             swal("Select Payment Type", "Validation Error!", "error");
-        }else if(paymentType == 2 && dueDate == ''){
+        } else if (paymentType == 2 && dueDate == '') {
             swal("Select Due Date!", "Validation Error!", "error");
-        }else if(paymentType == 3 && bankName == ''){
+        } else if (paymentType == 3 && bankName == '') {
             swal("Type Bank Name!", "Validation Error!", "error");
-        }else if(paymentType == 3 && branchName == ''){
+        } else if (paymentType == 3 && branchName == '') {
             swal("Type Branch Name!", "Validation Error!", "error");
-        }else if(paymentType == 3 && checkNo == ''){
+        } else if (paymentType == 3 && checkNo == '') {
             swal("Type Check No!", "Validation Error!", "error");
-        }else if(paymentType == 3 && checkDate == ''){
+        } else if (paymentType == 3 && checkDate == '') {
             swal("Select Check Date!", "Validation Error!", "error");
-        }else if(totalPrice == '' || totalPrice < 0){
+        } else if (totalPrice == '' || totalPrice < 0) {
             swal("Add Sales Item!", "Validation Error!", "error");
-        }else if(paymentType == 4 && partialHead == ''){
+        } else if (paymentType == 4 && partialHead == '') {
             swal("Select Account Head!", "Validation Error!", "error");
-        }else if(paymentType == 4 && thisAllotment == ''){
+        } else if (paymentType == 4 && thisAllotment == '') {
             swal("Given Cash Amount!", "Validation Error!", "error");
-        }else if(cylinder == 1 && rowCount <= 1){
+        } else if (cylinder == 1 && rowCount <= 1) {
             swal("Add Receive Cylinder Item!", "Validation Error!", "error");
-        }else{
+        } else {
             swal({
                 title: "Are you sure ?",
                 text: "You won't be able to revert this!",
@@ -480,13 +525,13 @@
                 closeOnCancel: true,
                 type: 'success'
             },
-            function (isConfirm) {
-                if (isConfirm) {
-                    $("#publicForm").submit();
-                }else{
-                    return false;
-                }
-            });
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $("#publicForm").submit();
+                        } else {
+                            return false;
+                        }
+                    });
         }
     }
 </script>
@@ -512,8 +557,7 @@
                             $this->db->where_in('dist_id', array($this->dist_id, 1));
                             $customerType = $this->db->get()->result();
 
-                           // echo $this->db->last_query();die;
-
+                            // echo $this->db->last_query();die;
                             //$customerType = $this->Common_model->get_data_list_by_single_column('customertype', 'dist_id', $this->dist_id);
                             ?>
                             <div class="form-group">
@@ -523,7 +567,7 @@
                                         <option>-Select Type-</option>
                                         <?php foreach ($customerType as $key => $eachType): ?>
                                             <option value="<?php echo $eachType->type_id; ?>"><?php echo $eachType->typeTitle; ?></option>
-                                        <?php endforeach; ?>
+<?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>

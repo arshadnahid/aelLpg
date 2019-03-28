@@ -339,6 +339,7 @@ $route['deleteProductType/(:any)'] = 'ProductController/deleteProductType/$1';
 $route['productPackageList']='ProductPackageController/product_package_list';
 $route['productPackageAdd']='ProductPackageController/product_package_add';
 $route['productPackageEdit/(:any)']='ProductPackageController/product_package_edit/$1';
+$route['productPackageView/(:any)']='ProductPackageController/product_package_view/$1';
 $route['productPackageDelete/(:any)']='ProductPackageController/product_package_delete/$1';
 
 

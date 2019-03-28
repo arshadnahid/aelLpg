@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Nahid
@@ -7,8 +8,8 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ProductPackageController extends CI_Controller
-{
+class ProductPackageController extends CI_Controller {
+
     private $timestamp;
     public $admin_id;
     public $dist_id;
@@ -30,21 +31,17 @@ class ProductPackageController extends CI_Controller
         $this->dist_id = $this->session->userdata('dis_id');
     }
 
-    public function  product_package_list(){
+    public function product_package_list() {
 
-        if (isPostBack()){
-
-
-
-
-
-
+        if (isPostBack()) {
+            
         }
         $data['pageName'] = 'product_package_list';
         $data['mainContent'] = $this->load->view('distributor/inventory/product_package/product_package_list', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
-    public function  product_package_add(){
+
+    public function product_package_add() {
 
         if (isPostBack()) {
             $this->form_validation->set_rules('package_name', 'Package Name', 'required');
@@ -55,6 +52,8 @@ class ProductPackageController extends CI_Controller
             } else {
 
                 $this->db->trans_start();
+                $productOrgId = $this->db->where('dist_id', $this->dist_id)->or_where('dist_id', 1)->count_all_results('package') + 1;
+                $data['product_code'] = "PACID" . date('y') . date('m') . str_pad($productOrgId, 4, "0", STR_PAD_LEFT);
 
                 $data['package_name'] = $this->input->post('package_name');
                 $data['description'] = $this->input->post('description');
@@ -67,12 +66,12 @@ class ProductPackageController extends CI_Controller
                 $product_id = $this->input->post('product_id');
                 $allProduct = array();
                 $this->db->insert('package', $data);
-                $package_id=$this->db->insert_id();
+                $package_id = $this->db->insert_id();
 
                 foreach ($product_id as $key => $value):
                     unset($dataDetails);
-                    $dataDetails['product_id']=$this->input->post('product_id')[$key];
-                    $dataDetails['package_id']=$package_id;
+                    $dataDetails['product_id'] = $this->input->post('product_id')[$key];
+                    $dataDetails['package_id'] = $package_id;
                     $dataDetails['dist_id'] = $this->dist_id;
                     $dataDetails['insert_by'] = $this->admin_id;
                     $dataDetails['insert_date'] = $this->timestamp;
@@ -86,19 +85,22 @@ class ProductPackageController extends CI_Controller
 
                 if ($this->db->trans_status() === FALSE):
                     message("Product Package Can't Save.");
-                    redirect(site_url('productPackageAdd'));
+                    redirect(site_url('productPackageEdit/'.$package_id));
                 else:
                     message("Product Package Save successfully.");
-                    redirect(site_url('productPackageAdd'));
+                    redirect(site_url('productPackageEdit/'.$package_id));
                 endif;
             }
         }
+        $productOrgId = $this->db->where('dist_id', $this->dist_id)->or_where('dist_id', 1)->count_all_results('package') + 1;
+        $data['packageid'] = "PACID" . date('y') . date('m') . str_pad($productOrgId, 4, "0", STR_PAD_LEFT);
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
         $data['pageName'] = 'product_package_add';
         $data['mainContent'] = $this->load->view('distributor/inventory/product_package/product_package_add', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
-     public function  product_package_edit($package_id){
+
+    public function product_package_edit($package_id) {
 
         if (isPostBack()) {
             $this->form_validation->set_rules('package_name', 'Package Name', 'required');
@@ -119,38 +121,38 @@ class ProductPackageController extends CI_Controller
                 $data['update_date'] = $this->timestamp;
 
                 $this->db->where('package_id', $package_id)
-                    ->where('dist_id ', $this->dist_id)
-                    ->update('package', $data);
+                        ->where('dist_id ', $this->dist_id)
+                        ->update('package', $data);
 
 
                 $product_id = $this->input->post('product_id');
                 $allProductOld = array();
                 $allProduct = array();
                 $dataDetails = array();
-                $dataDelete['is_active']='N';
-                $dataDelete['is_delete']='Y';
+                $dataDelete['is_active'] = 'N';
+                $dataDelete['is_delete'] = 'Y';
                 $this->db->where('package_id', $package_id)
-                    ->where('dist_id ', $this->dist_id)
-                    ->update('package_products', $dataDelete);
+                        ->where('dist_id ', $this->dist_id)
+                        ->update('package_products', $dataDelete);
 
                 foreach ($product_id as $key => $value):
                     unset($dataDetailsOld);
                     unset($dataDetails);
-                    if (isset($_POST['package_products_id_'.$this->input->post('product_id')[$key]]) ) {
-                        $dataDetailsOld['product_id']=$this->input->post('product_id')[$key];
-                        $dataDetailsOld['package_products_id']=$_POST['package_products_id_'.$this->input->post('product_id')[$key]];
-                        $dataDetailsOld['package_id']=$package_id;
+                    if (isset($_POST['package_products_id_' . $this->input->post('product_id')[$key]])) {
+                        $dataDetailsOld['product_id'] = $this->input->post('product_id')[$key];
+                        $dataDetailsOld['package_products_id'] = $_POST['package_products_id_' . $this->input->post('product_id')[$key]];
+                        $dataDetailsOld['package_id'] = $package_id;
 
                         $dataDetailsOld['update_by'] = $this->admin_id;
                         $dataDetailsOld['update_date'] = $this->timestamp;
 
-                        $dataDetailsOld['is_active']='Y';
-                        $dataDetailsOld['is_delete']='N';
+                        $dataDetailsOld['is_active'] = 'Y';
+                        $dataDetailsOld['is_delete'] = 'N';
                         $allProductOld[] = $dataDetailsOld;
-                    }else{
+                    } else {
 
-                        $dataDetails['product_id']=$this->input->post('product_id')[$key];
-                        $dataDetails['package_id']=$package_id;
+                        $dataDetails['product_id'] = $this->input->post('product_id')[$key];
+                        $dataDetails['package_id'] = $package_id;
                         $dataDetails['dist_id'] = $this->dist_id;
                         $dataDetails['insert_by'] = $this->admin_id;
                         $dataDetails['insert_date'] = $this->timestamp;
@@ -158,20 +160,20 @@ class ProductPackageController extends CI_Controller
                         $dataDetails['update_date'] = $this->timestamp;
                         $dataDetails['company_id'] = 0;
                         $dataDetails['branch_id'] = 0;
-                        $dataDetails['is_active']='Y';
-                        $dataDetails['is_delete']='N';
+                        $dataDetails['is_active'] = 'Y';
+                        $dataDetails['is_delete'] = 'N';
                         $allProduct[] = $dataDetails;
                     }
 
                 endforeach;
 
                 $this->db->insert_batch('package_products', $allProduct);
-                $this->db->update_batch('package_products', $allProductOld,'package_products_id');
+                $this->db->update_batch('package_products', $allProductOld, 'package_products_id');
                 $this->db->trans_complete();
 
                 if ($this->db->trans_status() === FALSE):
                     message("Product Package Can't Save.");
-                    redirect(site_url('productPackageEdit/'.$package_id));
+                    redirect(site_url('productPackageEdit/' . $package_id));
                 else:
                     message("Product Package Save successfully.");
                     redirect(site_url('productPackageList'));
@@ -196,42 +198,101 @@ class ProductPackageController extends CI_Controller
 
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
 
-        $select_fields='package.package_name,package.package_id,package_products.package_products_id,package_products.product_id,
+        $select_fields = 'package.package_name,package.product_code,package.package_id,package_products.package_products_id,package_products.product_id,
                         product.productName,product.brand_id,product.category_id,
                         productcategory.title,
                         brand.brandName';
-         $joins[0]['table'] = 'package_products';
-         $joins[0]['conditionition'] = 'package_products.package_id=package.package_id';
-         $joins[0]['jointype'] = 'left';
+        $joins[0]['table'] = 'package_products';
+        $joins[0]['conditionition'] = 'package_products.package_id=package.package_id';
+        $joins[0]['jointype'] = 'left';
 
-         $joins[1]['table'] = 'product';
-         $joins[1]['conditionition'] = 'package_products.product_id=product.product_id';
-         $joins[1]['jointype'] = 'left';
+        $joins[1]['table'] = 'product';
+        $joins[1]['conditionition'] = 'package_products.product_id=product.product_id';
+        $joins[1]['jointype'] = 'left';
 
-         $joins[2]['table'] = 'productcategory';
-         $joins[2]['conditionition'] = 'productcategory.category_id=product.category_id';
-         $joins[2]['jointype'] = 'left';
+        $joins[2]['table'] = 'productcategory';
+        $joins[2]['conditionition'] = 'productcategory.category_id=product.category_id';
+        $joins[2]['jointype'] = 'left';
 
 
 
-         $joins[3]['table'] = 'brand';
-         $joins[3]['conditionition'] = 'brand.brandId=product.brand_id ';
-         $joins[3]['jointype'] = 'left';
+        $joins[3]['table'] = 'brand';
+        $joins[3]['conditionition'] = 'brand.brandId=product.brand_id ';
+        $joins[3]['jointype'] = 'left';
 
         $condition['package.package_id'] = $package_id;
         $condition['package.dist_id'] = $this->dist_id;
-         $condition['package.is_active'] = 'Y';
-         $condition['package.is_delete'] = 'N';
-         $condition['package_products.is_active'] = 'Y';
-         $condition['package_products.is_delete'] = 'N';
+        $condition['package.is_active'] = 'Y';
+        $condition['package.is_delete'] = 'N';
+        $condition['package_products.is_active'] = 'Y';
+        $condition['package_products.is_delete'] = 'N';
 
-        $data['package_details'] = $this->Common_model->join_select_all_row_obj('package', $select_fields, $joins, $condition,'Y');
+        $data['package_details'] = $this->Common_model->join_select_all_row_obj('package', $select_fields, $joins, $condition, 'Y');
         //echo '<pre>';
         //echo $this->db->last_query();
         //print_r($data['package_details']);
         //exit;
         $data['pageName'] = 'product_package_add';
         $data['mainContent'] = $this->load->view('distributor/inventory/product_package/product_package_edit', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+    public function product_package_view($package_id) {
+
+       
+
+        
+
+
+//    $joins[0]['table'] = 'reference';
+//    $joins[0]['conditionition'] = 'reference.reference_id=customer.reference_id';
+//    $joins[0]['jointype'] = 'left';
+//
+//    $condition['customer.customer_id'] = $customerid;
+//    $condition['customer.dist_id'] = $this->dist_id;
+//    $select_fields = 'customer.customerPhone,customer.customerAddress,customer.division,customer.thanna,customer.district,reference.reference_id,reference.refCode,reference.referenceName,reference.referencePhone';
+//
+//
+//    $customer_info = $this->Common_model->join_select_one_row_array('customer', $select_fields, $joins, $condition);
+
+
+        $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
+
+        $select_fields = 'package.package_name,package.product_code,package.package_id,package_products.package_products_id,package_products.product_id,
+                        product.productName,product.brand_id,product.category_id,
+                        productcategory.title,
+                        brand.brandName';
+        $joins[0]['table'] = 'package_products';
+        $joins[0]['conditionition'] = 'package_products.package_id=package.package_id';
+        $joins[0]['jointype'] = 'left';
+
+        $joins[1]['table'] = 'product';
+        $joins[1]['conditionition'] = 'package_products.product_id=product.product_id';
+        $joins[1]['jointype'] = 'left';
+
+        $joins[2]['table'] = 'productcategory';
+        $joins[2]['conditionition'] = 'productcategory.category_id=product.category_id';
+        $joins[2]['jointype'] = 'left';
+
+
+
+        $joins[3]['table'] = 'brand';
+        $joins[3]['conditionition'] = 'brand.brandId=product.brand_id ';
+        $joins[3]['jointype'] = 'left';
+
+        $condition['package.package_id'] = $package_id;
+        $condition['package.dist_id'] = $this->dist_id;
+        $condition['package.is_active'] = 'Y';
+        $condition['package.is_delete'] = 'N';
+        $condition['package_products.is_active'] = 'Y';
+        $condition['package_products.is_delete'] = 'N';
+
+        $data['package_details'] = $this->Common_model->join_select_all_row_obj('package', $select_fields, $joins, $condition, 'Y');
+        //echo '<pre>';
+        //echo $this->db->last_query();
+        //print_r($data['package_details']);
+        //exit;
+        $data['pageName'] = 'product_package_add';
+        $data['mainContent'] = $this->load->view('distributor/inventory/product_package/product_package_view', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
 
@@ -262,7 +323,6 @@ class ProductPackageController extends CI_Controller
         }
         redirect(site_url('productPackageList'));
     }
-
 
     function productPackageStatusChange() {
         $package_id = $this->input->post('package_id');

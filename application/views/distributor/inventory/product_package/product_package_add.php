@@ -1,10 +1,9 @@
-<?php
-/**
+<?php /**
  * Created by PhpStorm.
  * User: AEL-DEV
  * Date: 3/25/2019
  * Time: 9:44 AM
- */?>
+ */ ?>
 
 
 
@@ -44,7 +43,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Package Code <span style="color:red!important"> *</span></label>
                             <div class="col-sm-6">
 
-                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $productid; ?>" class="form-control" placeholder="Product Code" />
+                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $packageid; ?>" class="form-control" placeholder="Product Code" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -88,21 +87,21 @@
 
                                 <table border="1"  id="package_details"style="width:100%;background: white">
                                     <thead>
-                                    <tr style="background:#F9FBFC">
+                                        <tr style="background:#F9FBFC">
 
-                                        <th id="thd" style="height:25px;text-align: center;font-weight: bold;">
-                                            Product Name
-                                        </th>
-                                        <th id="thd" style="height:25px;text-align: center;font-weight: bold;">
-                                            Product Category
-                                        </th>
-                                        <th id="thd" style="height:25px;width: 5%;text-align: center">
-                                            <i style="color:red" class="fa fa-trash-o"></i>
-                                        </th>
+                                            <th id="thd" style="height:25px;text-align: center;font-weight: bold;">
+                                                Product Name
+                                            </th>
+                                            <th id="thd" style="height:25px;text-align: center;font-weight: bold;">
+                                                Product Category
+                                            </th>
+                                            <th id="thd" style="height:25px;width: 5%;text-align: center">
+                                                <i style="color:red" class="fa fa-trash-o"></i>
+                                            </th>
 
 
 
-                                    </tr>
+                                        </tr>
                                     </thead>
                                     <tbody id="package_table">
 
@@ -200,32 +199,37 @@
         var productID = $('#productID').val();
         var productName = $('#productID').find('option:selected').attr('productName');
         var checkStatus = checkProductAddedOrNot(productID);
-        if(checkStatus==true){
-            var tab = "<tr class='trClass'>";
+        if (productID != '') {
+            if (checkStatus == true) {
+                var tab = "<tr class='trClass'>";
 
-            tab += '<td>' +
-                "<input type='hidden' name='product_id[]' id='productID_"+productID +"' value='"+productID+"'>" +
-                "<input type='hidden' name='' id='' value='"+productID+"'>" +
-                "<input type='hidden' name='' id='' value='"+productID+"'>" +
-                "<input type='hidden' name='' id='' value='"+productID+"'>" +
-                "<input type='hidden' name='' id='' value='"+productID+"'>"
+                tab += '<td>' +
+                        "<input type='hidden' name='product_id[]' id='productID_" + productID + "' value='" + productID + "'>" +
+                        "<input type='hidden' name='' id='' value='" + productID + "'>" +
+                        "<input type='hidden' name='' id='' value='" + productID + "'>" +
+                        "<input type='hidden' name='' id='' value='" + productID + "'>" +
+                        "<input type='hidden' name='' id='' value='" + productID + "'>"
 
-                + productName + '</td>';
-            tab += '<td>' + productCatName + '</td>';
-            //tab += '<td>' + '' + '%</td>';
-            //tab += '<td>' + '' + '</td>';
-            tab += "<td id='thd' style='height: 27px;text-align:center'>" +
-                "<span><input type='hidden' class='tag' value='" + productID + "'>" +
-                "<a style='padding-left:0px' href='javascript:void(0)' attr-pid='"+ productID +"' onClick='return false;' class='removetag"+ productID +"'>" +
-                "<i style='color:red;' class='fa fa-times'></i>"+
-                "</span>" +
-                "</td>";
-            tab += '</tr>';
-            $('#package_table').prepend(tab);
-            $('#productID').val('').trigger('chosen:updated');
-        }else{
+                        + productName + '</td>';
+                tab += '<td>' + productCatName + '</td>';
+                //tab += '<td>' + '' + '%</td>';
+                //tab += '<td>' + '' + '</td>';
+                tab += "<td id='thd' style='height: 27px;text-align:center'>" +
+                        "<span><input type='hidden' class='tag' value='" + productID + "'>" +
+                        "<a style='padding-left:0px' href='javascript:void(0)' attr-pid='" + productID + "' onClick='return false;' class='removetag" + productID + "'>" +
+                        "<i style='color:red;' class='fa fa-times'></i>" +
+                        "</span>" +
+                        "</td>";
+                tab += '</tr>';
+                $('#package_table').prepend(tab);
+                $('#productID').val('').trigger('chosen:updated');
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
+
         $('.removetag' + productID).click(function (e) {
             $(this).parent().parent().parent().remove();
         });
