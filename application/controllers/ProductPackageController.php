@@ -53,7 +53,7 @@ class ProductPackageController extends CI_Controller {
 
                 $this->db->trans_start();
                 $productOrgId = $this->db->where('dist_id', $this->dist_id)->or_where('dist_id', 1)->count_all_results('package') + 1;
-                $data['product_code'] = "PACID" . date('y') . date('m') . str_pad($productOrgId, 4, "0", STR_PAD_LEFT);
+                $data['package_code'] = "PACID" . date('y') . date('m') . str_pad($productOrgId, 4, "0", STR_PAD_LEFT);
 
                 $data['package_name'] = $this->input->post('package_name');
                 $data['description'] = $this->input->post('description');
@@ -85,7 +85,7 @@ class ProductPackageController extends CI_Controller {
 
                 if ($this->db->trans_status() === FALSE):
                     message("Product Package Can't Save.");
-                    redirect(site_url('productPackageEdit/'.$package_id));
+                    redirect(site_url('productPackageAdd/'.$package_id));
                 else:
                     message("Product Package Save successfully.");
                     redirect(site_url('productPackageEdit/'.$package_id));
@@ -198,7 +198,7 @@ class ProductPackageController extends CI_Controller {
 
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
 
-        $select_fields = 'package.package_name,package.product_code,package.package_id,package_products.package_products_id,package_products.product_id,
+        $select_fields = 'package.package_name,package.package_code,package.package_id,package_products.package_products_id,package_products.product_id,
                         product.productName,product.brand_id,product.category_id,
                         productcategory.title,
                         brand.brandName';
@@ -257,7 +257,7 @@ class ProductPackageController extends CI_Controller {
 
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
 
-        $select_fields = 'package.package_name,package.product_code,package.package_id,package_products.package_products_id,package_products.product_id,
+        $select_fields = 'package.package_name,package.package_code,package.package_id,package_products.package_products_id,package_products.product_id,
                         product.productName,product.brand_id,product.category_id,
                         productcategory.title,
                         brand.brandName';

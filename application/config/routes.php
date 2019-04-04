@@ -200,7 +200,10 @@ $route['supplierPayment'] = 'InventoryController/supplierPayment';
 
 $route['supplierPaymentAdd'] = 'InventoryController/supplierPaymentAdd';
 $route['purchases_list'] = 'InventoryController/purchases_list';
-$route['purchases_add'] = 'InventoryController/purchases_add';
+//$route['purchases_add'] = 'InventoryController/purchases_add';
+
+$route['purchases_add'] = 'lpg/PurchaseController/purchases_add';
+
 $route['purchases_add/(:any)'] = 'InventoryController/purchases_add/$1';
 $route['purchases_edit/(:any)'] = 'InventoryController/purchases_edit/$1';
 $route['viewPurchases/(:any)'] = 'InventoryController/viewPurchases/$1';

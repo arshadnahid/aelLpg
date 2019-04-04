@@ -536,28 +536,24 @@ $(document).ready(function () {
                 return false;
             } else {
                 var tab;
-                if($('.is_same').val()==0){
-                    slNo++;
-                }else{
-                    slNo;
-                }
+
                 if(productCatID == 2){
                     tab='<tr class="new_item' + j + '">' +
-                        '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
+                        '<input type="hidden" name="slNo_'+slNo+'" value="'+slNo+'"/>' +
                         '<input type="hidden" name="brand_id[]" value="'+brand_id+'"/>' +
-                        '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
-                        '<input type="hidden" name="category_id_'+ slNo +'" value="' + productCatID + '">' +
+                        '<input type="hidden" name="is_package[]" value="0">' +
+                        '<input type="hidden" name="category_id[]" value="' + productCatID + '">' +
                         '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName + ' ' +
-                        '<input type="hidden"  name="product_id_'+ slNo +'" value="' + productID + '">' +
+                        '<input type="hidden"  name="product_id[]" value="' + productID + '">' +
                         '</td>' +
                         '<td align="right">' +
-                        '<input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity_'+ slNo +'" value="' + quantity + '">' +
+                        '<input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity[]" value="' + quantity + '">' +
                         '</td>' +
                         '<td align="right">' +
                         '<input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value="' + returnAble + '"  >' +
                         '</td>' +
                         '<td align="right">' +
-                        '<input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate_'+ slNo +'" value="' + rate + '">' +
+                        '<input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate[]" value="' + rate + '">' +
                         '</td>' +
                         '<td align="right">' +
                         '<input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '">' +
@@ -575,19 +571,19 @@ $(document).ready(function () {
                     $("#show_item tfoot").append(tab);
                 }else{
                     tab='<tr class="new_item' + j + '">' +
-                        '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
-                        '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
-                        '<input type="hidden" name="category_id_'+ slNo +'" value="' + productCatID + '">' +
-                        '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName + ' <input type="hidden"  name="product_id_'+ slNo +'" value="' + productID + '">' +
+                        '<input type="hidden" name="slNo_'+slNo+'" value="'+slNo+'"/>' +
+                        '<input type="hidden" name="is_package[]" value="0">' +
+                        '<input type="hidden" name="category_id[]" value="' + productCatID + '">' +
+                        '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName + ' <input type="hidden"  name="product_id[]" value="' + productID + '">' +
                         '</td>' +
                         '</td>' +
                         '<td align="right">' +
-                        '<input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity_'+ slNo +'" value="' + quantity + '">' +
+                        '<input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity[]" value="' + quantity + '">' +
                         '</td>' +
                         '<td align="right"><input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value=""  readonly>' +
                         '</td>' +
                         '<td align="right">' +
-                        '<input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate_'+ slNo +'" value="' + rate + '">' +
+                        '<input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate[]" value="' + rate + '">' +
                         '</td>' +
                         '<td align="right"><input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '">' +
                         '</td>' +
@@ -619,7 +615,11 @@ $(document).ready(function () {
                 $('.price').val('');
                 $('.returnAble').val('');
             }
-
+            if($('.is_same').val()==0){
+                slNo++;
+            }else{
+                slNo;
+            }
 
 
         }else{
@@ -636,10 +636,10 @@ $(document).ready(function () {
                     console.log(data);
                     $.each(data, function (key, value) {
                         slNo++;
-                        $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/><input type="hidden" name="is_package_'+ slNo +'" value="1"><input type="hidden" name="category_id_'+ slNo +'" value="' + value['category_id'] + '">' +
+                        $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="slNo_'+slNo+'" value="'+slNo+'"/><input type="hidden" name="is_package[]" value="1"><input type="hidden" name="category_id[]" value="' + value['category_id'] + '">' +
                             '<td style="padding-left:15px;"> [ ' + value['title'] + '] - ' + value['productName'] +'&nbsp;'+ value['unitTtile'] +'&nbsp;[ '+ value['brandName']+" ]"+
-                            ' <input type="hidden"  name="product_id_'+ slNo +'" value="' + value['product_id'] + '"></td>' +
-                            '</td><td align="right"><input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity_'+ slNo +'" value="' + quantity + '"></td><td align="right"><input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value=""  readonly></td><td align="right"><input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate_'+ slNo +'" value="' + rate + '"></td><td align="right"><input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '"></td><td></td><td></td><td><a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
+                            ' <input type="hidden"  name="product_id[]" value="' + value['product_id'] + '"></td>' +
+                            '</td><td align="right"><input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity[]" value="' + quantity + '"></td><td align="right"><input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value=""  readonly></td><td align="right"><input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate[]" value="' + rate + '"></td><td align="right"><input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '"></td><td></td><td></td><td><a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
                         j++;
 
                     });
@@ -652,8 +652,6 @@ $(document).ready(function () {
             $('.rate').val('');
             $('.price').val('');
             $('.returnAble').val('');
-
-
 
         }
 

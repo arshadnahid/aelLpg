@@ -370,7 +370,7 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
         $totalStockIn = $this->db->get()->result();
     }
 
-    function getProductStock($productId) {
+    /*function getProductStock($productId) {
         $this->db->select("sum(stock.quantity) as totalStockIn");
         $this->db->from("stock");
         $this->db->where("stock.product_id", $productId);
@@ -384,6 +384,42 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
         $this->db->where("stock.dist_id", $this->dist_id);
         $totalStockOut = $this->db->get()->row();
         return $totalStockIn->totalStockIn - $totalStockOut->totalStockOut;
+    }*/
+    function getProductStock($productId,$category_id=null,$ispackage=null) {
+
+
+
+
+            $this->db->select("category_id");
+            $this->db->from("product");
+            $this->db->where("product.product_id", $productId);
+            $category_id=$this->db->get()->row();
+
+            $is_package=$ispackage;
+
+
+            if($category_id->category_id==1){
+                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
+                $query = $this->db->query($query);
+                $result = $query->row();
+                log_message('error','getProductStock '.print_r($this->db->last_query(),true));
+                log_message('error','getProductStock '.print_r('NAHID 1',true));
+                return $result->purchase_qty;
+
+            }else if($category_id->category_id==2){
+                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
+                $query = $this->db->query($query);
+                $result = $query->row();
+                log_message('error','getProductStock '.print_r($this->db->last_query(),true));
+                log_message('error','getProductStock '.print_r('NAHID 2',true));
+                return $result->purchase_qty;
+            }
+
+
+
+
+
+
     }
 
     function generals_customer($customer_id) {

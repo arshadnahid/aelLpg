@@ -203,8 +203,12 @@
                                                     <div class="table-header">
                                                         Purchases Item
                                                     </div>
+
+                                                    <!-- <button type="button" class="btn btn-primary btn-rounded" onclick="packageOrProduct(1)">Product</button>
+                                                     <button type="button" class="btn btn-default btn-rounded" onclick="packageOrProduct(0)">Package</button>!-->
                                                     <div class="autocomplete">
                                                         <div class="input-group">
+
                                                             <span class=" input-group-addon glyphicon glyphicon-search"></span>
                                                             <input id="productNameAutocomplete" class="form-control "
                                                                    placeholder="Scan/Search Product by Name/Code" autocomplete="off">
@@ -213,17 +217,35 @@
                                                     <table class="table table-bordered table-hover" id="show_item">
                                                         <thead>
                                                             <tr>
-                                                                <th nowrap style="width:25%;border-radius:10px;" align="center"><strong>Product <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap style="width:15%;border-radius:10px;" align="center"><strong>Quantity <span style="color:red;"> *</span></strong></th>
+                                                                                                                           <!--   <th id="package_th" nowrap style="width:25%;border-radius:10px;" align="center"><strong>package <span style="color:red;"> *</span></strong></th> !-->
+                                                                <th id="product_th" nowrap style="width:25%;border-radius:10px;" align="center"><strong>Product <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap style="width:8%;border-radius:10px;" align="center"><strong>Quantity <span style="color:red;"> *</span></strong></th>
                                                                 <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Returnable(Qty)</strong></th>
-                                                                <th nowrap style="width:20%;border-radius:10px;" align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap style="width:20%;border-radius:10px;" align="center"><strong>Total Price(BDT) <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Total Price(BDT) <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap style="width:20%;border-radius:10px;" align="center"><strong>Returned Cylinder <span style="color:red;"> </th>
+                                                                <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Returned Qty <span style="color:red;"></th>
                                                                 <th align="center"><strong>Action</strong></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td>
+                                                                <!-- <td id="package_td">
+                                                                    <select id="package_id" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
+                                                                        <option value=""></option>
+                                                                        <?php foreach ($packageList as $key => $eachInfo):
+                                                                            ?>
+
+
+                                                                                        <option categoryName="" unit="" categoryId="" productName="<?php echo $eachInfo->package_name . " [ " . $eachInfo->package_code . " ] "; ?>" value="<?php echo $eachInfo->package_id; ?>"><?php echo $eachInfo->package_name . " [ " . $eachInfo->package_code . " ] "; ?></option>
+
+
+                                                                            <?php
+                                                                        endforeach;
+                                                                        ?>
+                                                                    </select>
+                                                                </td>!-->
+                                                                <td id="product_td">
                                                                     <select id="productID" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
                                                                         <option value=""></option>
                                                                         <?php foreach ($productList as $key => $eachProduct):
@@ -235,7 +257,7 @@
                                                                                     $productPreFix = substr($eachInfo->productName, 0, 5);
                                                                                     //if ($productPreFix != 'Empty'):
                                                                                         ?>
-                                                                                        <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
+                                                                                        <option ispackage="0" brand_id="<?php echo $eachInfo->brand_id?>"categoryName="<?php echo $eachProduct['categoryName']; ?>" unit="<?php echo $eachInfo->unitTtile ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName .' '.$eachInfo->unitTtile. " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName .' '.$eachInfo->unitTtile. " [ " . $eachInfo->brandName . " ] "; ?></option>
                                                                                         <?php
                                                                                    // endif;
                                                                                 endforeach;
@@ -244,12 +266,44 @@
                                                                             <?php
                                                                         endforeach;
                                                                         ?>
+                                                                        <optgroup label="Package">
+                                                                            <?php
+                                                                            foreach ($productList['packageList'] as $eachInfo) :
+
+
+                                                                                ?>
+                                                                                <option ispackage="1"   value="<?php echo $eachInfo->package_id; ?>"><?php echo $eachInfo->package_name . " [ " . $eachInfo->package_code . " ] "; ?></option>
+                                                                                <?php
+                                                                                // endif;
+                                                                            endforeach;
+                                                                            ?>
+                                                                        </optgroup>
+
+
                                                                     </select>
                                                                 </td>
-                                                                <td><input type="text" class="form-control text-right quantity decimal"   placeholder="0"></td>
+                                                                <td><input type="text" class="form-control text-right is_same decimal"  value="0"><input type="text" class="form-control text-right quantity decimal"   placeholder="0"></td>
                                                                 <td><input type="text" class="form-control text-right returnAble decimal"   placeholder="0"></td>
                                                                 <td><input type="text" class="form-control text-right rate decimal" placeholder="0.00"  ></td>
                                                                 <td><input type="text" class="form-control text-right price decimal" placeholder="0.00" readonly="readonly"></td>
+                                                                <td>
+                                                                    <select  id="productID2" onchange="getProductPrice2(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by product name">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        foreach ($cylinderProduct as $eachProduct):
+                                                                            $productPreFix = substr($eachProduct->productName, 0, 5);
+                                                                            if ($eachProduct->category_id == 1):
+                                                                                ?>
+                                                                                <option  categoryName2="<?php echo $eachProduct->productCat; ?>" brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName .' '. $eachProduct->unitTtile .' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                                                    <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
+                                                                                </option>
+                                                                                <?php
+                                                                            endif;
+                                                                        endforeach;
+                                                                        ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td><input type="text" class="form-control text-right returnQuentity decimal" placeholder="0.00" ></td>
                                                                 <td><a id="add_item" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
                                                             </tr>
                                                         </tbody>
@@ -370,14 +424,21 @@
                                                             <tfoot>
                                                                 <tr>
                                                                     <td>
+
+                                                                        <?php
+                                                                        //echo "<pre>";
+                                                                        //print_r($cylinderProduct);
+
+                                                                        ?>
+
                                                                         <select  id="productID2" onchange="getProductPrice2(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by product name">
                                                                             <option value=""></option>
                                                                             <?php
                                                                             foreach ($cylinderProduct as $eachProduct):
                                                                                 $productPreFix = substr($eachProduct->productName, 0, 5);
-                                                                                if ($productPreFix == 'Empty'):
+                                                                                if ($eachProduct->category_id == 1):
                                                                                     ?>
-                                                                                    <option productName2="<?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                                                    <option   brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
                                                                                         <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
                                                                                     </option>
                                                                                     <?php
@@ -426,6 +487,33 @@
     </div><!-- /.page-content -->
 </div>
 <script>
+    $(document).ready(function () {
+        //$(".chosen-select").chosen();
+        //packageOrProduct(1);
+        //$('#productID2').prop('disabled', true).trigger("liszt:updated");
+
+    });
+
+  /*  function  packageOrProduct(forHideshow){
+
+        if(forHideshow==1){
+            $('#package_th').hide();
+            $('#package_td').hide();
+            $('#product_th').show();
+            $('#product_td').show();
+        }else{
+
+
+            $('#package_th').show();
+            $('#package_td').show();
+            $('#product_th').hide();
+            $('#product_td').hide();
+        }
+    }*/
+
+
+
+
 
     $("#ReciveproductNameAutocomplete").autocomplete({
         source: function (request, response) {
@@ -627,7 +715,7 @@
                             if (productCatID == 2) {
                                 tab = '<tr class="new_item' + productID + '">' +
                                     '<td style="padding-left:15px;">' +
-                                    '['+ productCatName + ' ] - '+ productName + '&nbsp;[&nbsp;' + productBrandName + '&nbsp;]&nbsp;' +
+                                    '['+ productCatName + ' ] - '+ productName +'&nbsp;'+unitName+ '&nbsp;[&nbsp;' + productBrandName + '&nbsp;]&nbsp;' +
                                     '<input id="productID_' + productID + '" name="productID[]" value="' + productID + '" type="hidden">' +
                                     '<input type="hidden" name="category_id[]" value="' + productCatID + '">' +
                                     '</td>' +
@@ -654,7 +742,7 @@
 
                                 tab = '<tr class="new_item' + productID + '">' +
                                     '<td style="padding-left:15px;">' +
-                                    '['+ productCatName + ' ] - '+ productName + '&nbsp;[&nbsp;' + productBrandName + '&nbsp;]&nbsp;' +
+                                    '['+ productCatName + ' ] - '+ productName +'&nbsp;'+unitName+  '&nbsp;[&nbsp;' + productBrandName + '&nbsp;]&nbsp;' +
                                     '<input id="productID_' + productID + '" name="productID[]" value="' + productID + '" type="hidden">' +
                                     '<input type="hidden" name="category_id[]" value="' + productCatID + '">' +
                                     '</td>' +

@@ -52,7 +52,7 @@
                             
                             <div class="col-sm-6">
 
-                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $package_details[0]->product_code; ?>" class="form-control" placeholder="Product Code" style="border:none;background: #FFF !important" />
+                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $package_details[0]->package_code; ?>" class="form-control" placeholder="Product Code" style="border:none;background: #FFF !important" />
                             </div>
                         </div>
                         <div class="form-group">

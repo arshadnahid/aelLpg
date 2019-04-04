@@ -1589,7 +1589,13 @@ class SalesController extends CI_Controller {
         $data['configInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
         $data['accountHeadList'] = $this->Common_model->getAccountHead();
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
-        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 2);
+        //echo '<pre>';
+        //echo $this->db->last_query();
+        //print_r($data['productList']);exit;
+
+
+
+        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 1);
         $data['productCat'] = $this->Common_model->getPublicProductCat($this->dist_id);
         $data['unitList'] = $this->Common_model->getPublicUnit($this->dist_id);
         $data['customerList'] = $this->Sales_Model->getCustomerList($this->dist_id);
@@ -2787,6 +2793,40 @@ class SalesController extends CI_Controller {
             }
             echo json_encode($this->Common_model->get_product_list_by_dist_id($this->dist_id, $q, $status));
         }
+    }
+    public function  product_list_for_update(){
+        //$query="SELECT * FROM `product` WHERE category_id in (1,2)   ";
+        $query="SELECT * FROM `product` WHERE category_id in (1,2) AND  dist_id in (1,".$this->dist_id.")";
+        $query = $this->db->query($query);
+        $result = $query->result_array();
+
+
+        $product=array();
+
+        foreach ($result as $key => $value) :
+            $product[$key]['product_id']=$value['product_id'];
+            $product[$key]['productName']=preg_replace("/[^0-9]{1,4}/", '', $value['productName']);;
+        endforeach;
+
+
+
+
+        $this->db->trans_start();
+
+
+        $this->db->update_batch('product', $product, 'product_id');
+
+
+
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === FALSE) {
+            return 0;
+        } else {
+            return 1;
+        }
+        echo "<pre>";
+        var_dump($product);
+        print_r($product);
     }
 
 }

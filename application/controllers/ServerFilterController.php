@@ -223,7 +223,7 @@ class ServerFilterController extends CI_Controller {
             $row[] = $products->title;
             $row[] = $products->brandName;
             $row[] = $products->product_code;
-            $row[] = $products->productName;
+            $row[] = $products->productName .' '. $products->unitTtile;
             $row[] = $products->purchases_price;
             $row[] = $products->retailPrice;
             $row[] = $products->salesPrice;

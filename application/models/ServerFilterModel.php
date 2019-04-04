@@ -112,10 +112,11 @@ class ServerFilterModel extends CI_Model {
     }
 
     private function _get_product_datatables_query() {
-        $this->db->select("productcategory.title,brand.brandName,product.product_code,product.productName,product.purchases_price,product.salesPrice,product.retailPrice,product.status,product.dist_id,product.product_id");
+        $this->db->select("productcategory.title,brand.brandName,product.product_code,product.productName,product.purchases_price,product.salesPrice,product.retailPrice,product.status,product.dist_id,product.product_id,unit.unitTtile");
         $this->db->from($this->table);
         $this->db->join('brand', 'brand.brandId = product.brand_id', 'left');
         $this->db->join('productcategory', 'productcategory.category_id = product.category_id', 'left');
+        $this->db->join('unit', 'unit.unit_id = product.unit_id', 'left');
         $this->db->group_start();
         $this->db->where('product.dist_id', $this->dist_id);
         $this->db->or_where('product.dist_id', 1);

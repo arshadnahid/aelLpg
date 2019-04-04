@@ -24,7 +24,7 @@
                     <i class="ace-icon fa fa-home home-icon"></i>
                     <a href="<?php echo site_url('DistributorDashboard/3'); ?>">Inventory</a>
                 </li>
-                <li class="active">Add Product Package</li>
+                <li class="active">Edit Product Package</li>
             </ul>
             <ul class="breadcrumb pull-right">
                 <li>
@@ -51,7 +51,7 @@
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Package Code <span style="color:red!important"> *</span></label>
                             <div class="col-sm-6">
 
-                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $package_details[0]->product_code; ?>" class="form-control" placeholder="Product Code" />
+                                <input type="text" id="form-field-1" name="package_code" readonly value="<?php echo $package_details[0]->package_code; ?>" class="form-control" placeholder="Product Code" />
                             </div>
                         </div>
                         <div class="form-group">

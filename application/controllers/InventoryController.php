@@ -180,6 +180,11 @@ class InventoryController extends CI_Controller {
                 $data['dist_id'] = $this->dist_id;
                 $data['updated_by'] = $this->admin_id;
                 $insertid = $this->Common_model->insert_data('product', $data);
+
+                echo "<pre>";
+                print_r($this->db->last_query());
+                exit;
+
                 if (!empty($insertid)):
                     message("New product inserted successfully.");
                     redirect(site_url('productList'));
@@ -1776,7 +1781,8 @@ class InventoryController extends CI_Controller {
         $data['costList'] = $this->Common_model->get_data_list_by_many_columns('generaldata', $costCondition);
         $data['productCat'] = $this->Common_model->getPublicProductCat($this->dist_id);
         $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
-        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 2);
+        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 1);
+
         $data['supplierList'] = $this->Common_model->getPublicSupplier($this->dist_id);
 
         $condition1 = array(
@@ -3787,8 +3793,13 @@ class InventoryController extends CI_Controller {
 
     function viewPurchases($purchases_id = NULL) {
         $data['title'] = 'Purchases View';
-        $data['purchasesList'] = $this->Common_model->get_single_data_by_single_column('generals', 'generals_id', $purchases_id);
-        $data['stockList'] = $this->Common_model->get_data_list_by_single_column('stock', 'generals_id', $purchases_id);
+        $data['purchasesList'] = $this->Common_model->get_single_data_by_single_column('purchase_invoice_info', 'purchase_invoice_id', $purchases_id);
+        //$data['purchasesList'] = $this->Common_model->get_single_data_by_single_column('generals', 'generals_id', $purchases_id);
+        $data['stockList'] = $this->Common_model->get_purchase_product_detaild2( $purchases_id);
+        //echo  $this->db->last_query();
+        //echo "<pre>";
+        //print_r($data['stockList']);
+        //exit;
         // $data['returanAbleCylinder'] = $this->Common_model->getReturnAbleCylinder($purchases_id);
 
         $data['creditAmount'] = $paymentInfo = $this->Inventory_Model->getCreditAmount($purchases_id);

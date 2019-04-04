@@ -261,9 +261,10 @@ class Common_model extends CI_Model {
     }
 
     public function getPublicProduct($distId, $catid) {
-        $this->db->select('product.product_id,productcategory.title as productCat,product.brand_id,product.category_id,product.productName,product.dist_id,product.status,brand.brandName');
+        $this->db->select('product.product_id,productcategory.title as productCat,product.brand_id,product.category_id,product.productName,product.dist_id,product.status,brand.brandName,unit.unitTtile');
         $this->db->from('product');
         $this->db->join('brand', 'brand.brandId = product.brand_id', 'left');
+        $this->db->join('unit', 'unit.unit_id = product.unit_id', 'left');
         $this->db->join('productcategory', 'productcategory.category_id = product.category_id', 'left');
         $this->db->group_start();
         $this->db->where('product.dist_id', $distId);
@@ -300,14 +301,32 @@ class Common_model extends CI_Model {
             $list['productInfo'] = $this->getProductListByCategory($eachCategory->category_id, $distId);
             $allList[] = $list;
         }
+        $allList['packageList']=$this->getPublicPackageList($distId);
         return $allList;
+    }
+    public function getPublicPackageList($distId) {
+        $allList = array();
+        $this->db->select('package.package_name,package.package_id,package.package_code,product.product_id,product.category_id');
+        $this->db->from('package');
+        $this->db->join('package_products', 'package_products.package_id = package.package_id', 'left');
+        $this->db->join('product', 'product.product_id = package_products.product_id', 'left');
+
+        $this->db->where('product.category_id', '2');
+        $this->db->group_start();
+        $this->db->where('package.dist_id', '1');
+        $this->db->or_where('package.dist_id', $distId);
+        $this->db->group_end();
+        $result = $this->db->get()->result();
+
+        return $result;
     }
 
     public function getProductListByCategory($category, $distId) {
-        $this->db->select('product.product_id,productcategory.title as productCat,product.brand_id,product.category_id,product.productName,product.dist_id,product.status,brand.brandName');
+        $this->db->select('product.product_id,productcategory.title as productCat,product.brand_id,product.category_id,product.productName,product.dist_id,product.status,brand.brandName,unit.unitTtile');
         $this->db->from('product');
         $this->db->join('brand', 'brand.brandId = product.brand_id', 'left');
         $this->db->join('productcategory', 'productcategory.category_id = product.category_id', 'left');
+        $this->db->join('unit', 'unit.unit_id = product.unit_id', 'left');
         $this->db->group_start();
         $this->db->where('product.dist_id', $distId);
         $this->db->or_where('product.dist_id', 1);
@@ -1276,6 +1295,103 @@ class Common_model extends CI_Model {
         $this->db->order_by('product_type_id', 'ASE');
         $getUnitList = $this->db->get()->result();
         return $getUnitList;
+    }
+    public function  get_package_product($package_id){
+        $this->db->select('package.package_id,package.package_name,package.package_code,package_products.product_id,productcategory.category_id,productcategory.title,product.productName,unit.unitTtile,brand.brandId,brand.brandName');
+        $this->db->from('package');
+        $this->db->join('package_products', 'package_products.package_id=package.package_id','left');
+        $this->db->join('product', 'product.product_id=package_products.product_id','left');
+        $this->db->join('productcategory', 'productcategory.category_id=product.category_id','left');
+        $this->db->join('unit', 'unit.unit_id=product.unit_id','left');
+        $this->db->join('brand', 'brand.brandId=product.brand_id','left');
+        $this->db->where('package.package_id='.$package_id);
+        $sql = $this->db->get();
+        return $sql->result();
+    }
+    public function  get_purchase_product_detaild($package_id){
+        $this->db->select('purchase_details.product_id,purchase_details.is_package,purchase_details.quantity,purchase_details.unit_price,
+        product.productName,product.product_code,
+        productcategory.category_id,productcategory.title,unit.unitTtile,brand.brandId,brand.brandName');
+        $this->db->from('purchase_details');
+
+        $this->db->join('product', 'product.product_id=purchase_details.product_id','left');
+        $this->db->join('productcategory', 'productcategory.category_id=product.category_id','left');
+        $this->db->join('unit', 'unit.unit_id=product.unit_id','left');
+        $this->db->join('brand', 'brand.brandId=product.brand_id','left');
+        $this->db->where('purchase_details.purchase_invoice_id='.$package_id);
+        $sql = $this->db->get();
+        return $sql->result();
+    }
+
+    public function  get_purchase_product_detaild3($package_id){
+        $this->db->select('purchase_details.product_id,purchase_details.is_package,purchase_details.quantity,purchase_details.unit_price,
+        product.productName,product.product_code,
+        productcategory.category_id,productcategory.title,
+        unit.unitTtile,
+        brand.brandId,brand.brandName ,
+        product.productName as return_productName,product.product_code as return_product_code,
+        productcategory.category_id as return_category_id,productcategory.title as return_title,
+        unit.unitTtile as return_unitTtile,
+        brand.brandId as return_brandId,brand.brandName as return_brandName
+        ');
+        $this->db->from('purchase_details');
+        $this->db->join('purchase_return_details', 'purchase_return_details.purchase_details_id=purchase_details.purchase_details_id','left');
+        $this->db->join('product', 'product.product_id=purchase_details.product_id','left');
+        $this->db->join('productcategory', 'productcategory.category_id=product.category_id','left');
+        $this->db->join('unit', 'unit.unit_id=product.unit_id','left');
+        $this->db->join('brand', 'brand.brandId=product.brand_id','left');
+
+        $this->db->join('product as product_r', 'product_r.product_id=purchase_return_details.product_id','left');
+        $this->db->join('productcategory as productcategory_r', 'productcategory_r.category_id=product_r.category_id','left');
+        $this->db->join('unit as unit_r', 'unit_r.unit_id=product_r.unit_id','left');
+        $this->db->join('brand as brand_r', 'brand_r.brandId=product_r.brand_id','left');
+        $this->db->where('purchase_details.purchase_invoice_id='.$package_id);
+        $sql = $this->db->get();
+        return $sql->result();
+    }
+
+
+    public function  get_purchase_product_detaild2($package_id){
+        $query="SELECT
+                    purchase_details.purchase_details_id,
+                    purchase_details.purchase_invoice_id,
+                    purchase_details.is_package,
+                    purchase_details.product_id,
+                    product.productName,
+                    product.product_code,
+                    productcategory.title,
+                    unit.unitTtile,
+                    brand.brandName,
+                    product2.productName AS return_product_name,
+                    product2.product_code AS return_product_code,
+                    productcategory2.title AS return_product_cat,
+                    unit2.unitTtile AS return_product_unit,
+                    brand2.brandName AS return_product_brand,
+                    purchase_details.quantity,
+                    purchase_details.unit_price,
+                    purchase_return_details.product_id AS return_product_id,
+                    purchase_return_details.returnable_quantity,
+                    purchase_return_details.return_quantity
+                FROM
+                    purchase_details
+                LEFT JOIN purchase_return_details ON purchase_return_details.purchase_details_id = purchase_details.purchase_details_id
+                AND purchase_return_details.is_active = 'Y'
+                AND purchase_return_details.is_delete = 'N'
+                LEFT JOIN product ON product.product_id = purchase_details.product_id
+                LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+                LEFT JOIN unit ON unit.unit_id = product.unit_id
+                LEFT JOIN brand ON brand.brandId = product.brand_id
+                LEFT JOIN product AS product2 ON product2.product_id = purchase_return_details.product_id
+                LEFT JOIN productcategory AS productcategory2 ON productcategory2.category_id = product2.category_id
+                LEFT JOIN unit AS unit2 ON unit2.unit_id = product2.unit_id
+                LEFT JOIN brand AS brand2 ON brand2.brandId = product2.brand_id
+                WHERE
+                    purchase_details.is_active = 'Y'
+                AND purchase_details.is_delete = 'N'
+                AND purchase_details.purchase_invoice_id =".$package_id;
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
     }
     
 

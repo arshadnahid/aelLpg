@@ -72,8 +72,8 @@
                                                         <option value="<?php echo $each_ref->reference_id; ?>"><?php echo $each_ref->referenceName; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
-            <!--                                    <input type="text" id="form-field-1" name="reference"  value="" class="form-control" placeholder="Reference" />
-                                                -->
+                                                <!--                                    <input type="text" id="form-field-1" name="reference"  value="" class="form-control" placeholder="Reference" />
+                                                                                    -->
                                             </div>
                                         </div>
                                     </div>
@@ -174,78 +174,89 @@
                                             <div class="panel panel-default">
                                                 <div class="panel-body">
                                                     <div class="table-header">
-                                                        Sales Item 
+                                                        Sales Item
                                                     </div>
-                                                    <div class="">
-                                                        <button type="button" class="btn btn-info" onclick="showHideTd(1)">Package</button>
-                                                        <button type="button" class="btn btn-success" onclick="showHideTd(2)">Product</button>
-                                                    </div>
+
+
                                                     <table class="table table-bordered table-hover tableAddItem" id="show_item">
                                                         <thead>
-                                                            <tr>
-                                                                <th nowrap  align="center" id="package_th"><strong>Package <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap  align="center" id="product_th"><strong>Product <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap  align="center"><strong>Quantity <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap  align="center"><strong>Receivable(Qty)</strong></th>
-                                                                <th nowrap  align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
-                                                                <th nowrap  align="center"><strong>Total Price(BDT) <span style="color:red;"> *</span></strong></th>
-                                                                <th align="center"><strong>Action</strong></th>
-                                                            </tr>
+                                                        <tr>
+
+
+                                                            <th nowrap  align="center" id="product_th"><strong>Product <span style="color:red;"> *</span></strong></th>
+                                                            <th nowrap  align="center"><strong>Quantity <span style="color:red;"> *</span></strong></th>
+                                                            <th nowrap  align="center"><strong>Receivable(Qty)</strong></th>
+                                                            <th nowrap  align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
+                                                            <th nowrap  align="center"><strong>Total Price(BDT) <span style="color:red;"> *</span></strong></th>
+                                                            <th nowrap style="width:20%;border-radius:10px;" align="center"><strong>Returned Cylinder <span style="color:red;"> </th>
+                                                            <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Returned Qty <span style="color:red;"></th>
+                                                            <th align="center"><strong>Action</strong></th>
+                                                        </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
-                                                                <td id="package_td">
-                                                                    <select id="" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
-                                                                        <option value=""></option>
-                                                                        <?php foreach ($productList as $key => $eachProduct):
-                                                                            ?>
-                                                                            <optgroup label="<?php echo $eachProduct['categoryName']; ?>">
-                                                                                <?php
-                                                                                foreach ($eachProduct['productInfo'] as $eachInfo) :
+                                                        <tr>
 
-                                                                                    $productPreFix = substr($eachInfo->productName, 0, 5);
-                                                                                    //  if ($productPreFix != 'Empty'):
-                                                                                    ?>
-                                                                                    <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
-                                                                                    <?php
-                                                                                    //  endif;
-                                                                                endforeach;
-                                                                                ?>
-                                                                            </optgroup>
+                                                            <td id="product_td">
+                                                                <select id="productID" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
+                                                                    <option value=""></option>
+                                                                    <?php foreach ($productList as $key => $eachProduct):
+                                                                        ?>
+                                                                        <optgroup label="<?php echo $eachProduct['categoryName']; ?>">
                                                                             <?php
+                                                                            foreach ($eachProduct['productInfo'] as $eachInfo) :
+
+                                                                                $productPreFix = substr($eachInfo->productName, 0, 5);
+                                                                                //  if ($productPreFix != 'Empty'):
+                                                                                ?>
+                                                                                <option ispackage="0" categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
+                                                                                <?php
+                                                                                //  endif;
+                                                                            endforeach;
+                                                                            ?>
+                                                                        </optgroup>
+
+                                                                        <?php
+                                                                    endforeach;
+                                                                    ?>
+                                                                    <optgroup label="Package">
+                                                                        <?php
+                                                                        foreach ($productList['packageList'] as $eachInfo) :
+
+
+                                                                            ?>
+                                                                            <option ispackage="1" categoryId="<?php echo $eachInfo->category_id; ?>"  product_id="<?php echo $eachInfo->product_id;?>"  value="<?php echo $eachInfo->package_id; ?>"><?php echo $eachInfo->package_name . " [ " . $eachInfo->package_code . " ] "; ?></option>
+                                                                            <?php
+                                                                            // endif;
                                                                         endforeach;
                                                                         ?>
-                                                                    </select>
-                                                                </td>
-                                                                <td id="product_td">
-                                                                    <select id="productID" onchange="getProductPrice(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product">
-                                                                        <option value=""></option>
-                                                                        <?php foreach ($productList as $key => $eachProduct):
+                                                                    </optgroup>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="text" class="form-control text-right is_same decimal"  value="0"><input type="hidden" value="" id="stockQty"/><input type="text"  onkeyup="checkStockOverQty(this.value)" class="form-control text-right quantity decimal"  placeholder="0"></td>
+                                                            <td><input type="hidden" value="" id="returnStockQty"/><input type="text" readonly onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity decimal"   placeholder="0"></td>
+                                                            <td><input type="text" class="form-control text-right rate decimal" placeholder="0.00"  ></td>
+                                                            <td><input type="text" class="form-control text-right price decimal" placeholder="0.00" readonly="readonly"></td>
+                                                            <td>
+                                                                <select  id="productID2"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by product name">
+                                                                    <option value=""></option>
+                                                                    <?php
+                                                                    foreach ($cylinderProduct as $eachProduct):
+                                                                        $productPreFix = substr($eachProduct->productName, 0, 5);
+                                                                        if ($eachProduct->category_id == 1):
                                                                             ?>
-                                                                            <optgroup label="<?php echo $eachProduct['categoryName']; ?>">
-                                                                                <?php
-                                                                                foreach ($eachProduct['productInfo'] as $eachInfo) :
-
-                                                                                    $productPreFix = substr($eachInfo->productName, 0, 5);
-                                                                                    //  if ($productPreFix != 'Empty'):
-                                                                                    ?>
-                                                                                    <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
-                                                                                    <?php
-                                                                                    //  endif;
-                                                                                endforeach;
-                                                                                ?>
-                                                                            </optgroup>
+                                                                            <option  categoryName2="<?php echo $eachProduct->productCat; ?>" brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName .' '. $eachProduct->unitTtile .' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                                                <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
+                                                                            </option>
                                                                             <?php
-                                                                        endforeach;
-                                                                        ?>
-                                                                    </select>
-                                                                </td>
-                                                                <td><input type="hidden" value="" id="stockQty"/><input type="text"  onkeyup="checkStockOverQty(this.value)" class="form-control text-right quantity decimal"  placeholder="0"></td>
-                                                                <td><input type="hidden" value="" id="returnStockQty"/><input type="text" readonly onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity decimal"   placeholder="0"></td>
-                                                                <td><input type="text" class="form-control text-right rate decimal" placeholder="0.00"  ></td>
-                                                                <td><input type="text" class="form-control text-right price decimal" placeholder="0.00" readonly="readonly"></td>
-                                                                <td><a id="add_item" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
-                                                            </tr>
+                                                                        endif;
+                                                                    endforeach;
+                                                                    ?>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="text" class="form-control text-right returnQuentity decimal" placeholder="0.00" ></td>
+                                                            <td><a id="add_item" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
+                                                        </tr>
+
                                                         </tbody>
                                                         <tfoot></tfoot>
                                                     </table>
@@ -267,73 +278,73 @@
                                                     </div>
                                                     <table class="table table-bordered table-hover ">
                                                         <tbody>
-                                                            <tr>
-                                                                <td nowrap  align="right"><strong>Total </strong></td>
-                                                                <td   align="right"><strong class="total_price"></strong></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap align="right"><strong>Discount ( - ) </strong></td>
-                                                                <td><input type="text"  onkeyup="calDiscount()" id="disCount" style="text-align: right" name="discount" value="" class="form-control" placeholder="0.00"   oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap   align="right"><strong>Grand Total</strong></td>
-                                                                <td><input readonly id="grandTotal" type="text" style="text-align: right" name="grandtotal" value="" class="form-control"  placeholder="0.00"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap    align="right"><strong>VAT(%) ( + )</strong></td>
-                                                                <td><input type="text" id="vatAmount"  style="text-align: right" name="vat" readonly value="<?php
-                                                                    if (!empty($configInfo->vat)): echo $configInfo->vat;
-                                                                    endif;
-                                                                    ?>" class="form-control totalVatAmount"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
+                                                        <tr>
+                                                            <td nowrap  align="right"><strong>Total </strong></td>
+                                                            <td   align="right"><strong class="total_price"></strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap align="right"><strong>Discount ( - ) </strong></td>
+                                                            <td><input type="text"  onkeyup="calDiscount()" id="disCount" style="text-align: right" name="discount" value="" class="form-control" placeholder="0.00"   oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap   align="right"><strong>Grand Total</strong></td>
+                                                            <td><input readonly id="grandTotal" type="text" style="text-align: right" name="grandtotal" value="" class="form-control"  placeholder="0.00"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap    align="right"><strong>VAT(%) ( + )</strong></td>
+                                                            <td><input type="text" id="vatAmount"  style="text-align: right" name="vat" readonly value="<?php
+                                                                if (!empty($configInfo->vat)): echo $configInfo->vat;
+                                                                endif;
+                                                                ?>" class="form-control totalVatAmount"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
 
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap  align="right"><strong>Loader ( + )</strong></td>
-                                                                <td><input type="text" id="loader" onkeyup="calcutateFinal()"   style="text-align: right" name="loaderAmount" value=""  class="form-control"  placeholder="0.00"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap  align="right"><strong>Transportation ( + )</strong></td>
-                                                                <td><input type="text" id="transportation" onkeyup="calcutateFinal()"   style="text-align: right" name="transportationAmount" value=""  class="form-control"  placeholder="0.00"/></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td nowrap  align="right"><strong>Net Total</strong></td>
-                                                                <td><input type="text" id="netAmount"  style="text-align: right" name="netTotal" value="" readonly class="form-control"  placeholder="0.00"/></td>
-                                                            </tr>
-                                                            <tr class="chaque_amount_class" style="display:none">
-                                                                <td nowrap  align="right"><strong>Chaque Amount</strong></td>
-                                                                <td><input type="text" id="chaque_amount"  style="text-align: right" name="chaque_amount" value=""  class="form-control"  placeholder="0.00"/></td>
-                                                            </tr>
-                                                            <tr class="partisals"  >
-                                                                <td  nowrap   align="right"><strong>Account <span style="color:red;"> * </span></strong></td>
-                                                                <td >
-                                                                    <select style="width:100%!important;"  name="accountCrPartial" class="chosen-select   checkAccountBalance" id="partialHead" data-placeholder="Search by Account Head">
-                                                                        <option value=""></option>
-                                                                        <?php
-                                                                        foreach ($accountHeadList as $key => $head) {
-                                                                            if ($key != 51 || $key != 112) {
-                                                                                ?>
-                                                                                <optgroup label="<?php echo $head['parentName']; ?>">
-                                                                                    <?php
-                                                                                    foreach ($head['Accountledger'] as $eachLedger) :
-                                                                                        ?>
-                                                                                        <option <?php
-                                                                                        if ($eachLedger->chartId == '54') {
-                                                                                            echo "selected";
-                                                                                        }
-                                                                                        ?> value="<?php echo $eachLedger->chartId; ?>"><?php echo $eachLedger->title . " ( " . $eachLedger->code . " ) "; ?></option>
-                                                                                <?php endforeach; ?>
-                                                                                </optgroup>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap  align="right"><strong>Loader ( + )</strong></td>
+                                                            <td><input type="text" id="loader" onkeyup="calcutateFinal()"   style="text-align: right" name="loaderAmount" value=""  class="form-control"  placeholder="0.00"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap  align="right"><strong>Transportation ( + )</strong></td>
+                                                            <td><input type="text" id="transportation" onkeyup="calcutateFinal()"   style="text-align: right" name="transportationAmount" value=""  class="form-control"  placeholder="0.00"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td nowrap  align="right"><strong>Net Total</strong></td>
+                                                            <td><input type="text" id="netAmount"  style="text-align: right" name="netTotal" value="" readonly class="form-control"  placeholder="0.00"/></td>
+                                                        </tr>
+                                                        <tr class="chaque_amount_class" style="display:none">
+                                                            <td nowrap  align="right"><strong>Chaque Amount</strong></td>
+                                                            <td><input type="text" id="chaque_amount"  style="text-align: right" name="chaque_amount" value=""  class="form-control"  placeholder="0.00"/></td>
+                                                        </tr>
+                                                        <tr class="partisals"  >
+                                                            <td  nowrap   align="right"><strong>Account <span style="color:red;"> * </span></strong></td>
+                                                            <td >
+                                                                <select style="width:100%!important;"  name="accountCrPartial" class="chosen-select   checkAccountBalance" id="partialHead" data-placeholder="Search by Account Head">
+                                                                    <option value=""></option>
+                                                                    <?php
+                                                                    foreach ($accountHeadList as $key => $head) {
+                                                                        if ($key != 51 || $key != 112) {
+                                                                            ?>
+                                                                            <optgroup label="<?php echo $head['parentName']; ?>">
                                                                                 <?php
-                                                                            }
+                                                                                foreach ($head['Accountledger'] as $eachLedger) :
+                                                                                    ?>
+                                                                                    <option <?php
+                                                                                    if ($eachLedger->chartId == '54') {
+                                                                                        echo "selected";
+                                                                                    }
+                                                                                    ?> value="<?php echo $eachLedger->chartId; ?>"><?php echo $eachLedger->title . " ( " . $eachLedger->code . " ) "; ?></option>
+                                                                                <?php endforeach; ?>
+                                                                            </optgroup>
+                                                                            <?php
                                                                         }
-                                                                        ?>
-                                                                    </select>
-                                                                </td>
-                                                            </tr>
-                                                            <tr  class="partisals">
-                                                                <td nowrap  align="right"><strong>Payment ( - )<span style="color:red;"> * </span></strong></td>
-                                                                <td><input type="text" id="payment" onkeyup="calculatePartialPayment()" style="text-align: right" name="partialPayment" value=""  class="form-control" autocomplete="off"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
-                                                        <input type="hidden" id="duePayment"  style="text-align: right" name="duePayment" value="" readonly  class="form-control"  placeholder="0.00"/>
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr  class="partisals">
+                                                            <td nowrap  align="right"><strong>Payment ( - )<span style="color:red;"> * </span></strong></td>
+                                                            <td><input type="text" id="payment" onkeyup="calculatePartialPayment()" style="text-align: right" name="partialPayment" value=""  class="form-control" autocomplete="off"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
+                                                            <input type="hidden" id="duePayment"  style="text-align: right" name="duePayment" value="" readonly  class="form-control"  placeholder="0.00"/>
                                                         </tr>
                                                         <tr class="creditDate" style="display:none;">
                                                             <td nowrap   align="right"><strong>Due Date</strong></td>
@@ -357,6 +368,7 @@
                                                             <td><input type="text" id="totalDue"  readonly style="text-align: right" name="" value=""  class="form-control" autocomplete="off"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
                                                         </tr>
                                                         </tbody>
+
                                                     </table>
 
                                                 </div>
@@ -377,35 +389,35 @@
                                                     </div>
                                                     <table class="table table-bordered table-hover" id="show_item2">
                                                         <thead>
-                                                            <tr>
-                                                                <th style="width:18%" align="center"><strong>Product <span style="color:red;"> *</span></strong></th>
-                                                                <th style="width:17%" align="center"><strong><span style="color:red;"> *</span>Received(Qty)</strong></th>
-                                                                <th style="width:15%" align="center"><strong>Action</strong></th>
-                                                            </tr>
+                                                        <tr>
+                                                            <th style="width:18%" align="center"><strong>Product <span style="color:red;"> *</span></strong></th>
+                                                            <th style="width:17%" align="center"><strong><span style="color:red;"> *</span>Received(Qty)</strong></th>
+                                                            <th style="width:15%" align="center"><strong>Action</strong></th>
+                                                        </tr>
                                                         </thead>
                                                         <tfoot>
-                                                            <tr>
-                                                                <td>
-                                                                    <select  id="productID2" onchange="getProductPrice2(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product Name">
-                                                                        <option value=""></option>
-                                                                        <?php
-                                                                        foreach ($cylinderProduct as $eachProduct):
-                                                                            $productPreFix = substr($eachProduct->productName, 0, 5);
-                                                                            if ($productPreFix == 'Empty'):
-                                                                                ?>
-                                                                                <option productName="<?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                        <tr>
+                                                            <td>
+                                                                <select  id="productID2" onchange="getProductPrice2(this.value)" class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Product Name">
+                                                                    <option value=""></option>
+                                                                    <?php
+                                                                    foreach ($cylinderProduct as $eachProduct):
+                                                                        $productPreFix = substr($eachProduct->productName, 0, 5);
+                                                                        if ($productPreFix == 'Empty'):
+                                                                            ?>
+                                                                            <option  brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
                                                                                 <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
-                                                                                </option>
-                                                                                <?php
-                                                                            endif;
-                                                                        endforeach;
-                                                                        ?>
-                                                                    </select>
-                                                                </td>
-                                                                <td><input type="hidden" value="" id="stockQty2"/><input type="text"  onkeyup="checkStockOverQty2(this.value)" class="form-control text-right quantity2" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  placeholder="0"></td>
-                                                                <!--<td><input type="hidden" value="" id="returnStockQty"/><input type="text"  onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  placeholder="0"></td>-->
-                                                                <td><a id="add_item2" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
-                                                            </tr>
+                                                                            </option>
+                                                                            <?php
+                                                                        endif;
+                                                                    endforeach;
+                                                                    ?>
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="hidden" value="" id="stockQty2"/><input type="text"  onkeyup="checkStockOverQty2(this.value)" class="form-control text-right quantity2" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  placeholder="0"></td>
+                                                            <!--<td><input type="hidden" value="" id="returnStockQty"/><input type="text"  onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity" oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');"  placeholder="0"></td>-->
+                                                            <td><a id="add_item2" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
+                                                        </tr>
                                                         </tfoot>
                                                         <tbody>
 
@@ -446,19 +458,7 @@
 <script>
 
 
-function showHideTd(i){
-    if(i==1){
-        $('#package_th').show();
-        $('#package_td').show();
-        $('#product_th').hide();
-        $('#product_td').hide();
-    }else{
-        $('#package_th').hide();
-        $('#package_td').hide();
-        $('#product_th').show();
-        $('#product_td').show();
-    }
-}
+
 
     function isconfirm2() {
 
@@ -514,26 +514,251 @@ function showHideTd(i){
             swal("Add Receive Cylinder Item!", "Validation Error!", "error");
         } else {
             swal({
-                title: "Are you sure ?",
-                text: "You won't be able to revert this!",
-                showCancelButton: true,
-                confirmButtonColor: '#73AE28',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                cancelButtonText: "No",
-                closeOnConfirm: true,
-                closeOnCancel: true,
-                type: 'success'
-            },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            $("#publicForm").submit();
-                        } else {
-                            return false;
-                        }
-                    });
+                    title: "Are you sure ?",
+                    text: "You won't be able to revert this!",
+                    showCancelButton: true,
+                    confirmButtonColor: '#73AE28',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: "No",
+                    closeOnConfirm: true,
+                    closeOnCancel: true,
+                    type: 'success'
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $("#publicForm").submit();
+                    } else {
+                        return false;
+                    }
+                });
         }
     }
+
+    $(document).ready(function () {
+        var j = 0;
+        var slNo = 1;
+        $("#add_item").click(function () {
+            var productCatID = $('#productID').find('option:selected').attr('categoryId');
+            console.log(productCatID);
+            var productCatName = $('#productID').find('option:selected').attr('categoryName');
+            var productID = $('#productID').val();
+            var productName = $('#productID').find('option:selected').attr('productName');
+
+            var ispackage = $('#productID').find('option:selected').attr('ispackage');
+            var package_id2 = $('#productID2').val();
+            var productCatName2 = $('#productID2').find('option:selected').attr('categoryName2');
+            var productName2 = $('#productID2').find('option:selected').attr('productName2');
+            var brand_id = $('#productID').find('option:selected').attr('brand_id');
+
+
+            var quantity = $('.quantity').val();
+            var rate = $('.rate').val();
+            var price = $('.price').val();
+            var returnQuantity = $('.returnQuantity').val();
+
+            var returnQuentity = $('.returnQuentity').val();
+
+            if(ispackage==0){
+
+                var tab;
+
+                if(productCatID == 2){
+                    if($('.is_same').val()==0){
+                        slNo++;
+                        tab ='<tr class="new_item' + j + '">' +
+                            '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
+                            '<input type="hidden" name="brand_id[]" value="'+brand_id+'"/>' +
+                            '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
+                            '<input type="hidden" name="category_id[]" value="'  + productCatID + '">' +
+                            '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName +
+                            '<input type="hidden"  name="product_id_'+ slNo +'" value="' + productID + '">' +
+                            '</td>' +
+                            '<td align="right">' +
+                            '<input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity_'+ slNo +'" value="' + quantity + '">' +
+                            '</td>' +
+                            '<td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '">' +
+                            '</td>' +
+                            '<td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate_'+ slNo +'" value="' + rate + '">' +
+                            '</td>' +
+                            '<td align="right"><input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '">' +
+                            '</td>' +
+                            '<td colspan="2">' +
+                            '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
+                            '<tr>'+
+                            '<td>'+
+                            productName2+
+                            '</td>'+
+                            '<td>'+
+                            returnQuentity+
+                            '</td>'+
+                            '</tr>'+
+                            '</table>'+
+                            '</td>' +
+                            '<td>' +
+                            '<a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
+                            '</td>' +
+                            '</tr>';
+                        console.log(tab);
+                        $("#show_item tfoot").append(tab);
+                    }else {
+                        slNo;
+                        var tab2="<tr>" +
+                            "<td>" +
+                            productName2+
+                            "</td>" +
+                            "<td>" +
+                            returnQuentity+
+                            "</td>" +
+                            "</tr>";
+
+                        $("#return_product_"+slNo).append(tab2);
+
+                    }
+
+
+                    $('.is_same').val('1')
+                }else{
+                    slNo++;
+                    tab ='<tr class="new_item' + j + '">' +
+                        '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
+                        '<input type="hidden" name="brand_id[]" value="'+brand_id+'"/>' +
+                        '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
+                        '<input type="hidden" name="category_id[]" value="'  + productCatID + '">' +
+                        '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName +
+                        '<input type="hidden"  name="product_id_'+ slNo +'" value="' + productID + '">' +
+                        '</td>' +
+                        '<td align="right">' +
+                        '<input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity_'+ slNo +'" value="' + quantity + '">' +
+                        '</td>' +
+                        '<td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '">' +
+                        '</td>' +
+                        '<td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate_'+ slNo +'" value="' + rate + '">' +
+                        '</td>' +
+                        '<td align="right"><input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '">' +
+                        '</td>' +
+                        '<td colspan="2">' +
+                        '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
+                        '<tr>'+
+                        '<td>'+
+                        productName2+
+                        '</td>'+
+                        '<td>'+
+                        returnQuentity+
+                        '</td>'+
+                        '</tr>'+
+                        '</table>'+
+                        '</td>' +
+                        '<td>' +
+                        '<a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
+                        '</td>' +
+                        '</tr>';
+                    console.log(tab);
+                    $("#show_item tfoot").append(tab);
+
+
+
+
+
+                }
+            }else{
+                var quantity = $('.quantity').val();
+                var returnAble = $('.returnAble').val();
+                var rate = $('.rate').val();
+                var price = $('.price').val();
+                $.ajax({
+                    type: "POST",
+                    dataType:'json',
+                    url:baseUrl + "lpg/PurchaseController/package_product_list",
+                    data: 'package_id=' + productID,
+                    success: function (data) {
+
+                        $.each(data, function (key, value) {
+                            slNo++;
+                            $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/><input type="hidden" name="is_package_'+ slNo +'" value="1"><input type="hidden" name="category_id_'+ slNo +'" value="' + value['category_id'] + '">' +
+                                '<td style="padding-left:15px;"> [ ' + value['title'] + '] - ' + value['productName'] +'&nbsp;'+ value['unitTtile'] +'&nbsp;[ '+ value['brandName']+" ]"+
+                                ' <input type="hidden"  name="product_id_'+ slNo +'" value="' + value['product_id'] + '"></td>' +
+                                '</td><td align="right"><input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity_'+ slNo +'" value="' + quantity + '"></td><td align="right"><input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value=""  readonly></td><td align="right"><input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate_'+ slNo +'" value="' + rate + '"></td><td align="right"><input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '"></td><td></td><td></td><td><a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
+                            j++;
+
+                        });
+                        console.log(slNo);
+                    }
+                });
+                $('.quantity').val('');
+                $('.rate').val('');
+                $('.price').val('');
+                $('.returnAble').val('');
+            }
+
+        })
+        j++;
+
+
+    });
+
+
+    function getProductPrice(product_id) {
+        $("#stockQty").val('');
+        $(".quantity").val('');
+        $('.is_same').val('0');
+        var productCatID = parseFloat($('#productID').find('option:selected').attr('categoryId'));
+        console.log('getProductPrice');
+        console.log(productCatID);
+        var ispackage = $('#productID').find('option:selected').attr('ispackage');
+        if(ispackage==1){
+            product_id= $('#productID').find('option:selected').attr('product_id');
+        }
+
+
+
+        console.log('getProductPrice');
+        console.log(productCatID);
+        if(productCatID ==2){
+            console.log('PPP');
+            $(".returnQuantity").attr('readonly',false);
+        }else{
+            $(".returnQuantity").attr('readonly',true);
+        }
+        $.ajax({
+            type: "POST",
+            url: baseUrl + "FinaneController/getProductPriceForSale",
+            data: 'product_id=' + product_id,
+            success: function (data) {
+                $('.rate').val('');
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: baseUrl+ "FinaneController/getProductStock",
+            data: {product_id:product_id,category_id:productCatID,ispackage:ispackage},
+            success: function (data) {
+                var mainStock = parseFloat(data);
+                if(isNaN(mainStock)){
+                    mainStock=0;
+                }
+
+                console.log('data');
+                console.log(data);
+                if(data !=''){
+                    $("#stockQty").val(data);
+                    $(".quantity").attr("disabled",false);
+                    if(mainStock <= 0){
+                        $(".quantity").attr("disabled",true);
+                        $(".quantity").attr("placeholder", "0 ");
+                    }else{
+                        $(".quantity").attr("disabled",false);
+                        $(".quantity").attr("placeholder", ""+mainStock);
+                    }
+                }else{
+                    $("#stockQty").val('');
+                    $(".quantity").attr("disabled",true);
+                    $(".quantity").attr("placeholder", "0");
+                }
+            }
+        });
+    }
+
 </script>
 
 <div class="modal fade" id="myModal" role="dialog">
@@ -567,7 +792,7 @@ function showHideTd(i){
                                         <option>-Select Type-</option>
                                         <?php foreach ($customerType as $key => $eachType): ?>
                                             <option value="<?php echo $eachType->type_id; ?>"><?php echo $eachType->typeTitle; ?></option>
-<?php endforeach; ?>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>

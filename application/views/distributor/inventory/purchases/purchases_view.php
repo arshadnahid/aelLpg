@@ -46,28 +46,28 @@
                             <div class="widget-toolbar no-border invoice-info">
                                 <span class="invoice-info-label">Payment Type:</span>
                                 <span class="red"><?php
-if ($purchasesList->payType == 1) {
+if ($purchasesList->payment_type == 1) {
     echo " Cash";
-} elseif ($purchasesList->payType == 4) {
+} elseif ($purchasesList->payment_type == 4) {
     echo "Cash";
-} elseif ($purchasesList->payType == 3) {
+} elseif ($purchasesList->payment_type == 3) {
     echo "Cheque";
 } else {
     echo "Credit";
 }
 ?></span>
                                 <br />
-                                <?php if ($purchasesList->payType == 2) { ?>
+                                <?php if ($purchasesList->payment_type == 2) { ?>
                                     <span class="invoice-info-label"> Due Date:</span>
                                     <span class="red"><?php echo date('d-m-Y', strtotime($purchasesList->dueDate)); ?></span>
                                 <?php } ?>
                             </div>
                             <div class="widget-toolbar no-border invoice-info">
                                 <span class="invoice-info-label">Voucher ID:</span>
-                                <span class="red"><?php echo $purchasesList->voucher_no; ?> / <?php echo $purchasesList->mainInvoiceId; ?></span>
+                                <span class="red"><?php echo $purchasesList->invoice_no; ?> / <?php echo $purchasesList->supplier_invoice_no; ?></span>
                                 <br />
                                 <span class="invoice-info-label"> Date:</span>
-                                <span class="red"><?php echo date('d-m-Y', strtotime($purchasesList->date)); ?></span>
+                                <span class="red"><?php echo date('d-m-Y', strtotime($purchasesList->invoice_date)); ?></span>
                             </div>
                             <div class="widget-toolbar hidden-480"  class="hidden-xs">
                                 <a  onclick="window.print();" style="cursor:pointer;">
@@ -137,9 +137,11 @@ if ($purchasesList->payType == 1) {
                                                 </li>
                                                 <li>
                                                     <i class="ace-icon fa fa-caret-right green"></i> Transportation: <?php
-                                if (!empty($purchasesList->transportation)):
-                                    $transporation = $this->Common_model->tableRow('vehicle', 'id', $purchasesList->transportation);
-                                    echo $transporation->vehicleName . ' [ ' . $transporation->vehicleModel . ' ] ';
+                               // if (!empty($purchasesList->transportation)):
+                                if (!empty($purchasesList->transport_charge)):
+                                   // $transporation = $this->Common_model->tableRow('vehicle', 'id', $purchasesList->transportation);
+                                   // echo $transporation->vehicleName . ' [ ' . $transporation->vehicleModel . ' ] ';
+                                    echo $transporation->transport_charge ;
                                 else:
                                     echo "N/A";
                                 endif;
@@ -149,9 +151,11 @@ if ($purchasesList->payType == 1) {
                                                     <i class="ace-icon fa fa-caret-right green"></i> Loader:
 
                                                     <?php
-                                                    if (!empty($purchasesList->loader)):
-                                                        $loaderInfo = $this->Common_model->tableRow('employee', 'id', $purchasesList->loader);
-                                                        echo $loaderInfo->personalMobile . ' [ ' . $loaderInfo->name . ' ] ';
+                                                    if (!empty($purchasesList->loader_charge)):
+                                                    //if (!empty($purchasesList->loader)):
+                                                        //$loaderInfo = $this->Common_model->tableRow('employee', 'id', $purchasesList->loader);
+                                                        //echo $loaderInfo->personalMobile . ' [ ' . $loaderInfo->name . ' ] ';
+                                                        echo $loaderInfo->loader_charge ;
                                                     else:
                                                         echo "N/A";
                                                     endif;
@@ -164,16 +168,19 @@ if ($purchasesList->payType == 1) {
                                 </div><!-- /.row -->
                                 <div class="space"></div>
                                 <div style="min-height:400px;" >
-                                    <table class="table table-striped table-bordered">
+                                    <table class="table table-striped table-bordered" id="ALLPRODUCT">
                                         <thead>
                                             <tr>
                                                 <td class="center">#</td>
-                                                <td><strong>Product Category</strong></td>
                                                 <td><strong>Product</strong></td>
-                                                <td><strong>Unit</strong></td>
+                                                <td><strong>Return Product</strong></td>
+
+                                                <td><strong>Return Quantity</strong></td>
                                                 <td><strong>Quantity</strong></td>
                                                 <td><strong>Unit Price</strong></td>
                                                 <td><strong>Total Price</strong></td>
+
+
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -182,37 +189,44 @@ if ($purchasesList->payType == 1) {
                                             $trate = 0;
                                             $tprice = 0;
                                             foreach ($stockList as $key => $each_info):
-                                                if ($each_info->type == 'In') {
+                                                //if ($each_info->type == 'In') {
                                                     $tqty += $each_info->quantity;
-                                                    $trate += $each_info->rate;
-                                                    $tprice += $each_info->rate * $each_info->quantity;
+                                                    $trate += $each_info->unit_price;
+                                                    $tprice += $each_info->unit_price * $each_info->quantity;
                                                     ?>
                                                     <tr>
                                                         <td class="center"><?php echo $key + 1; ?></td>
                                                         <td>
                                                             <?php
-                                                            echo $this->Common_model->tableRow('productcategory', 'category_id', $each_info->category_id)->title;
+                                                            echo $each_info->title .' '.$each_info->productName .' '.$each_info->unitTtile .' [ ' . $each_info->brandName . ' ] ';
+                                                            //echo $this->Common_model->tableRow('productcategory', 'category_id', $each_info->category_id)->title;
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php
-                                                            $productInfo = $this->Common_model->tableRow('product', 'product_id', $each_info->product_id);
-                                                            echo $productInfo->productName;
-                                                            echo ' [ ' . $this->Common_model->tableRow('brand', 'brandId', $productInfo->brand_id)->brandName . ' ] ';
+                                                            if($each_info->return_product_cat!='') {
+                                                                echo $each_info->return_product_cat . ' ' . $each_info->return_product_name . ' ' . $each_info->return_product_unit . ' [ ' . $each_info->return_product_brand . ' ] ';
+                                                            }else{
+                                                                echo '------';
+                                                            }
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php
-                                                            if (!empty($each_info->unit)):
-                                                                echo $this->Common_model->tableRow('unit', 'unit_id', $each_info->unit)->unitTtile;
-                                                            endif;
+                                                            if($each_info->return_product_cat!='') {
+                                                                echo $each_info->return_quantity;
+                                                            }else{
+                                                                echo '------';
+                                                            }
                                                             ?>
                                                         </td>
                                                         <td align='right'><?php echo $each_info->quantity; ?> </td>
-                                                        <td align='right'><?php echo $each_info->rate; ?> </td>
-                                                        <td align='right'><?php echo number_format($each_info->rate * $each_info->quantity, 2); ?> </td>
+                                                        <td align='right'><?php echo $each_info->unit_price; ?> </td>
+                                                        <td align='right'><?php echo number_format($each_info->unit_price * $each_info->quantity, 2); ?> </td>
                                                     </tr>
-                                                <?php }endforeach; ?>
+                                                <?php
+                                            //}
+                                                endforeach; ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -221,19 +235,19 @@ if ($purchasesList->payType == 1) {
                                             </tr>
                                             <tr>
                                                 <td colspan="6" align="right"><strong>Discount ( - )</strong></td>
-                                                <td align='right'><?php echo number_format((float) $purchasesList->discount, 2, '.', ','); ?></td>
+                                                <td align='right'><?php echo number_format((float) $purchasesList->discount_amount, 2, '.', ','); ?></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="6" align="right"><strong>Loader ( + )</strong></td>
-                                                <td align='right'><?php echo number_format((float) $purchasesList->loaderAmount, 2, '.', ','); ?></td>
+                                                <td align='right'><?php echo number_format((float) $purchasesList->loader_charge, 2, '.', ','); ?></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="6" align="right"><strong>Transportation ( + )</strong></td>
-                                                <td align='right'><?php echo number_format((float) $purchasesList->transportationAmount, 2, '.', ','); ?></td>
+                                                <td align='right'><?php echo number_format((float) $purchasesList->transport_charge, 2, '.', ','); ?></td>
                                             </tr>
 
                                             <?php
-                                            $netAmount = ($tprice + $purchasesList->transportationAmount + $purchasesList->loaderAmount) - $purchasesList->discount ;
+                                            $netAmount = ($tprice + $purchasesList->transport_charge + $purchasesList->loader_charge) - $purchasesList->discount_amount ;
                                             ?>
                                             <tr>
                                                 <td colspan="6" align="right"><strong>Net Total</strong></td>
@@ -254,7 +268,7 @@ if ($purchasesList->payType == 1) {
                                             </tr>
                                             <tr>
                                                 <td colspan="7" >
-                                                    <span>Narration : &nbsp;</span> <?php echo $purchasesList->narration; ?>
+                                                    <span>Narration : &nbsp;</span> <?php //echo $purchasesList->narration; ?>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -309,6 +323,51 @@ if ($purchasesList->payType == 1) {
             $('#customerCurrentDue').text(parseFloat(data).toFixed(2));
         }
     });
+
+    MergeCommonRowsForSearchResult($('#ALLPRODUCT'), 1, 3);
+
+
+
+    function MergeCommonRowsForSearchResult(table, startCol, HowManyCol) {
+
+
+        var firstColumnBrakes = [];
+        // iterate through the columns instead of passing each column as function parameter:
+        for (var i = startCol; i <= (startCol + HowManyCol); i++) {
+            var previous = null, cellToExtend = null, rowspan = 1;
+            table.find("td:nth-child(" + i + ")").each(function (index, e) {
+                var jthis = $(this), content = jthis.text();
+
+                // check if current row "break" exist in the array. If not, then extend rowspan:
+                if (previous == content && content !== "" && $.inArray(index, firstColumnBrakes) === -1) {
+                    console.log(content);
+                    // hide the row instead of remove(), so the DOM index won't "move" inside loop.
+                    jthis.addClass('hidden');
+                    cellToExtend.attr("rowspan", (rowspan = rowspan + 1));
+                    //sum
+
+
+
+
+
+
+
+                } else {
+                    // store row breaks only for the first column:
+                    if (i === 1)
+                        firstColumnBrakes.push(index);
+                    rowspan = 1;
+                    previous = content;
+                    cellToExtend = jthis;
+                }
+
+            });
+            //sumColValue(table,startCol);
+        }
+
+        // now remove hidden td's (or leave them hidden if you wish):
+        $('td.hidden').remove();
+    }
 
 
 </script>

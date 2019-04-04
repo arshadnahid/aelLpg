@@ -476,15 +476,29 @@ $(document).on("keyup", ".add_rate", function () {
 
 $(document).ready(function () {
     var j = 0;
-    $("#add_item").click(function () {
+    var slNo = 1;
+    $("#add_item22").click(function () {
         var productCatID = $('#productID').find('option:selected').attr('categoryId');
         var productCatName = $('#productID').find('option:selected').attr('categoryName');
         var productID = $('#productID').val();
         var productName = $('#productID').find('option:selected').attr('productName');
+
+        var ispackage = $('#productID').find('option:selected').attr('ispackage');
+        var package_id2 = $('#productID2').val();
+        var productCatName2 = $('#productID2').find('option:selected').attr('categoryName2');
+        var productName2 = $('#productID2').find('option:selected').attr('productName2');
+        var brand_id = $('#productID').find('option:selected').attr('brand_id');
+
+
         var quantity = $('.quantity').val();
         var rate = $('.rate').val();
         var price = $('.price').val();
         var returnQuantity = $('.returnQuantity').val();
+
+        var returnQuentity = $('.returnQuentity').val();
+        if(ispackage==0){
+
+
         if(productCatID  == ''){
             swal("Product Category can't be empty!", "Validation Error!", "error");
             return false;
@@ -498,11 +512,107 @@ $(document).ready(function () {
             swal("Unit Price Can't be empty!", "Validation Error!", "error");
             return false;
         }else{
-            if(productCatID == 2){
-                $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="category_id[]" value="'  + productCatID + '"><td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName + '<input type="hidden"  name="product_id[]" value="' + productID + '"></td><td align="right"><input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity[]" value="' + quantity + '"></td><td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '"></td><td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate[]" value="' + rate + '"></td><td align="right"><input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '"></td><td><a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
+            var tab;
+            if($('.is_same').val()==0){
+                slNo++;
             }else{
-                $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="category_id[]" value="'  + productCatID + '"><td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName + '<input type="hidden"  name="product_id[]" value="' + productID + '"></td><td align="right"><input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity[]" value="' + quantity + '"></td><td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '" readonly></td><td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate[]" value="' + rate + '"></td><td align="right"><input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '"></td><td><a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
+                slNo;
             }
+
+
+            if(productCatID == 2){
+                console.log('OOO');
+                tab ='<tr class="new_item' + j + '">' +
+                    '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
+                    '<input type="hidden" name="brand_id[]" value="'+brand_id+'"/>' +
+                    '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
+                    '<input type="hidden" name="category_id[]" value="'  + productCatID + '">' +
+                    '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName +
+                    '<input type="hidden"  name="product_id_'+ slNo +'" value="' + productID + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity_'+ slNo +'" value="' + quantity + '">' +
+                    '</td>' +
+                    '<td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '">' +
+                    '</td>' +
+                    '<td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate_'+ slNo +'" value="' + rate + '">' +
+                    '</td>' +
+                    '<td align="right"><input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '">' +
+                    '</td>' +
+                    '<td align="right">' + productCatName2 +'&nbsp;'+productName2+
+                    '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
+                    '</td>' +
+                    '</tr>';
+                $("#show_item tfoot").append(tab);
+            }else{
+                tab='<tr class="new_item' + j + '">' +
+                    '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
+                    '<input type="hidden" name="is_package_'+ slNo +'" value="0">' +
+                    '<input type="hidden" name="category_id_'+ slNo +'" value="' + productCatID + '">' +
+                    '<td style="padding-left:15px;"> [ ' + productCatName + '] - ' + productName +
+                    '<input type="hidden"  name="product_id[]" value="' + productID + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity[]" value="' + quantity + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '" readonly>' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate[]" value="' + rate + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input readonly type="text" class="add_price text-right form-control" id="tprice_'+ j +'" name="price[]" value="' + price + '">' +
+                    '</td>' +
+                    '<td align="right">' + productCatName2 +'&nbsp;'+productName2+
+                    '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
+                    '</td>' +
+                    '<td align="right">' +
+                    '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
+                    '</td>' +
+                    '<td><a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>';
+                $("#show_item tfoot").append(tab);
+            }
+        }
+        }else{
+            var quantity = $('.quantity').val();
+            var returnAble = $('.returnAble').val();
+            var rate = $('.rate').val();
+            var price = $('.price').val();
+            $.ajax({
+                type: "POST",
+                dataType:'json',
+                url:baseUrl + "lpg/PurchaseController/package_product_list",
+                data: 'package_id=' + productID,
+                success: function (data) {
+                    console.log(data);
+                    $.each(data, function (key, value) {
+                        slNo++;
+                        $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/><input type="hidden" name="is_package_'+ slNo +'" value="1"><input type="hidden" name="category_id_'+ slNo +'" value="' + value['category_id'] + '">' +
+                            '<td style="padding-left:15px;"> [ ' + value['title'] + '] - ' + value['productName'] +'&nbsp;'+ value['unitTtile'] +'&nbsp;[ '+ value['brandName']+" ]"+
+                            ' <input type="hidden"  name="product_id_'+ slNo +'" value="' + value['product_id'] + '"></td>' +
+                            '</td><td align="right"><input type="text" class="add_quantity decimal form-control text-right" id="qty_'+ j +'" name="quantity_'+ slNo +'" value="' + quantity + '"></td><td align="right"><input type="text" class="add_return form-control text-right decimal "  id="qtyReturn_'+ j +'"   name="add_returnAble[]" value=""  readonly></td><td align="right"><input type="text" id="rate_'+ j +'" class="add_rate form-control decimal text-right" name="rate_'+ slNo +'" value="' + rate + '"></td><td align="right"><input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '"></td><td></td><td></td><td><a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td></tr>');
+                        j++;
+
+                    });
+                    console.log(slNo);
+                }
+            });
+
+
+            $('.quantity').val('');
+            $('.rate').val('');
+            $('.price').val('');
+            $('.returnAble').val('');
+
+
+
         }
         $("#subBtn").attr('disabled',false);
         $('.quantity').val('');
@@ -546,51 +656,7 @@ $(document).ready(function () {
         });
     });
 });
-function getProductPrice(product_id) {
-    $("#stockQty").val('');
-    $(".quantity").val('');
 
-    var productCatID = parseFloat($('#productID').find('option:selected').attr('categoryId'));
-    if(productCatID ==2){
-        $(".returnQuantity").attr('readonly',false);
-    }else{
-        $(".returnQuantity").attr('readonly',true);
-    }
-    $.ajax({
-        type: "POST",
-        url: baseUrl + "FinaneController/getProductPriceForSale",
-        data: 'product_id=' + product_id,
-        success: function (data) {
-            $('.rate').val('');
-        }
-    });
-    $.ajax({
-        type: "POST",
-        url: baseUrl+ "FinaneController/getProductStock",
-        data: 'product_id=' + product_id,
-        success: function (data) {
-            var mainStock = parseFloat(data);
-            if(isNaN(mainStock)){
-                mainStock=0;
-            }
-            if(data !=''){
-                $("#stockQty").val(data);
-                $(".quantity").attr("disabled",false);
-                if(mainStock <= 0){
-                    $(".quantity").attr("disabled",true);
-                    $(".quantity").attr("placeholder", "0 ");
-                }else{
-                    $(".quantity").attr("disabled",false);
-                    $(".quantity").attr("placeholder", ""+mainStock);
-                }
-            }else{
-                $("#stockQty").val('');
-                $(".quantity").attr("disabled",true);
-                $(".quantity").attr("placeholder", "0");
-            }
-        }
-    });
-}
 function getProductPrice2(product_id) {
     $("#stockQty2").val('');
     $(".quantity2").val('');

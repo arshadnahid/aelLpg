@@ -2156,8 +2156,13 @@ class FinaneController extends CI_Controller {
     }
 
     function getProductStock() {
+
+        log_message('error','getProductStock POST '.print_r($_POST,true));
+
         $product_id = $this->input->post('product_id');
-        $productStock = $this->Sales_Model->getProductStock($product_id);
+        $category_id = $this->input->post('category_id');
+        $ispackage = $this->input->post('ispackage');
+        $productStock = $this->Sales_Model->getProductStock($product_id,$category_id,$ispackage);
         if (!empty($productStock) && $productStock > 0):
             echo $productStock;
         endif;

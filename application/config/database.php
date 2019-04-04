@@ -12,7 +12,7 @@ if ($_SERVER['HTTP_HOST'] == 'localhost'):
 //        'database' => 'aelbfopi_ael_erp',
        // 'database' => 'aelbfopi_ael_erp',
        //  'database' => 'hazi',
-        'database' => 'freshDatabase_2',
+        'database' => 'freshDatabase_3',
         //'username' => 'sflcl_aelfinal',
         //'password' => 'P7AH[?wgdL?,',
         //'database' => 'ael18',
