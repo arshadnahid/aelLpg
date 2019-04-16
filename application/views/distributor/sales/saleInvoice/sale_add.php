@@ -233,7 +233,7 @@
                                                                 </select>
                                                             </td>
                                                             <td><input type="text" class="form-control text-right is_same decimal"  value="0"><input type="hidden" value="" id="stockQty"/><input type="text"  onkeyup="checkStockOverQty(this.value)" class="form-control text-right quantity decimal"  placeholder="0"></td>
-                                                            <td><input type="hidden" value="" id="returnStockQty"/><input type="text" readonly onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity decimal"   placeholder="0"></td>
+                                                            <td><input type="hidden" value="" id="returnStockQty"/><input type="text" readonly  class="form-control text-right returnQuantity decimal"   placeholder="0"></td>
                                                             <td><input type="text" class="form-control text-right rate decimal" placeholder="0.00"  ></td>
                                                             <td><input type="text" class="form-control text-right price decimal" placeholder="0.00" readonly="readonly"></td>
                                                             <td>
@@ -540,7 +540,7 @@
         var slNo = 1;
         $("#add_item").click(function () {
             var productCatID = $('#productID').find('option:selected').attr('categoryId');
-            console.log(productCatID);
+
             var productCatName = $('#productID').find('option:selected').attr('categoryName');
             var productID = $('#productID').val();
             var productName = $('#productID').find('option:selected').attr('productName');
@@ -577,7 +577,7 @@
                             '<td align="right">' +
                             '<input type="text" id="qty_'+ j +'" class="form-control text-right add_quantity decimal" onkeyup="checkStockOverQty(this.value)" name="quantity_'+ slNo +'" value="' + quantity + '">' +
                             '</td>' +
-                            '<td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity[]" value="' + returnQuantity + '">' +
+                            '<td align="right"><input type="text" class="add_ReturnQuantity  text-right form-control decimal" name="returnQuantity['+ slNo +']" value="' + returnQuantity + '">' +
                             '</td>' +
                             '<td align="right"><input type="text" id="rate_'+ j +'" class="form-control add_rate text-right decimal" name="rate_'+ slNo +'" value="' + rate + '">' +
                             '</td>' +
@@ -587,10 +587,11 @@
                             '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
                             '<tr>'+
                             '<td>'+
+                            '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
                             productName2+
                             '</td>'+
                             '<td>'+
-                            returnQuentity+
+                            '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
                             '</td>'+
                             '</tr>'+
                             '</table>'+
@@ -599,16 +600,18 @@
                             '<a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
                             '</td>' +
                             '</tr>';
-                        console.log(tab);
+
                         $("#show_item tfoot").append(tab);
                     }else {
                         slNo;
                         var tab2="<tr>" +
                             "<td>" +
+                            '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
                             productName2+
                             "</td>" +
                             "<td>" +
-                            returnQuentity+
+                            '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
+
                             "</td>" +
                             "</tr>";
 
@@ -641,10 +644,10 @@
                         '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
                         '<tr>'+
                         '<td>'+
-                        productName2+
+
                         '</td>'+
                         '<td>'+
-                        returnQuentity+
+
                         '</td>'+
                         '</tr>'+
                         '</table>'+
@@ -653,7 +656,7 @@
                         '<a del_id="'+j+'" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
                         '</td>' +
                         '</tr>';
-                    console.log(tab);
+
                     $("#show_item tfoot").append(tab);
 
 
@@ -682,7 +685,7 @@
                             j++;
 
                         });
-                        console.log(slNo);
+
                     }
                 });
                 $('.quantity').val('');
@@ -691,8 +694,15 @@
                 $('.returnAble').val('');
             }
 
+            findTotalCal();
+            setTimeout(function() {
+                ///calculateCustomerDue();
+                calcutateFinal();
+            }, 100);
+
         })
         j++;
+
 
 
     });
@@ -703,8 +713,7 @@
         $(".quantity").val('');
         $('.is_same').val('0');
         var productCatID = parseFloat($('#productID').find('option:selected').attr('categoryId'));
-        console.log('getProductPrice');
-        console.log(productCatID);
+
         var ispackage = $('#productID').find('option:selected').attr('ispackage');
         if(ispackage==1){
             product_id= $('#productID').find('option:selected').attr('product_id');
@@ -712,10 +721,9 @@
 
 
 
-        console.log('getProductPrice');
-        console.log(productCatID);
+
         if(productCatID ==2){
-            console.log('PPP');
+
             $(".returnQuantity").attr('readonly',false);
         }else{
             $(".returnQuantity").attr('readonly',true);
@@ -738,8 +746,7 @@
                     mainStock=0;
                 }
 
-                console.log('data');
-                console.log(data);
+
                 if(data !=''){
                     $("#stockQty").val(data);
                     $(".quantity").attr("disabled",false);

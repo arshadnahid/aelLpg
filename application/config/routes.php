@@ -203,6 +203,9 @@ $route['purchases_list'] = 'InventoryController/purchases_list';
 //$route['purchases_add'] = 'InventoryController/purchases_add';
 
 $route['purchases_add'] = 'lpg/PurchaseController/purchases_add';
+$route['full_cylinder_stock_report'] = 'lpg/PurchaseController/cylinder_stock_report';
+$route['stock_group_report'] = 'lpg/PurchaseController/cylinder_stock_group_report';
+
 
 $route['purchases_add/(:any)'] = 'InventoryController/purchases_add/$1';
 $route['purchases_edit/(:any)'] = 'InventoryController/purchases_edit/$1';
@@ -222,6 +225,10 @@ $route['supPendingCheque'] = 'InventoryController/supPendingCheque';
 
 $route['productWiseSalesReport'] = 'SalesController/productWiseSalesReport';
 $route['salesReport'] = 'SalesController/salesReport';
+$route['cylinder_sales_report'] = 'lpg/SalesController/cylinder_sales_report';
+$route['sales_report_brand_wise'] = 'lpg/SalesController/sales_report_brand_wise';
+$route['daily_sales_statement']='lpg/SalesController/daily_sales_statement';
+
 $route['referenceSalesReport'] = 'SalesController/referenceSalesReport';
 $route['cancelOrder'] = 'SalesController/cancelOrder';
 $route['salesOrderCancel/(:any)'] = 'SalesController/salesOrderCancel/$1';
@@ -254,10 +261,11 @@ $route['editCustomer/(:any)'] = 'SalesController/editCustomer/$1';
 
 $route['salesOrderConfirm/(:any)'] = 'SalesController/salesOrderConfirm/$1';
 $route['salesInvoice'] = 'SalesController/salesInvoice';
-$route['salesInvoice_add'] = 'SalesController/salesInvoice_add';
+//$route['salesInvoice_add'] = 'SalesController/salesInvoice_add';
+$route['salesInvoice_add'] = 'lpg/SalesController/salesInvoice_add';
 $route['salesInvoice_add/(:any)'] = 'SalesController/salesInvoice_add/$1';
 $route['salesInvoice_edit/(:any)'] = 'SalesController/salesInvoice_edit/$1';
-$route['salesInvoice_view/(:any)'] = 'SalesController/salesInvoice_view/$1';
+$route['salesInvoice_view/(:any)'] = 'lpg/SalesController/salesInvoice_view/$1';
 $route['salesInvoicViewWithCylinder/(:any)'] = 'SalesController/salesInvoicViewWithCylinder/$1';
 
 

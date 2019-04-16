@@ -86,23 +86,26 @@ class PurchaseController extends CI_Controller
                 $purchase_inv['is_active'] = 'Y';
                 $purchase_inv['is_delete'] = 'N';
                 $this->invoice_id = $this->Common_model->insert_data('purchase_invoice_info', $purchase_inv);
-
-
-
-
-
-
-
-
                 $productCate = $this->input->post('category_id');
                 $allStock = array();
-                //echo "<pre>";
-                //print_r($_POST['slNo']);exit;
                 foreach ($_POST['slNo'] as $key => $value){
                     unset($stock);
+                    $returnable_quantity=$_POST['add_returnAble'][$value] !=''?$_POST['add_returnAble'][$value] :0;
+                    $return_quentity=empty($_POST['returnQuentity_'.$value])?0:array_sum($_POST['returnQuentity_'.$value]);
+                    $supplier_advance=0;
+                    $supplier_due=0;
                     $stock['purchase_invoice_id'] = $this->invoice_id;
                     $stock['product_id'] = $_POST['product_id_'.$value];
                     $stock['is_package '] = $_POST['is_package_'.$value];
+                    $stock['returnable_quantity '] = $returnable_quantity;
+                    $stock['return_quentity '] = $return_quentity;
+                    if($returnable_quantity<$returnable_quantity){
+                        $supplier_advance=$returnable_quantity-$returnable_quantity;
+                    }else{
+                        $supplier_due=$returnable_quantity-$returnable_quantity;
+                    }
+                    $stock['supplier_due'] = $supplier_due;
+                    $stock['supplier_advance'] = $supplier_advance;
                     $stock['quantity'] = $_POST['quantity_'.$value];
                     $stock['unit_price'] = $_POST['rate_'.$value];
                     $stock['insert_by'] = $this->admin_id;
@@ -110,8 +113,6 @@ class PurchaseController extends CI_Controller
                     log_message('error','Insert in stock table'.print_r($stock,true));
                     //$allStock[] = $stock;
                     $purchase_details_id=$this->Common_model->insert_data('purchase_details', $stock);
-
-
                     if(isset($_POST['returnproduct_'.$value])){
                         foreach ($_POST['returnproduct_'.$value] as $key1 => $value1){
                             unset($stock2);
@@ -123,11 +124,7 @@ class PurchaseController extends CI_Controller
                             $stock2['insert_date'] = $this->timestamp;
                             $allStock[] = $stock2;
                         }
-
-
                     }
-
-
                 }
                 $this->db->insert_batch('purchase_return_details', $allStock);
                 //$this->Common_model->insert_batch('purchase_return_details', $allStock);
@@ -917,4 +914,48 @@ class PurchaseController extends CI_Controller
             return $generals_id;
         }
     }
+
+
+    public  function  cylinder_stock_report(){
+
+        if (isPostBack()) {
+
+            $brandId = $this->input->post('brandId');
+            $start_date = date('Y-m-d', strtotime($this->input->post('start_date')));
+            $end_date = date('Y-m-d', strtotime($this->input->post('end_date')));
+            $data['allStock'] = $this->Inventory_Model->cylinder_stock_report($start_date, $end_date,  $brandId);
+            //echo $this->db->last_query();
+            //echo '<pre>';
+            //print_r($data['allStock']);
+            //exit;
+        }
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['pageTitle'] = 'Cylinder Stock Report';
+
+        $data['brandList'] = $this->Common_model->getPublicBrand($this->dist_id);
+        $data['title'] = 'Stock Report';
+        $data['mainContent'] = $this->load->view('distributor/inventory/report/cylinder_stock_report', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+
+    }
+    public  function  cylinder_stock_group_report(){
+
+        if (isPostBack()) {
+
+            $brandId = $this->input->post('brandId');
+            $start_date = date('Y-m-d', strtotime($this->input->post('start_date')));
+            $end_date = date('Y-m-d', strtotime($this->input->post('end_date')));
+            $data['allStock'] = $this->Inventory_Model->cylinder_stock_group_report($start_date, $end_date,  $brandId);
+
+        }
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['pageTitle'] = 'Cylinder Stock Report';
+
+        $data['brandList'] = $this->Common_model->getPublicBrand($this->dist_id);
+        $data['title'] = 'Stock Report';
+        $data['mainContent'] = $this->load->view('distributor/inventory/report/cylinder_stock_group_report', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+
+    }
+
 }

@@ -265,7 +265,7 @@ class ServerFilterController extends CI_Controller {
 
     public function salesList() {
 
-        $this->Filter_Model->filterData('generals', array('generals.date', 'generals.voucher_no', 'form.name', 'customer.customerID', 'customer.customerName', 'generals.narration', 'generals.debit'), array('generals.date', 'generals.voucher_no', 'form.name', 'customer.customerID', 'customer.customerName', 'generals.narration', 'generals.debit'), array('generals.date', 'generals.voucher_no', 'form.name', 'customer.customerID', 'customer.customerName', 'generals.narration', 'generals.debit'), $this->dist_id);
+        $this->Filter_Model->filterData('sales_invoice_info', array('sales_invoice_info.invoice_date', 'sales_invoice_info.invoice_no', 'customer.customerID', 'customer.customerName', 'sales_invoice_info.narration', 'sales_invoice_info.paid_amount'), array('sales_invoice_info.invoice_date', 'sales_invoice_info.invoice_no', 'customer.customerID', 'customer.customerName', 'sales_invoice_info.narration', 'sales_invoice_info.paid_amount'), array('sales_invoice_info.invoice_date', 'sales_invoice_info.invoice_no', 'customer.customerID', 'customer.customerName', 'sales_invoice_info.narration', 'sales_invoice_info.paid_amount'), $this->dist_id);
         $list = $this->Filter_Model->get_sales_datatables();
         $data = array();
         $no = $_POST['start'];
@@ -273,16 +273,16 @@ class ServerFilterController extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = date('M d, Y', strtotime($sale->date));
-            $row[] = '<a title="view invoice" href="' . site_url('salesInvoice_view/' . $sale->generals_id) . '">' . $sale->voucher_no . '</a></td>';
+            $row[] = date('M d, Y', strtotime($sale->invoice_date));
+            $row[] = '<a title="view invoice" href="' . site_url('salesInvoice_view/' . $sale->sales_invoice_id) . '">' . $sale->invoice_no . '</a></td>';
             $row[] = $sale->name;
             $row[] = '<a title="View Customer Dashboard" href="' . site_url('customerDashboard/' . $sale->customer_id) . '">' . $sale->customerID . ' [ ' . $sale->customerName . ' ] ' . '</a>';
             $row[] = $sale->narration;
             $row[] = number_format((float) $sale->debit, 2, '.', ',');
-            $row[] = number_format((float) $this->Sales_Model->getGpAmountByInvoiceId($this->dist_id, $sale->generals_id), 2, '.', ',');
-            $row[] = '<a class="blue" href="' . site_url('salesInvoice_view/' . $sale->generals_id) . '">
+            $row[] = number_format((float) $this->Sales_Model->getGpAmountByInvoiceId($this->dist_id, $sale->sales_invoice_id), 2, '.', ',');
+            $row[] = '<a class="blue" href="' . site_url('salesInvoice_view/' . $sale->sales_invoice_id) . '">
     <i class="ace-icon fa fa-search-plus bigger-130"></i></a>
-    <a class="green saleEditPermission" href="' . site_url('salesInvoice_edit/' . $sale->generals_id) . '">
+    <a class="green saleEditPermission" href="' . site_url('salesInvoice_edit/' . $sale->sales_invoice_id) . '">
     <i class="ace-icon fa fa-pencil bigger-130"></i></a>
     ';
             $data[] = $row;

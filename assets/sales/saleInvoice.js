@@ -91,6 +91,8 @@ $(document).ready(function () {
 
 function calcutateFinal(){
 
+    console.log('from calcutateFinal');
+
     findVatAmount();
     var loader = parseFloat($("#loader").val());
     if(isNaN(loader)){

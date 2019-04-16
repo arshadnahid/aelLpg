@@ -145,7 +145,7 @@ class ServerFilterModel extends CI_Model {
         }
     }
 
-    private function _get_sales_datatables_query() {
+    /*private function _get_sales_datatables_query() {
         $this->db->select("form.name,generals.generals_id,generals.voucher_no,generals.narration,generals.date,generals.debit,customer.customerID,customer.customerName,customer.customer_id");
         $this->db->from("generals");
         $this->db->join('customer', 'customer.customer_id=generals.customer_id');
@@ -173,6 +173,37 @@ class ServerFilterModel extends CI_Model {
         } else if (isset($this->order)) {
             //$order = $this->order;
             $this->db->order_by('generals.date', 'desc');
+        }
+    }*/
+
+    private function _get_sales_datatables_query() {
+        $this->db->select("sales_invoice_info.sales_invoice_id,sales_invoice_info.invoice_no,sales_invoice_info.narration,sales_invoice_info.invoice_date,sales_invoice_info.paid_amount,customer.customerID,customer.customerName,customer.customer_id");
+        $this->db->from("sales_invoice_info");
+        $this->db->join('customer', 'customer.customer_id=sales_invoice_info.customer_id');
+
+        $this->db->where('sales_invoice_info.dist_id', $this->dist_id);
+
+        $i = 0;
+        foreach ($this->column_search as $item) { // loop column
+            if ($_POST['search']['value']) { // if datatable send POST for search
+                if ($i === 0) { // first loop
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+
+                if (count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+            }
+            $i++;
+        }
+
+        if (isset($_POST['order'])) { // here order processing
+            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else if (isset($this->order)) {
+            //$order = $this->order;
+            $this->db->order_by('sales_invoice_info.invoice_date', 'desc');
         }
     }
 
@@ -650,10 +681,16 @@ class ServerFilterModel extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function count_all_sales() {
+    /*public function count_all_sales() {
         $this->db->from($this->table);
         $this->db->where('dist_id', $this->dist_id);
         $this->db->where('form_id', 5);
+        return $this->db->count_all_results();
+    }*/
+    public function count_all_sales() {
+        $this->db->from($this->table);
+        $this->db->where('dist_id', $this->dist_id);
+        //$this->db->where('form_id', 5);
         return $this->db->count_all_results();
     }
 

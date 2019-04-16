@@ -1,4 +1,11 @@
 
+
+<?php //echo '<pre>';
+//print_r($stockList);
+//exit;
+?>
+
+
 <div class="main-content">
     <div class="main-content-inner">
         <div class="breadcrumbs ace-save-state noPrint" id="breadcrumbs">
@@ -67,10 +74,10 @@ if ($saleslist->payType == 1) {
                             </div>
                             <div class="widget-toolbar no-border invoice-info">
                                 <span class="invoice-info-label">Invoice ID:</span>
-                                <span class="red"><?php echo $saleslist->voucher_no; ?> / <?php echo $saleslist->mainInvoiceId ?></span>
+                                <span class="red"><?php echo $saleslist->invoice_no; ?> / <?php echo $saleslist->mainInvoiceId ?></span>
                                 <br />
                                 <span class="invoice-info-label">Date:</span>
-                                <span class="blue"><?php echo date('d-m-Y', strtotime($saleslist->date)) ?></span>
+                                <span class="blue"><?php echo date('d-m-Y', strtotime($saleslist->invoice_date)) ?></span>
                             </div>
                             <div class="widget-toolbar hidden-480"  class="hidden-xs">
                                 <a  onclick="window.print();" style="cursor:pointer;">
@@ -196,6 +203,8 @@ if ($saleslist->payType == 1) {
                                                 <td class="center">#</td>
                                                 <td>Product Category</td>
                                                 <td>Product</td>
+                                                <td>Recive Product</td>
+                                                <td>Quantity Recived</td>
                                                 <td>Quantity</td>
                                                 <td>Unit Price</td>
                                                 <td>Total Price</td>
@@ -207,76 +216,96 @@ if ($saleslist->payType == 1) {
                                             $trate = 0;
                                             $tprice = 0;
                                             $j = 1;
-                                            foreach ($stockList as $key => $each_info):
-                                                if ($each_info->type == 'Out') {
-                                                    $tqty += $each_info->quantity;
-                                                    $trate += $each_info->rate;
-                                                    $tprice += $each_info->rate * $each_info->quantity;
+                                            foreach ($stockList[$saleslist->sales_invoice_id] as $key => $each_info):
+
+                                                    $tqty += $each_info['quantity'];
+                                                    $trate += $each_info['unit_price'];
+                                                    $tprice += $each_info['unit_price'] * $each_info['quantity'];
                                                     ?>
                                                     <tr>
                                                         <td class="center"><?php echo $j++; ?></td>
                                                         <td>
                                                             <?php
-                                                            echo $this->Common_model->tableRow('productcategory', 'category_id', $each_info->category_id)->title;
+                                                            echo $each_info['title'];
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php
-                                                            $productInfo = $this->Common_model->tableRow('product', 'product_id', $each_info->product_id);
-                                                            echo $productInfo->productName;
-                                                            echo ' [ ' . $this->Common_model->tableRow('brand', 'brandId', $productInfo->brand_id)->brandName . ' ] ';
+                                                            echo $each_info['productName'] .''. $each_info['unitTtile'] .'['.$each_info['brandName'].']';
+
+
                                                             ?>
                                                         </td>
-                                                        <td><?php echo $each_info->quantity; ?> </td>
-                                                        <td align="right"><?php echo $each_info->rate; ?> </td>
-                                                        <td align="right"><?php echo number_format($each_info->rate * $each_info->quantity, 2); ?> </td>
+                                                        <td colspan="2">
+                                                            <table class="table table-border">
+                                                                <?php
+                                                                foreach ($each_info['return'] as $key1 =>$value1){
+                                                                foreach ($value1 as $key2 =>$value2){
+
+                                                                ?>
+                                                                    <tr>
+                                                                        <td><?php echo $value2['return_product_cat'].' '. $value2['return_product_name'] .' '. $value2['return_product_unit'] .'[ '. $value2['return_product_brand'] .' ]'?></td>
+                                                                        <td><?php echo $value2['returnable_quantity']?></td>
+                                                                    </tr>
+
+
+                                                                <?php }}?>
+                                                            </table>
+                                                        </td>
+
+                                                        <td><?php echo $each_info['quantity']; ?> </td>
+                                                        <td align="right"><?php echo $each_info['unit_price']; ?> </td>
+                                                        <td align="right"><?php echo number_format($each_info['unit_price'] * $each_info['quantity'], 2); ?> </td>
                                                     </tr>
-                                                <?php }endforeach; ?>
+                                                <?php
+
+
+                                                endforeach; ?>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Sub - Total</strong></td>
+                                                <td colspan="7" align="right"><strong>Sub - Total</strong></td>
 
                                                 <td align="right"><?php echo number_format($tprice, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Discount ( - ) </strong></td>
+                                                <td colspan="7" align="right"><strong>Discount ( - ) </strong></td>
 
                                                 <td align="right"><?php echo number_format($saleslist->discount, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>VAT <?php echo round($saleslist->vat, 2) . ' '; ?>%( + )</strong></td>
+                                                <td colspan="7" align="right"><strong>VAT <?php echo round($saleslist->vat, 2) . ' '; ?>%( + )</strong></td>
                                                 <td align="right"><?php echo number_format($saleslist->vatAmount, 2); ?></td>
 
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Loader ( + )</strong></td>
+                                                <td colspan="7" align="right"><strong>Loader ( + )</strong></td>
                                                 <td align="right"><?php echo number_format($saleslist->loaderAmount, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Transportation ( + )</strong></td>
+                                                <td colspan="7" align="right"><strong>Transportation ( + )</strong></td>
                                                 <td align="right"><?php echo number_format($saleslist->transportationAmount, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Net Total</strong></td>
+                                                <td colspan="7" align="right"><strong>Net Total</strong></td>
                                                 <td align="right"><?php echo number_format($saleslist->debit, 2); ?></td>
                                             </tr>
 
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Payment ( - )</strong></td>
+                                                <td colspan="7" align="right"><strong>Payment ( - )</strong></td>
                                                 <td align="right"><?php echo number_format($invoicePayment, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5" align="right"><strong>Due Amount</strong></td>
+                                                <td colspan="7" align="right"><strong>Due Amount</strong></td>
                                                 <td align="right"><?php echo number_format($saleslist->debit - $invoicePayment, 2); ?></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="6" >
+                                                <td colspan="8" >
                                                     <strong><span>In Words : &nbsp;</span> <?php echo $this->Common_model->get_bd_amount_in_text($saleslist->debit); ?></strong>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="6">
+                                                <td colspan="8">
                                                     <span>Narration : &nbsp;</span> <?php echo $saleslist->narration; ?>
                                                 </td>
                                             </tr>

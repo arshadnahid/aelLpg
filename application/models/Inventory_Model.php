@@ -183,7 +183,220 @@ ON tab4.product_id=p.product_id
         $result = $query->result();
         return $result;
     }
+    public function cylinder_stock_report($start_date, $end_date,  $brandId){
+        $query="SELECT
+                brand.brandId,
+                brand.brandName,
+                IFNULL(purchase_refill_qty_table.purchase_refill_qty,0) as purchase_refill_qty,
+                IFNULL(purchase_empty_qty_table.purchase_empty_qty,0) as purchase_empty_qty,
+                IFNULL(purchase_refill_qty_table.purchase_returnable_quantity,0) as purchase_returnable_quantity,
+                IFNULL(purchase_refill_qty_table.purchase_return_quentity,0) as purchase_return_quentity,
+                IFNULL(purchase_refill_qty_table.purchase_supplier_due,0) as purchase_supplier_due,
+                IFNULL(purchase_refill_qty_table.purchase_supplier_advance,0) as purchase_supplier_advance,
+                IFNULL(sales_refill_qty_table.sales_refill_qty,0) as sales_refill_qty,
+                IFNULL(sales_empty_qty_table.sales_empty_qty,0) as sales_empty_qty,
+                IFNULL(sales_refill_qty_table.sales_returnable_quantity,0) as sales_returnable_quantity,
+                IFNULL(sales_refill_qty_table.sales_return_quentity,0) as sales_return_quentity,
+                IFNULL(sales_refill_qty_table.sales_customer_due,0) as sales_customer_due,
+                IFNULL(sales_refill_qty_table.sales_customer_advance,0) as sales_customer_advance
+            FROM
+                brand
+            LEFT JOIN(
+                SELECT
+                    product.product_id,
+                    product.brand_id,
+                    SUM(IFNULL(purchase_details.quantity,0)) AS purchase_refill_qty,
+                    SUM(IFNULL(purchase_details.returnable_quantity,0))AS purchase_returnable_quantity,
+                    SUM(IFNULL(purchase_details.return_quentity,0))AS purchase_return_quentity,
+                    SUM(IFNULL(purchase_details.supplier_due,0))AS purchase_supplier_due,
+                    SUM(IFNULL(purchase_details.supplier_advance,0))AS purchase_supplier_advance,
+                    product.category_id
+                FROM
+                    product
+                LEFT JOIN purchase_details ON purchase_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 2
+                GROUP BY
+                    product.brand_id
+            )AS purchase_refill_qty_table ON purchase_refill_qty_table.brand_id =brand.brandId
+            AND purchase_refill_qty_table.category_id = 2
+            LEFT JOIN(
+                SELECT
+                    product.brand_id,
+                    product.category_id,
+                    (SUM(IFNULL(purchase_details.quantity,0))- IFNULL(SUM(purchase_return_details.return_quantity),0))AS purchase_empty_qty
+                FROM
+                    product
+                LEFT JOIN purchase_details ON purchase_details.product_id = product.product_id
+                AND purchase_details.is_package = 0
+                LEFT JOIN purchase_return_details ON purchase_return_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 1
+                GROUP BY
+                    product.brand_id
+            )AS purchase_empty_qty_table ON purchase_empty_qty_table.brand_id = brand.brandId
+            AND purchase_empty_qty_table.category_id = 1
+            LEFT JOIN(
+                SELECT
+                    product.product_id,
+                    product.brand_id,
+                    SUM(IFNULL(sales_details.quantity,0)) AS sales_refill_qty,
+                    SUM(IFNULL(sales_details.returnable_quantity,0))AS sales_returnable_quantity,
+                    SUM(IFNULL(sales_details.return_quentity,0))AS sales_return_quentity,
+                    SUM(IFNULL(sales_details.customer_due,0))AS sales_customer_due,
+                    SUM(IFNULL(sales_details.customer_advance,0))AS sales_customer_advance,
+                    product.category_id
+                FROM
+                    product
+                LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 2
+                GROUP BY
+                    product.brand_id
+            )AS sales_refill_qty_table ON sales_refill_qty_table.brand_id =brand.brandId
+            AND sales_refill_qty_table.category_id = 2
+            LEFT JOIN(
+                SELECT
+                    product.brand_id,
+                    product.category_id,
+                    (SUM(IFNULL(sales_details.quantity,0))- IFNULL(SUM(sales_return_details.return_quantity),0))AS sales_empty_qty
+                FROM
+                    product
+                LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                AND sales_details.is_package = 0
+                LEFT JOIN sales_return_details ON sales_return_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 1
+                GROUP BY
+                    product.brand_id
+            )AS sales_empty_qty_table ON sales_empty_qty_table.brand_id = brand.brandId
+            AND sales_empty_qty_table.category_id = 1";
+        if($brandId !='0'){
+            $query.=" WHERE brand.brandId=".$brandId;
+        }
 
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+    public function cylinder_stock_group_report($start_date, $end_date,  $brandId){
+        $query="SELECT
+                brand.brandId,
+                brand.brandName,
+                product.productName,
+                unit.unitTtile,
+                IFNULL(purchase_refill_qty_table.purchase_refill_qty,0)AS purchase_refill_qty,
+                IFNULL(purchase_refill_qty_table.purchase_returnable_quantity,0)AS purchase_returnable_quantity,
+                IFNULL(purchase_refill_qty_table.purchase_return_quentity,0)AS purchase_return_quentity,
+                IFNULL(purchase_refill_qty_table.purchase_supplier_due,0)AS purchase_supplier_due,
+                IFNULL(purchase_refill_qty_table.purchase_supplier_advance,	0)AS purchase_supplier_advance,
+              IFNULL(purchase_empty_qty_table.purchase_empty_qty,0)AS purchase_empty_qty,
+              IFNULL(sales_refill_qty_table.sales_refill_qty,	0	)AS sales_refill_qty,
+                IFNULL(sales_empty_qty_table.sales_empty_qty,0)AS sales_empty_qty,
+                IFNULL(sales_refill_qty_table.sales_returnable_quantity,0	)AS sales_returnable_quantity,
+                IFNULL(sales_refill_qty_table.sales_return_quentity,0	)AS sales_return_quentity,
+                IFNULL(sales_refill_qty_table.sales_customer_due,0	)AS sales_customer_due,
+                IFNULL(sales_refill_qty_table.sales_customer_advance,	0	)AS sales_customer_advance
+            FROM
+                brand
+            LEFT JOIN product ON product.brand_id = brand.brandId
+            LEFT JOIN unit ON unit.unit_id=product.unit_id
+            LEFT JOIN(
+                SELECT
+                    product.product_id,
+                    product.brand_id,
+                    product.productName,
+                    SUM(IFNULL(	purchase_details.quantity,0))AS purchase_refill_qty,
+                    SUM(IFNULL(purchase_details.returnable_quantity,0))AS purchase_returnable_quantity,
+                    SUM(IFNULL(purchase_details.return_quentity,0))AS purchase_return_quentity,
+                    SUM(IFNULL(purchase_details.supplier_due,0))AS purchase_supplier_due,
+                    SUM(IFNULL(purchase_details.supplier_advance,0))AS purchase_supplier_advance,
+                    product.category_id
+                FROM
+                    product
+                LEFT JOIN purchase_details ON purchase_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 2
+                GROUP BY
+                    product.brand_id,
+                    product.productName
+            )AS purchase_refill_qty_table ON purchase_refill_qty_table.brand_id = brand.brandId
+            AND purchase_refill_qty_table.productName = product.productName
+            AND purchase_refill_qty_table.category_id = 2
+            LEFT JOIN(SELECT
+                    product.brand_id,
+                    product.category_id,
+                product.productName,
+                    (SUM(IFNULL(purchase_details.quantity,0))- IFNULL(SUM(purchase_return_details.return_quantity),0))AS purchase_empty_qty
+                FROM
+                    product
+                LEFT JOIN purchase_details ON purchase_details.product_id = product.product_id
+                AND purchase_details.is_package = 0
+                LEFT JOIN purchase_return_details ON purchase_return_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 1
+                GROUP BY
+                    product.brand_id,
+                    product.productName
+            )AS purchase_empty_qty_table ON purchase_empty_qty_table.brand_id = brand.brandId
+            AND purchase_empty_qty_table.productName = product.productName
+            AND purchase_empty_qty_table.category_id = 1
+            LEFT JOIN(
+            SELECT
+                    product.product_id,
+                    product.brand_id,
+                product.productName,
+                    SUM(IFNULL(sales_details.quantity, 0))AS sales_refill_qty,
+                    SUM(IFNULL(sales_details.returnable_quantity,0))AS sales_returnable_quantity,
+                    SUM(IFNULL(sales_details.return_quentity,	0))AS sales_return_quentity,
+                    SUM(IFNULL(sales_details.customer_due,0))AS sales_customer_due,
+                    SUM(IFNULL(sales_details.customer_advance,0))AS sales_customer_advance,
+                    product.category_id
+                FROM
+                    product
+                LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 2
+                GROUP BY
+                    product.brand_id,
+                    product.productName
+            
+            )AS sales_refill_qty_table ON sales_refill_qty_table.brand_id = brand.brandId
+            AND sales_refill_qty_table.productName = product.productName
+            AND sales_refill_qty_table.category_id = 2
+            LEFT JOIN(
+                SELECT
+                    product.brand_id,
+                    product.category_id,
+                product.productName,
+                    (SUM(IFNULL(sales_details.quantity, 0))- IFNULL(SUM(sales_return_details.return_quantity),0))AS sales_empty_qty
+                FROM
+                    product
+                LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                AND sales_details.is_package = 0
+                LEFT JOIN sales_return_details ON sales_return_details.product_id = product.product_id
+                WHERE
+                    product.category_id = 1
+                GROUP BY
+                    product.brand_id,
+                    product.productName
+            )AS sales_empty_qty_table ON sales_empty_qty_table.brand_id = brand.brandId
+            AND sales_empty_qty_table.productName = product.productName
+            AND sales_empty_qty_table.category_id = 1
+            WHERE
+                brand.dist_id = 1
+            GROUP BY
+                product.brand_id,
+                product.productName
+            ORDER BY brand.brandId,product.productName";
+        if($brandId !='0'){
+            $query.=" WHERE brand.brandId=".$brandId;
+        }
+        //log_message('error','cylinder_stock_report query'.print_r($query,true));
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
     public function checkOpenigValid($distId) {
         $this->db->select("sum(credit) as totalAmount");
         $this->db->from("opening_balance");
@@ -756,6 +969,118 @@ ON tab4.product_id=p.product_id
                         s.product_id,
                         s.customerId  order  BY subCusTable.sup_id ASC   ";
         }
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+    function sales_report_brand_wise($start_date, $end_date,  $brandId) {
+
+
+                                    $query = "SELECT
+                            brand.brandId,
+                            brand.brandName,
+                            product.productName,
+                           CAST(product.productName AS UNSIGNED) as p_name,
+                          unit.unitTtile,
+                          IFNULL(sales_package_qty_table.sales_package_qty,	0	)AS sales_package_qty,
+                          IFNULL(sales_refill_qty_table.sales_refill_qty,	0	)AS sales_refill_qty,
+                            IFNULL(sales_empty_qty_table.sales_empty_qty,0)AS sales_empty_qty,
+                            IFNULL(sales_refill_qty_table.sales_returnable_quantity,0	)AS sales_returnable_quantity,
+                            IFNULL(sales_refill_qty_table.sales_return_quentity,0	)AS sales_return_quentity,
+                            IFNULL(sales_refill_qty_table.sales_customer_due,0	)AS sales_customer_due,
+                            IFNULL(sales_refill_qty_table.sales_customer_advance,	0	)AS sales_customer_advance
+                        FROM
+                            brand
+                        LEFT JOIN product ON product.brand_id = brand.brandId
+                        LEFT JOIN unit ON unit.unit_id=product.unit_id
+                        LEFT JOIN(
+                        SELECT
+                                product.product_id,
+                                product.brand_id,
+                                product.productName, 
+                                sales_details.insert_date,
+                                SUM(IFNULL(sales_details.quantity, 0))AS sales_package_qty,
+                                SUM(IFNULL(sales_details.returnable_quantity,0))AS sales_returnable_quantity,
+                                SUM(IFNULL(sales_details.return_quentity,	0))AS sales_return_quentity,
+                                SUM(IFNULL(sales_details.customer_due,0))AS sales_customer_due,
+                                SUM(IFNULL(sales_details.customer_advance,0))AS sales_customer_advance,
+                                product.category_id
+                            FROM
+                                product
+                            LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                            LEFT JOIN sales_invoice_info on sales_invoice_info.sales_invoice_id=sales_details.sales_invoice_id
+                        
+                            WHERE
+                                product.category_id = 2
+                        AND sales_details.is_package = 1
+                        AND sales_invoice_info.invoice_date > '" . $start_date . "'
+                        AND sales_invoice_info.invoice_date < '" . $end_date . "'
+                            GROUP BY
+                                product.brand_id,
+                                product.productName
+                        
+                        )AS sales_package_qty_table ON sales_package_qty_table.brand_id = brand.brandId
+                        AND sales_package_qty_table.productName = product.productName
+                        AND sales_package_qty_table.category_id = 2
+                        LEFT JOIN(
+                        SELECT
+                                product.product_id,
+                                product.brand_id,
+                            product.productName,
+                                SUM(IFNULL(sales_details.quantity, 0))AS sales_refill_qty,
+                                SUM(IFNULL(sales_details.returnable_quantity,0))AS sales_returnable_quantity,
+                                SUM(IFNULL(sales_details.return_quentity,	0))AS sales_return_quentity,
+                                SUM(IFNULL(sales_details.customer_due,0))AS sales_customer_due,
+                                SUM(IFNULL(sales_details.customer_advance,0))AS sales_customer_advance,
+                                product.category_id
+                            FROM
+                                product
+                            LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                            LEFT JOIN sales_invoice_info on sales_invoice_info.sales_invoice_id=sales_details.sales_invoice_id
+                        
+                            WHERE
+                                product.category_id = 2
+                        AND sales_details.is_package = 0
+                         AND sales_invoice_info.invoice_date > '" . $start_date . "'
+                        AND sales_invoice_info.invoice_date < '" . $end_date . "'
+                            GROUP BY
+                                product.brand_id,
+                                product.productName
+                        
+                        )AS sales_refill_qty_table ON sales_refill_qty_table.brand_id = brand.brandId
+                        AND sales_refill_qty_table.productName = product.productName
+                        AND sales_refill_qty_table.category_id = 2
+                        LEFT JOIN(
+                            SELECT
+                                product.brand_id,
+                                product.category_id,
+                            product.productName,
+                                (SUM(IFNULL(sales_details.quantity, 0))- IFNULL(SUM(sales_return_details.return_quantity),0))AS sales_empty_qty
+                            FROM
+                                product
+                            LEFT JOIN sales_details ON sales_details.product_id = product.product_id
+                            AND sales_details.is_package = 0
+                            LEFT JOIN sales_return_details ON sales_return_details.product_id = product.product_id
+                            LEFT JOIN sales_invoice_info on sales_invoice_info.sales_invoice_id=sales_details.sales_invoice_id
+                            WHERE
+                                product.category_id = 1
+                                 AND sales_invoice_info.invoice_date > '" . $start_date . "'
+                        AND sales_invoice_info.invoice_date < '" . $end_date . "'
+                            GROUP BY
+                                product.brand_id,
+                                product.productName
+                        )AS sales_empty_qty_table ON sales_empty_qty_table.brand_id = brand.brandId
+                        AND sales_empty_qty_table.productName = product.productName
+                        AND sales_empty_qty_table.category_id = 1
+                        WHERE
+                            brand.dist_id = 1
+                        
+                        GROUP BY
+                            product.brand_id,
+                            product.productName
+                        ORDER BY brand.brandId,product.productName";
+
+
         $query = $this->db->query($query);
         $result = $query->result();
         return $result;

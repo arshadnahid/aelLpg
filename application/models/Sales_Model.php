@@ -399,7 +399,15 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
 
 
             if($category_id->category_id==1){
-                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
+                $query="SELECT(SUM(purchase_details.quantity)- IFNULL(SUM(purchase_return_details.return_quantity),0))AS purchase_qty
+                        FROM
+                            product
+                        LEFT JOIN purchase_details ON purchase_details.product_id=product.product_id
+                        LEFT JOIN purchase_return_details ON purchase_return_details.product_id = purchase_details.product_id
+                        WHERE
+                            purchase_details.is_package =".$is_package." AND purchase_details.product_id = ".$productId;
+
+                //$query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
                 $query = $this->db->query($query);
                 $result = $query->row();
                 log_message('error','getProductStock '.print_r($this->db->last_query(),true));
@@ -407,7 +415,8 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
                 return $result->purchase_qty;
 
             }else if($category_id->category_id==2){
-                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
+                //$query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
+                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE   purchase_details.product_id=".$productId;
                 $query = $this->db->query($query);
                 $result = $query->row();
                 log_message('error','getProductStock '.print_r($this->db->last_query(),true));
@@ -496,6 +505,34 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
         $cylinderInOutResult = $this->db->get()->result();
         return $cylinderInOutResult;
     }
+
+
+
+    function daily_sales_statement($start_date, $end_date,  $brandId) {
+
+
+        $query = "SELECT
+            sales_invoice_info.invoice_date,
+                SUM(sales_invoice_info.invoice_amount) as sales_amount,
+                
+                SUM(sales_invoice_info.paid_amount) as customer_paid_amount,
+                SUM(sales_invoice_info.discount_amount) as discount_amount
+            FROM
+                sales_invoice_info
+                WHERE
+             sales_invoice_info.invoice_date >= '" . $start_date . "'
+        AND sales_invoice_info.invoice_date <= '" . $end_date . "'
+            GROUP BY sales_invoice_info.invoice_date";
+
+
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+
+
+
+
 
 }
 

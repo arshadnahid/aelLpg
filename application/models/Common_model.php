@@ -1393,6 +1393,118 @@ class Common_model extends CI_Model {
         $result = $query->result();
         return $result;
     }
+    public function  get_sales_product_detaild2($sales_invoice_id){
+        $query="SELECT
+                    sales_details.sales_details_id,
+                    sales_details.sales_invoice_id,
+                    sales_details.is_package,
+                    sales_details.product_id,
+                    product.productName,
+                    product.product_code,
+                    productcategory.title,
+                    unit.unitTtile,
+                    brand.brandName,
+                    product2.productName AS return_product_name,
+                    product2.product_code AS return_product_code,
+                    productcategory2.title AS return_product_cat,
+                    unit2.unitTtile AS return_product_unit,
+                    brand2.brandName AS return_product_brand,
+                    sales_details.quantity,
+                    sales_details.unit_price,
+                    sales_return_details.product_id AS return_product_id,
+                    sales_return_details.returnable_quantity,
+                    sales_return_details.return_quantity
+                FROM
+                    sales_details
+                LEFT JOIN sales_return_details ON sales_return_details.sales_details_id = sales_details.sales_details_id
+                AND sales_return_details.is_active = 'Y'
+                AND sales_return_details.is_delete = 'N'
+                LEFT JOIN product ON product.product_id = sales_details.product_id
+                LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+                LEFT JOIN unit ON unit.unit_id = product.unit_id
+                LEFT JOIN brand ON brand.brandId = product.brand_id
+                LEFT JOIN product AS product2 ON product2.product_id = sales_return_details.product_id
+                LEFT JOIN productcategory AS productcategory2 ON productcategory2.category_id = product2.category_id
+                LEFT JOIN unit AS unit2 ON unit2.unit_id = product2.unit_id
+                LEFT JOIN brand AS brand2 ON brand2.brandId = product2.brand_id
+                WHERE
+                    sales_details.is_active = 'Y'
+                AND sales_details.is_delete = 'N'
+                AND sales_details.sales_invoice_id =".$sales_invoice_id;
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+
+
+    public function  cylinder_sales_report($customerId,$start_date,$end_date){
+        $query="SELECT
+                    sales_invoice_info.sales_invoice_id,
+                    sales_invoice_info.invoice_no,
+                    sales_invoice_info.customer_invoice_no,
+                    sales_invoice_info.invoice_date,
+                    sales_invoice_info.payment_type,
+                    sales_invoice_info.customer_id,
+                    customer.customerID,
+                    customer.customerType,
+                    customer.customerName,
+                    sales_details.sales_details_id,
+                    sales_details.sales_invoice_id,
+                    sales_details.is_package,
+                    sales_details.product_id,
+                    product.productName,
+                    product.product_code,
+                    productcategory.title,
+                    unit.unitTtile,
+                    brand.brandName,
+                    product2.productName AS return_product_name,
+                    product2.product_code AS return_product_code,
+                    productcategory2.title AS return_product_cat,
+                    unit2.unitTtile AS return_product_unit,
+                    brand2.brandName AS return_product_brand,
+                    sales_details.quantity,
+                    sales_details.unit_price,
+                    sales_return_details.product_id AS return_product_id,
+                    sales_return_details.returnable_quantity,
+                    sales_return_details.return_quantity
+                FROM
+                    sales_invoice_info
+                LEFT JOIN customer ON customer.customer_id = sales_invoice_info.customer_id
+                LEFT JOIN sales_details ON sales_details.sales_invoice_id = sales_invoice_info.sales_invoice_id
+                LEFT JOIN sales_return_details ON sales_return_details.sales_details_id = sales_details.sales_details_id 
+                AND sales_return_details.is_active = 'Y' 
+                AND sales_return_details.is_delete = 'N'
+                LEFT JOIN product ON product.product_id = sales_details.product_id
+                LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+                LEFT JOIN unit ON unit.unit_id = product.unit_id
+                LEFT JOIN brand ON brand.brandId = product.brand_id
+                LEFT JOIN product AS product2
+                ON
+                    product2.product_id = sales_return_details.product_id
+                LEFT JOIN productcategory AS productcategory2
+                ON
+                    productcategory2.category_id = product2.category_id
+                LEFT JOIN unit AS unit2
+                ON
+                    unit2.unit_id = product2.unit_id
+                LEFT JOIN brand AS brand2
+                ON
+                    brand2.brandId = product2.brand_id
+                WHERE
+                    sales_invoice_info.is_active = 'Y' 
+                    AND sales_invoice_info.is_delete = 'N' 
+                    AND sales_details.is_active = 'Y' 
+                    AND sales_details.is_delete = 'N'";
+        if($customerId!="all"){
+            $query.="AND sales_invoice_info.customer_id =".$customerId;
+        }
+
+
+
+                $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
     
 
 }
