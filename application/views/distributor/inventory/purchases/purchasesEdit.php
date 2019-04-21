@@ -282,12 +282,33 @@
 
                                                         <?php
                                                         $totalEditPrice = 0;
-                                                        foreach ($editStock as $key => $eachStock) :
+                                                        foreach ($stockListEdit as $key => $eachStock) :
+
+                                                             ?>
+                                                            <tr class="new_item<?php echo $key + 767; ?>">
+                                                                <td>
+                                                                    <input type="hidden" name="category_id[]" value="<?php echo $eachStock->category_id; ?>">
+
+                                                                </td>
+
+
+                                                            </tr>
+
+
+
+                                                            <?php
+
+
+
+
+
+
                                                             if ($eachStock->type == 'In') {
                                                                 $returnQtyedit = $this->Inventory_Model->getReturnAbleCylinder2($this->dist_id, $eachStock->generals_id, $eachStock->product_id);
                                                                 ?>
-                                                                <tr class="new_item<?php echo $key + 767; ?>">
-                                                            <input type="hidden" name="category_id[]" value="<?php echo $eachStock->category_id; ?>">
+
+                                                                <tr >
+
                                                             <td style="padding-left:15px;">
                                                                 <?php
                                                                 $cateogry = $this->Common_model->tableRow('productcategory', 'category_id', $eachStock->category_id)->title;

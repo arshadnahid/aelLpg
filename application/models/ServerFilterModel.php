@@ -209,12 +209,12 @@ class ServerFilterModel extends CI_Model {
 
     private function _get_purchases_datatables_query() {
 
-        $this->db->select("form.name,generals.generals_id,generals.voucher_no,generals.narration,generals.date,generals.debit,supplier.supID,supplier.supName,supplier.sup_id,supplier.sup_id");
-        $this->db->from("generals");
-        $this->db->join('supplier', 'supplier.sup_id=generals.supplier_id');
-        $this->db->join('form', 'form.form_id=generals.form_id');
-        $this->db->where('generals.dist_id', $this->dist_id);
-        $this->db->where('generals.form_id', 11);
+        $this->db->select("purchase_invoice_info.purchase_invoice_id,purchase_invoice_info.invoice_no,purchase_invoice_info.narration,purchase_invoice_info.invoice_date,purchase_invoice_info.paid_amount,supplier.supID,supplier.supName,supplier.sup_id,supplier.sup_id");
+        $this->db->from("purchase_invoice_info");
+        $this->db->join('supplier', 'supplier.sup_id=purchase_invoice_info.supplier_id');
+
+        $this->db->where('purchase_invoice_info.dist_id', $this->dist_id);
+
         $i = 0;
         foreach ($this->column_search as $item) { // loop column
             if ($_POST['search']['value']) { // if datatable send POST for search
@@ -235,7 +235,7 @@ class ServerFilterModel extends CI_Model {
             $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
         } else if (isset($this->order)) {
             //$order = $this->order;
-            $this->db->order_by('generals.date', 'desc');
+            $this->db->order_by('purchase_invoice_info.invoice_date', 'desc');
         }
     }
     private function _get_payment_datatables_query() {
@@ -697,7 +697,7 @@ class ServerFilterModel extends CI_Model {
     public function count_all_purchases() {
         $this->db->from($this->table);
         $this->db->where('dist_id', $this->dist_id);
-        $this->db->where('form_id', 11);
+        //$this->db->where('form_id', 11);
         return $this->db->count_all_results();
     }
     public function count_all_payment() {

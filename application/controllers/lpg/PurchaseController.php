@@ -23,6 +23,7 @@ class PurchaseController extends CI_Controller
         $this->load->model('Finane_Model');
         $this->load->model('Inventory_Model');
         $this->load->model('Sales_Model');
+        $this->load->model('Purchases_Model');
         //$this->load->model('Datatable');
         $this->timestamp = date('Y-m-d H:i:s');
         $this->admin_id = $this->session->userdata('admin_id');
@@ -43,6 +44,7 @@ class PurchaseController extends CI_Controller
             $this->form_validation->set_rules('voucherid', 'Voucher ID', 'required');
             $this->form_validation->set_rules('purchasesDate', 'Purchases Date', 'required');
             $this->form_validation->set_rules('paymentType', 'Payment Date', 'required');
+            $this->form_validation->set_rules('slNo[]', 'Payment Date', 'required');
             //$this->form_validation->set_rules('category_id[]', 'Product Category', 'required');
             //$this->form_validation->set_rules('product_id[]', 'Product Name', 'required');
             //$this->form_validation->set_rules('quantity[]', 'Product Quantigy', 'required');
@@ -61,7 +63,7 @@ class PurchaseController extends CI_Controller
                 log_message('error','POST data'.print_r($_POST,true));
 
 
-
+                $newCylinderProductCost=0;
                 $purchase_inv['invoice_no'] = $this->input->post('voucherid');
                 $purchase_inv['supplier_invoice_no'] = $this->input->post('userInvoiceId');
                 $purchase_inv['supplier_id'] = $this->input->post('supplierID');
@@ -99,8 +101,8 @@ class PurchaseController extends CI_Controller
                     $stock['is_package '] = $_POST['is_package_'.$value];
                     $stock['returnable_quantity '] = $returnable_quantity;
                     $stock['return_quentity '] = $return_quentity;
-                    if($returnable_quantity<$returnable_quantity){
-                        $supplier_advance=$returnable_quantity-$returnable_quantity;
+                    if($returnable_quantity<$return_quentity){
+                        $supplier_advance=$return_quentity-$returnable_quantity;
                     }else{
                         $supplier_due=$returnable_quantity-$returnable_quantity;
                     }
@@ -108,6 +110,7 @@ class PurchaseController extends CI_Controller
                     $stock['supplier_advance'] = $supplier_advance;
                     $stock['quantity'] = $_POST['quantity_'.$value];
                     $stock['unit_price'] = $_POST['rate_'.$value];
+                    $newCylinderProductCost=$newCylinderProductCost+($_POST['rate_'.$value] *$_POST['quantity_'.$value]);
                     $stock['insert_by'] = $this->admin_id;
                     $stock['insert_date'] = $this->timestamp;
                     log_message('error','Insert in stock table'.print_r($stock,true));
@@ -136,15 +139,15 @@ class PurchaseController extends CI_Controller
 
                 if ($paymentType == 2) {
                     //if payment type credit than transaction here
-                    $generals_id = $this->creditTransactionInsert();
+                    $generals_id = $this->creditTransactionInsert($newCylinderProductCost);
                 } elseif ($paymentType == 1) {
                     //if payment type Cash than transaction here
                     $generals_id = $this->cashTransactionInsert();
                 } elseif ($paymentType == 4) {
                     //if payment type partial than calculate from here
-                    $generals_id = $this->partialTransactionInsert();
+                    $generals_id = $this->partialTransactionInsert($newCylinderProductCost);
                 } else {
-                    $generals_id = $this->chequeTransactionInsert();
+                    $generals_id = $this->chequeTransactionInsert($newCylinderProductCost);
                 }
                 $this->db->trans_complete();
                 if ($this->db->trans_status() === FALSE) {
@@ -186,8 +189,9 @@ class PurchaseController extends CI_Controller
         $data['packageList'] = $this->Common_model->getPublicPackageList($this->dist_id);
 
         $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 1);
+        $data['cylinderProduct_jason'] = json_encode($this->Common_model->getPublicProduct($this->dist_id, 1));
         //echo "<pre>";
-        //print_r($data['cylinderProduct']);exit;
+        //print_r($data['cylinderProduct_jason']);exit;
         $data['supplierList'] = $this->Common_model->getPublicSupplier($this->dist_id);
 
         $condition1 = array(
@@ -217,7 +221,7 @@ class PurchaseController extends CI_Controller
        // endif;
     }
 
-    function creditTransactionInsert() {
+    function creditTransactionInsert($newCylinderProductCost) {
 
 
 
@@ -243,7 +247,7 @@ class PurchaseController extends CI_Controller
 
 //cylinder calculation start here....
         $addReturnAble = $this->input->post('add_returnAble');
-        $newCylinderProductCost = 0;
+        $newCylinderProductCost1 = 0;
         $otherProductCost = 0;
         $productCate = $this->input->post('category_id');
         $allStock = array();
@@ -251,7 +255,7 @@ class PurchaseController extends CI_Controller
         foreach ($productCate as $key => $value):
             unset($stock);
             if ($value == 1) {
-                $newCylinderProductCost += $this->input->post('price')[$key];
+                $newCylinderProductCost1 += $this->input->post('price')[$key];
             } else {
                 $otherProductCost += $this->input->post('price')[$key];
             }
@@ -420,7 +424,7 @@ class PurchaseController extends CI_Controller
         }
     }
 
-    function partialTransactionInsert() {
+    function partialTransactionInsert($newCylinderProductCost) {
         $accountCr = $this->input->post('accountCrPartial');
         $thisAllotment = $this->input->post('thisAllotment');
         if (empty($accountCr) || empty($thisAllotment)) {
@@ -451,12 +455,12 @@ class PurchaseController extends CI_Controller
         $productCate = $this->input->post('category_id');
         $allStock = array();
         $allStockCylinder = array();
-        $newCylinderProductCost = '';
+        $newCylinderProductCost1 = '';
         $otherProductCost = '';
         foreach ($productCate as $key => $value):
             unset($stock);
             if ($value == 1) {
-                $newCylinderProductCost += $this->input->post('price')[$key];
+                $newCylinderProductCost1 += $this->input->post('price')[$key];
             } else {
                 $otherProductCost += $this->input->post('price')[$key];
             }
@@ -692,7 +696,7 @@ class PurchaseController extends CI_Controller
             return $generals_id;
         }
     }
-    function chequeTransactionInsert() {
+    function chequeTransactionInsert($newCylinderProductCost) {
         $bankName = $this->input->post('bankName');
         $checkNo = $this->input->post('checkNo');
         if (empty($bankName) || empty($checkNo)) {
@@ -725,13 +729,13 @@ class PurchaseController extends CI_Controller
         $productCate = $this->input->post('category_id');
         $allStock = array();
         $allStock1 = array();
-        $newCylinderProductCost = '';
+        $newCylinderProductCost1 = '';
         $otherProductCost = '';
         foreach ($productCate as $key => $value):
             unset($stock);
 //dd
             if ($value == 1) {
-                $newCylinderProductCost += $this->input->post('price')[$key];
+                $newCylinderProductCost1 += $this->input->post('price')[$key];
             } else {
                 $otherProductCost += $this->input->post('price')[$key];
             }
@@ -946,6 +950,7 @@ class PurchaseController extends CI_Controller
             $start_date = date('Y-m-d', strtotime($this->input->post('start_date')));
             $end_date = date('Y-m-d', strtotime($this->input->post('end_date')));
             $data['allStock'] = $this->Inventory_Model->cylinder_stock_group_report($start_date, $end_date,  $brandId);
+            //echo $this->db->last_query();
 
         }
         $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
@@ -957,5 +962,151 @@ class PurchaseController extends CI_Controller
         $this->load->view('distributor/masterDashboard', $data);
 
     }
+  public  function  current_stock(){
+
+
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['allStock'] = $this->Inventory_Model->current_stock($this->dist_id);
+        //echo '<pre>';
+        //print_r($data['allStock']);exit;
+
+        $data['pageTitle'] = 'Current Stock';
+
+        $data['brandList'] = $this->Common_model->getPublicBrand($this->dist_id);
+        $data['title'] = 'Stock Report';
+        $data['mainContent'] = $this->load->view('distributor/inventory/report/current_stock', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+
+    }
+    public  function  current_stock_value(){
+
+
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['allStock'] = $this->Inventory_Model->current_stock($this->dist_id);
+
+        $data['pageTitle'] = 'Current Stock';
+
+        $data['brandList'] = $this->Common_model->getPublicBrand($this->dist_id);
+        $data['title'] = 'Current Stock';
+        $data['mainContent'] = $this->load->view('distributor/inventory/report/current_stock_value', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+
+    }
+
+    public function purchases_edit($ivnoiceId = null) {
+        if (is_numeric($ivnoiceId)) {
+            //is invoice id is valid
+            $validInvoiecId = $this->Purchases_Model->checkInvoiceIdAndDistributor($this->dist_id, $ivnoiceId);
+
+            if ($validInvoiecId === NULL) {
+                exception("Sorry invoice id is invalid!!");
+                redirect(site_url('purchases_list'));
+            }
+        } else {
+            exception("Sorry invoice id is invalid!!");
+            redirect(site_url('purchases_list'));
+        }
+        $data['purchasesList'] = $this->Common_model->get_single_data_by_single_column('purchase_invoice_info', 'purchase_invoice_id', $ivnoiceId);
+
+
+        $stockList = $this->Common_model->get_purchase_product_detaild2( $ivnoiceId);
+        //echo $this->db->last_query();
+        //echo'<pre>';
+        //print_r($stockList);
+        //exit;
+
+        foreach ($stockList as $ind => $element) {
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['purchase_invoice_id'] = $element->purchase_invoice_id;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['purchase_details_id'] = $element->purchase_details_id;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['category_id'] = $element->category_id;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['is_package'] = $element->is_package;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['product_id'] = $element->product_id;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['productName'] = $element->productName;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['product_code'] = $element->product_code;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['title'] = $element->title;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['unitTtile'] = $element->unitTtile;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['brandName'] = $element->brandName;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['quantity'] = $element->quantity;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['unit_price'] = $element->unit_price;
+            //$result[$element->sales_invoice_id][$element->sales_details_id]['unit_price'] = $element->unit_price;
+            if($element->returnable_quantity >0 ){
+                $result[$element->purchase_invoice_id][$element->purchase_details_id]['return'][$element->purchase_details_id][] = array('return_product_name'=>$element->return_product_name,
+                    'return_product_id'=>$element->return_product_id,
+                    'return_product_cat'=>$element->return_product_cat,
+                    'return_product_name'=>$element->return_product_name,
+                    'return_product_unit'=>$element->return_product_unit,
+                    'return_product_brand'=>$element->return_product_brand,
+                    'returnable_quantity'=>$element->returnable_quantity,
+                );
+            }else{
+                $result[$element->purchase_invoice_id][$element->purchase_details_id]['return'][$element->purchase_details_id]='';
+            }
+        }
+        $data['stockListEdit'] = $result;
+        //echo '<pre>';
+        //print_r($result);
+        //exit;
+
+
+
+        $data['accountHeadList'] = $this->Common_model->getAccountHead();
+        $condition = array(
+            'dist_id' => $this->dist_id,
+            'form_id' => 11,
+        );
+        $data['editPurchases'] = $this->Common_model->get_single_data_by_single_column('generals', 'generals_id', $ivnoiceId);
+        $data['editStock'] = $this->Common_model->get_data_list_by_single_column('stock', 'generals_id', $ivnoiceId);
+        //if cash payment not empty.
+        $data['creditAmount2'] = $paymentInfo = $this->Inventory_Model->getCreditAmount($ivnoiceId);
+
+        //echo $this->db->last_query();die;
+        $data['accountIdForEdit'] = $this->Inventory_Model->getPurchasesAccountId($paymentInfo->generals_id);
+        $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
+        $data['cylinserOut'] = $this->Sales_Model->getCylinderInOutResult2($this->dist_id, $ivnoiceId, 23);
+        $data['cylinderIn'] = $this->Sales_Model->getCylinderInOutResult($this->dist_id, $ivnoiceId, 24);
+        $supID = $this->Common_model->getSupplierID($this->dist_id);
+        $data['supplierID'] = $this->Common_model->checkDuplicateSupID($supID, $this->dist_id);
+        $data['title'] = 'Purchases Edit';
+        $data['unitList'] = $this->Common_model->get_data_list_by_single_column('unit', 'dist_id', $this->dist_id);
+        $costCondition = array(
+            'dist_id' => $this->dist_id,
+            'parentId' => 62,
+        );
+        $data['costList'] = $this->Common_model->get_data_list_by_many_columns('generaldata', $costCondition);
+        $data['productCat'] = $this->Common_model->getPublicProductCat($this->dist_id);
+        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 2);
+        $data['unitList'] = $this->Common_model->getPublicUnit($this->dist_id);
+        $data['supplierList'] = $this->Common_model->getPublicSupplier($this->dist_id);
+
+        $condition1 = array(
+            'dist_id' => $this->dist_id,
+            'isActive' => 'Y',
+            'isDelete' => 'N',
+        );
+        $data['employeeList'] = $this->Common_model->get_data_list_by_many_columns('employee', $condition1);
+        $data['vehicleList'] = $this->Common_model->get_data_list_by_many_columns('vehicle', $condition1);
+
+        $totalPurchases = $this->Common_model->get_data_list_by_many_columns('generals', $condition);
+        $data['voucherID'] = "PV" . date('y') . date('m') . str_pad(count($totalPurchases) + 1, 4, "0", STR_PAD_LEFT);
+        $data['mainContent'] = $this->load->view('distributor/inventory/purchases/purchasesEdit', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
 
 }

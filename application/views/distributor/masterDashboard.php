@@ -135,7 +135,7 @@
         </div>
        <?php
         if(!empty($pageName) && $pageName=='salePosAdd'){
-            include 'include/jsFileForPos.php';
+            //include 'include/jsFileForPos.php';
         }else{
             include 'include/jsFile.php';
         }

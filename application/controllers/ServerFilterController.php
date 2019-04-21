@@ -300,7 +300,7 @@ class ServerFilterController extends CI_Controller {
 
     public function purchasesList() {
 
-        $this->Filter_Model->filterData('generals', array('generals.date', 'generals.voucher_no', 'form.name', 'supplier.supID', 'supplier.supName', 'generals.narration', 'generals.debit'), array('generals.date', 'generals.voucher_no', 'form.name', 'supplier.supID', 'supplier.supName', 'generals.narration', 'generals.debit'), array('generals.date', 'generals.voucher_no', 'form.name', 'supplier.supID', 'supplier.supName', 'generals.narration', 'generals.debit'), $this->dist_id);
+        $this->Filter_Model->filterData('purchase_invoice_info', array('purchase_invoice_info.invoice_date', 'purchase_invoice_info.invoice_no', 'supplier.supID', 'supplier.supName', 'purchase_invoice_info.narration', 'purchase_invoice_info.paid_amount '), array('purchase_invoice_info.invoice_date', 'purchase_invoice_info.invoice_no', 'supplier.supID', 'supplier.supName', 'purchase_invoice_info.narration', 'purchase_invoice_info.paid_amount '), array('purchase_invoice_info.invoice_date', 'purchase_invoice_info.invoice_no', 'supplier.supID', 'supplier.supName', 'purchase_invoice_info.narration', 'purchase_invoice_info.paid_amount'), $this->dist_id);
         $list = $this->Filter_Model->get_purchases_datatables();
         $data = array();
         $no = $_POST['start'];
@@ -308,15 +308,15 @@ class ServerFilterController extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = date('M d, Y', strtotime($purchases->date));
-            $row[] = '<a title="view Voucher" href="' . site_url('viewPurchases/' . $purchases->generals_id) . '">' . $purchases->voucher_no . '</a></td>';
+            $row[] = date('M d, Y', strtotime($purchases->invoice_date));
+            $row[] = '<a title="view Voucher" href="' . site_url('viewPurchases/' . $purchases->purchase_invoice_id) . '">' . $purchases->invoice_no . '</a></td>';
             $row[] = $purchases->name;
             $row[] = '<a title="View Supplier Dashboard" href="' . site_url('supplierDashboard/' . $purchases->sup_id) . '">' . $purchases->supID . ' [ ' . $purchases->supName . ' ] ' . '</a>';
             $row[] = $purchases->narration;
             $row[] = number_format((float) $purchases->debit, 2, '.', ',');
-            $row[] = '<a class="blue" href="' . site_url('viewPurchases/' . $purchases->generals_id) . '">
+            $row[] = '<a class="blue" href="' . site_url('viewPurchases/' . $purchases->purchase_invoice_id) . '">
     <i class="ace-icon fa fa-search-plus bigger-130"></i></a>
-    <a class="green inventoryEditPermission" href="' . site_url('purchases_edit/' . $purchases->generals_id) . '">
+    <a class="green inventoryEditPermission" href="' . site_url('purchases_edit/' . $purchases->purchase_invoice_id) . '">
     <i class="ace-icon fa fa-pencil bigger-130"></i></a>
     ';
             $data[] = $row;

@@ -529,6 +529,124 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
         $result = $query->result();
         return $result;
     }
+    function date_wise_product_sales($start_date, $end_date,  $brandId) {
+
+
+        $query = "SELECT
+                    sales_details.product_id,
+                    CONCAT(productcategory.title, ' ',product.productName, ' [ ',brand.brandName,' ]') as productName,
+                    product.product_code,
+                    productcategory.title,
+                    brand.brandName,
+                    SUM(sales_details.quantity)AS sales_qty,
+                    AVG(sales_details.unit_price)AS sales_price
+                FROM
+                    sales_details
+                JOIN sales_invoice_info ON sales_invoice_info.sales_invoice_id = sales_details.sales_invoice_id
+                LEFT JOIN product ON product.product_id = sales_details.product_id
+                LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+                LEFT JOIN brand ON brand.brandId = product.brand_id
+                AND sales_invoice_info.invoice_date >= '" . $start_date ."'
+                AND sales_invoice_info.invoice_date <= '" . $end_date . "'
+                WHERE
+                    sales_details.is_active = 'Y'
+                AND sales_details.is_delete = 'N'
+                GROUP BY
+                    sales_details.product_id";
+
+
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }function date_wise_product_sales_by_date($start_date, $end_date,  $brandId) {
+
+
+        $query = "SELECT
+                    sales_invoice_info.invoice_date,
+                    sales_details.product_id,
+                    CONCAT(productcategory.title, ' ',product.productName, ' [ ',brand.brandName,' ]') as productName,
+                    product.product_code,
+                    productcategory.title,
+                    brand.brandName,
+                    SUM(sales_details.quantity)AS sales_qty,
+                    AVG(sales_details.unit_price)AS sales_price
+                FROM
+                    sales_details
+                JOIN sales_invoice_info ON sales_invoice_info.sales_invoice_id = sales_details.sales_invoice_id
+                LEFT JOIN product ON product.product_id = sales_details.product_id
+                LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+                LEFT JOIN brand ON brand.brandId = product.brand_id
+                AND sales_invoice_info.invoice_date >= '" . $start_date ."'
+                AND sales_invoice_info.invoice_date <= '" . $end_date . "'
+                WHERE
+                    sales_details.is_active = 'Y'
+                AND sales_details.is_delete = 'N'
+                GROUP BY
+                    sales_details.product_id,sales_invoice_info.invoice_date";
+
+
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+
+
+    public  function customer_list($dist_id){
+        $query="SELECT DISTINCT
+	customer.customerID,
+	customer.customerType,
+	customer.customerName,
+	customer.customer_id,
+	customer.dist_id,
+	(
+		SELECT
+			sales_invoice_info.sales_invoice_id
+		FROM
+			sales_invoice_info
+		WHERE
+			sales_invoice_info.is_active = 'Y'
+		AND sales_invoice_info.is_delete = 'N'
+		AND sales_invoice_info.customer_id = customer.customer_id
+		LIMIT 1
+	)AS have_invoice
+FROM
+	customer
+WHERE
+	1 = 1";
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+
+    public  function customer_due($customer_id,$start_date, $end_date,  $dist_id){
+        $query="SELECT
+                sales_invoice_info.sales_invoice_id,
+                sales_invoice_info.invoice_no,
+                sales_invoice_info.invoice_date,
+                sales_invoice_info.invoice_amount,
+                sales_invoice_info.paid_amount,
+                sales_invoice_info.customer_id,
+                customer.customerID,
+                customer.customerName,
+            CONCAT(customer.customerName, ' [ ',customer.customerID,' ]') as productName
+            FROM
+                sales_invoice_info
+            LEFT JOIN customer ON customer.customer_id = sales_invoice_info.customer_id
+            WHERE
+                sales_invoice_info.is_active = 'Y'
+            AND sales_invoice_info.is_delete = 'N'
+             AND sales_invoice_info.invoice_date >= '" . $start_date ."'
+                AND sales_invoice_info.invoice_date <= '" . $end_date . "'";
+
+
+        if($customer_id!='All'){
+            $query.="AND sales_invoice_info.customer_id=".$customer_id;
+        }
+        $query.="ORDER BY sales_invoice_info.invoice_date ASC";
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
 
 
 

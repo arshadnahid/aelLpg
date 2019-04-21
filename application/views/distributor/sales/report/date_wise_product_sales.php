@@ -2,10 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: AEL-DEV
- * Date: 4/11/2019
- * Time: 10:07 AM
- */
-?>
+ * Date: 4/16/2019
+ * Time: 9:46 AM
+ */?>
+
+
 
 
 
@@ -25,7 +26,7 @@ endif;
                     <i class="ace-icon fa fa-home home-icon"></i>
                     <a href="<?php echo site_url('DistributorDashboard/2'); ?>">Sales</a>
                 </li>
-                <li class="active">Cylinder Sales Report</li>
+                <li class="active">Daily Sales Statement</li>
             </ul>
             <ul class="breadcrumb pull-right">
                 <li>
@@ -40,39 +41,13 @@ endif;
         <div class="page-content">
             <div class="row  noPrint">
                 <div class="col-md-12">
-                    <form id="publicForm" action=""  method="post" class="form-horizontal">
+                    <form id="publicForm" action=""  method="get" class="form-horizontal">
                         <div class="col-md-12">
                             <div class="table-header">
-                                Cylinder Combine Report
+                                Daily Sales Statement
                             </div>
                             <br>
-                            <div class="col-md-7">
 
-                                <div class="col-md-2">
-
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label class="col-sm-4 control-label no-padding-right" for="form-field-1"> Brand</label>
-                                        <div class="col-sm-8">
-                                            <select  name="brandId" class="chosen-select form-control " id="form-field-select-3" data-placeholder="Search by Category">
-                                                <option <?php
-                                                if (!empty($brandId) && $brandId == '0') {
-                                                    echo "selected";
-                                                }
-                                                ?> value="0">All</option>
-                                                <?php foreach ($brandList as $eachInfo): ?>
-                                                    <option <?php
-                                                    if (!empty($brandId) && $brandId == $eachInfo->brandId) {
-                                                        echo "selected";
-                                                    }
-                                                    ?> value="<?php echo $eachInfo->brandId; ?>"><?php echo $eachInfo->brandName; ?></option>
-                                                <?php endforeach; ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="col-md-5">
                                 <div class="col-md-4">
@@ -124,66 +99,49 @@ endif;
                 </div>
             </div>
         </div><!-- /.col -->
-        <?php
-        if (isset($_POST['start_date'])):?>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-
-                    <table class="table table-responsive">
-                        <tr>
-                            <td style="text-align:center;">
-                                <h3><?php echo $companyInfo->companyName; ?></h3>
-                                <p><?php echo $companyInfo->dist_address; ?></p>
-                                <strong>Phone : </strong><?php echo $companyInfo->dist_phone; ?><br>
-                                <strong>Email : </strong><?php echo $companyInfo->dist_email; ?><br>
-                                <strong>Website : </strong><?php echo $companyInfo->dis_website; ?><br>
-                                <strong><?php echo $pageTitle; ?></strong>
-                                <strong>From <?php echo $from_date; ?> To <?php echo $to_date; ?></span></strong>
-                            </td>
-                        </tr>
-                    </table>
-
                     <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th class="text-center">Brand</th>
                             <?php
                             foreach ($product  as $ind => $element) {
-                            ?>
-                            <th  class="text-center" colspan="3"><?php echo $element .'Kg'?></th>
+                                ?>
+                                <th  class="text-center" colspan="3"><?php echo $element .'Kg'?></th>
                             <?php }?>
                         </tr>
                         <tr>
                             <th></th>
                             <?php
                             foreach ($product  as $ind => $element) {
-                            ?>
-                            <th class="<?php echo 'package_'.$element?>">
-                                Pack
-                            </th>
-                            <th class="<?php echo 'package_'.$element?>">
-                                Ref
-                            </th>
-                            <th class="<?php echo 'package_'.$element?>">
-                                Emp
-                            </th>
+                                ?>
+                                <th class="<?php echo 'package_'.$element?>">
+                                    Pack
+                                </th>
+                                <th class="<?php echo 'package_'.$element?>">
+                                    Ref
+                                </th>
+                                <th class="<?php echo 'package_'.$element?>">
+                                    Emp
+                                </th>
                             <?php }?>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
                         foreach ($sales_list  as $ind => $element2) {
-                        ?>
+                            ?>
                             <tr>
                                 <td>
                                     <?php echo $element2['brand_name']?>
                                 </td>
                                 <?php
                                 foreach ($product  as $ind => $element) {
-                                   $package_th= ('package_'.$element)?'package_'.$element:'package_0';
-                                   $refial_th= ('refial_'.$element)?'refial_'.$element:'refial_0';
-                                   $empty_th= ('empty_'.$element)?'empty_'.$element:'empty_0';
+                                    $package_th= ('package_'.$element)?'package_'.$element:'package_0';
+                                    $refial_th= ('refial_'.$element)?'refial_'.$element:'refial_0';
+                                    $empty_th= ('empty_'.$element)?'empty_'.$element:'empty_0';
                                     $packageValue= isset($element2[$element.'_package'])?$element2[$element.'_package']:'';
                                     $refialValue= isset($element2[$element.'_refial'])?$element2[$element.'_refial']:'';
                                     $emptyValue= isset($element2[$element.'_empty'])?$element2[$element.'_empty']:'';
@@ -209,7 +167,7 @@ endif;
         </div>
 
     </div><!-- /.page-content -->
-    <?php endif;?>
 </div>
+
 
 

@@ -11,15 +11,9 @@
         width: 100%;
         height: 25px;
     }
-    .custome_read_only{
-        pointer-events: none;
-        cursor:not-allowed;
-        background-color:#eeeeee;
-    }
 </style>
 <script src="//code.jquery.com/jquery-2.2.3.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/jQueryUI/jquery-new-ui.js"></script>
-
 
 <div class="main-content" >
     <div class="main-content-inner">
@@ -493,22 +487,7 @@
     </div><!-- /.page-content -->
 </div>
 <script>
-    var cylinderProduct;
-    window.cylinderProduct='<?php echo json_encode($cylinderProduct); ?>';
-    var option = "";
-    option += "<option value='" + '' + "'>---Select Name---</option>";
-    $.each(JSON.parse( cylinderProduct), function (key, value) {
-        if(value.category_id==1){
-            option+="<option categoryName2='"+value.productCat+"' brand_id='"+value.brand_id +"' productName2='"+value.productName+' ['+ value.brandName+']'+"' value='"+value.product_id+"'  >"+ value.productName+' ['+ value.brandName  +' ]'+"</option>";
-        }
-    });
-
-
-
     $(document).ready(function () {
-
-
-
         //$(".chosen-select").chosen();
         //packageOrProduct(1);
         //$('#productID2').prop('disabled', true).trigger("liszt:updated");

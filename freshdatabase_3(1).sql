@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2019 at 01:59 PM
+-- Generation Time: Apr 16, 2019 at 02:12 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -84,7 +84,19 @@ INSERT INTO `adminloghistory` (`logId`, `adminId`, `logIn`, `logOut`, `date`, `d
 (6, 2, '2019-04-01 08:40:16', NULL, '2019-04-01', 2, '::1'),
 (7, 2, '2019-04-02 08:25:13', NULL, '2019-04-02', 2, '::1'),
 (8, 2, '2019-04-03 07:46:32', NULL, '2019-04-03', 2, '::1'),
-(9, 2, '2019-04-04 08:23:03', NULL, '2019-04-04', 2, '::1');
+(9, 2, '2019-04-04 08:23:03', NULL, '2019-04-04', 2, '::1'),
+(10, 2, '2019-04-06 09:09:50', NULL, '2019-04-06', 2, '::1'),
+(11, 2, '2019-04-07 08:32:45', NULL, '2019-04-07', 2, '::1'),
+(12, 2, '2019-04-07 11:18:14', NULL, '2019-04-07', 2, '::1'),
+(13, 2, '2019-04-07 14:31:00', NULL, '2019-04-07', 2, '::1'),
+(14, 2, '2019-04-08 08:45:09', NULL, '2019-04-08', 2, '::1'),
+(15, 2, '2019-04-09 08:37:18', NULL, '2019-04-09', 2, '::1'),
+(16, 2, '2019-04-09 15:26:23', NULL, '2019-04-09', 2, '::1'),
+(17, 2, '2019-04-10 09:58:00', NULL, '2019-04-10', 2, '::1'),
+(18, 2, '2019-04-11 08:19:30', NULL, '2019-04-11', 2, '::1'),
+(19, 2, '2019-04-15 11:41:40', NULL, '2019-04-15', 2, '::1'),
+(20, 2, '2019-04-15 16:07:46', NULL, '2019-04-15', 2, '::1'),
+(21, 2, '2019-04-16 08:43:28', NULL, '2019-04-16', 2, '::1');
 
 -- --------------------------------------------------------
 
@@ -105,94 +117,102 @@ CREATE TABLE `admin_role` (
 --
 
 INSERT INTO `admin_role` (`admin_role_id`, `admin_id`, `navigation_id`, `parent_id`, `test`) VALUES
-(673, 2, 101, 0, ''),
-(674, 2, 102, 0, ''),
-(675, 2, 103, 0, ''),
-(676, 2, 104, 0, ''),
-(677, 2, 105, 0, ''),
-(678, 2, 106, 0, ''),
-(679, 2, 107, 0, ''),
-(680, 2, 108, 0, ''),
-(681, 2, 109, 0, ''),
-(682, 2, 119, 0, ''),
-(683, 2, 3, 2, ''),
-(684, 2, 17, 2, ''),
-(685, 2, 49, 2, ''),
-(686, 2, 76, 2, ''),
-(687, 2, 87, 2, ''),
-(688, 2, 89, 2, ''),
-(689, 2, 90, 2, ''),
-(690, 2, 58, 80, ''),
-(691, 2, 59, 80, ''),
-(692, 2, 60, 80, ''),
-(693, 2, 75, 80, ''),
-(694, 2, 88, 80, ''),
-(695, 2, 22, 81, ''),
-(696, 2, 40, 81, ''),
-(697, 2, 55, 81, ''),
-(698, 2, 56, 81, ''),
-(699, 2, 74, 81, ''),
-(700, 2, 110, 0, ''),
-(701, 2, 111, 0, ''),
-(702, 2, 112, 0, ''),
-(703, 2, 16, 9, ''),
-(704, 2, 51, 9, ''),
-(705, 2, 38, 10, ''),
-(706, 2, 39, 10, ''),
-(707, 2, 42, 10, ''),
-(708, 2, 79, 10, ''),
-(709, 2, 45, 12, ''),
-(710, 2, 48, 12, ''),
-(711, 2, 69, 12, ''),
-(712, 2, 85, 12, ''),
-(713, 2, 91, 12, ''),
-(714, 2, 113, 0, ''),
-(715, 2, 114, 0, ''),
-(716, 2, 115, 0, ''),
-(717, 2, 19, 13, ''),
-(718, 2, 20, 13, ''),
-(719, 2, 23, 14, ''),
-(720, 2, 24, 14, ''),
-(721, 2, 25, 14, ''),
-(722, 2, 62, 14, ''),
-(723, 2, 27, 15, ''),
-(724, 2, 30, 15, ''),
-(725, 2, 31, 15, ''),
-(726, 2, 32, 15, ''),
-(727, 2, 33, 15, ''),
-(728, 2, 34, 15, ''),
-(729, 2, 35, 15, ''),
-(730, 2, 36, 15, ''),
-(731, 2, 57, 15, ''),
-(732, 2, 116, 0, ''),
-(733, 2, 117, 0, ''),
-(734, 2, 118, 0, ''),
-(735, 2, 4, 7, ''),
-(736, 2, 5, 7, ''),
-(737, 2, 6, 7, ''),
-(738, 2, 43, 7, ''),
-(739, 2, 44, 7, ''),
-(740, 2, 52, 7, ''),
-(741, 2, 92, 7, ''),
-(742, 2, 93, 7, ''),
-(743, 2, 21, 8, ''),
-(744, 2, 37, 8, ''),
-(745, 2, 65, 8, ''),
-(746, 2, 28, 11, ''),
-(747, 2, 47, 11, ''),
-(748, 2, 70, 11, ''),
-(749, 2, 71, 11, ''),
-(750, 2, 77, 11, ''),
-(751, 2, 83, 11, ''),
-(752, 2, 46, 72, ''),
-(753, 2, 67, 72, ''),
-(754, 2, 68, 72, ''),
-(755, 2, 73, 72, ''),
-(756, 2, 82, 72, ''),
-(757, 2, 84, 72, ''),
-(758, 2, 94, 72, ''),
-(759, 2, 95, 72, ''),
-(760, 2, 96, 72, '');
+(1498, 2, 101, 12, ''),
+(1499, 2, 102, 12, ''),
+(1500, 2, 103, 12, ''),
+(1501, 2, 104, 12, ''),
+(1502, 2, 105, 0, ''),
+(1503, 2, 106, 0, ''),
+(1504, 2, 107, 0, ''),
+(1505, 2, 108, 0, ''),
+(1506, 2, 109, 0, ''),
+(1507, 2, 119, 0, ''),
+(1508, 2, 3, 2, ''),
+(1509, 2, 17, 2, ''),
+(1510, 2, 49, 2, ''),
+(1511, 2, 76, 2, ''),
+(1512, 2, 87, 2, ''),
+(1513, 2, 89, 2, ''),
+(1514, 2, 90, 2, ''),
+(1515, 2, 58, 80, ''),
+(1516, 2, 59, 80, ''),
+(1517, 2, 60, 80, ''),
+(1518, 2, 75, 80, ''),
+(1519, 2, 88, 80, ''),
+(1520, 2, 22, 81, ''),
+(1521, 2, 40, 81, ''),
+(1522, 2, 55, 81, ''),
+(1523, 2, 56, 81, ''),
+(1524, 2, 74, 81, ''),
+(1525, 2, 110, 0, ''),
+(1526, 2, 111, 0, ''),
+(1527, 2, 112, 0, ''),
+(1528, 2, 16, 9, ''),
+(1529, 2, 51, 9, ''),
+(1530, 2, 38, 10, ''),
+(1531, 2, 39, 10, ''),
+(1532, 2, 42, 10, ''),
+(1533, 2, 79, 10, ''),
+(1534, 2, 45, 12, ''),
+(1535, 2, 48, 12, ''),
+(1536, 2, 69, 12, ''),
+(1537, 2, 85, 12, ''),
+(1538, 2, 91, 12, ''),
+(1539, 2, 98, 12, ''),
+(1540, 2, 100, 12, ''),
+(1541, 2, 101, 12, ''),
+(1542, 2, 102, 12, ''),
+(1543, 2, 103, 12, ''),
+(1544, 2, 104, 12, ''),
+(1545, 2, 113, 0, ''),
+(1546, 2, 114, 0, ''),
+(1547, 2, 115, 0, ''),
+(1548, 2, 19, 13, ''),
+(1549, 2, 20, 13, ''),
+(1550, 2, 23, 14, ''),
+(1551, 2, 24, 14, ''),
+(1552, 2, 25, 14, ''),
+(1553, 2, 62, 14, ''),
+(1554, 2, 27, 15, ''),
+(1555, 2, 30, 15, ''),
+(1556, 2, 31, 15, ''),
+(1557, 2, 32, 15, ''),
+(1558, 2, 33, 15, ''),
+(1559, 2, 34, 15, ''),
+(1560, 2, 35, 15, ''),
+(1561, 2, 36, 15, ''),
+(1562, 2, 57, 15, ''),
+(1563, 2, 116, 0, ''),
+(1564, 2, 117, 0, ''),
+(1565, 2, 118, 0, ''),
+(1566, 2, 4, 7, ''),
+(1567, 2, 5, 7, ''),
+(1568, 2, 6, 7, ''),
+(1569, 2, 43, 7, ''),
+(1570, 2, 44, 7, ''),
+(1571, 2, 52, 7, ''),
+(1572, 2, 92, 7, ''),
+(1573, 2, 93, 7, ''),
+(1574, 2, 21, 8, ''),
+(1575, 2, 37, 8, ''),
+(1576, 2, 65, 8, ''),
+(1577, 2, 28, 11, ''),
+(1578, 2, 47, 11, ''),
+(1579, 2, 70, 11, ''),
+(1580, 2, 71, 11, ''),
+(1581, 2, 77, 11, ''),
+(1582, 2, 83, 11, ''),
+(1583, 2, 46, 72, ''),
+(1584, 2, 67, 72, ''),
+(1585, 2, 68, 72, ''),
+(1586, 2, 73, 72, ''),
+(1587, 2, 82, 72, ''),
+(1588, 2, 84, 72, ''),
+(1589, 2, 94, 72, ''),
+(1590, 2, 95, 72, ''),
+(1591, 2, 96, 72, ''),
+(1592, 2, 97, 72, ''),
+(1593, 2, 99, 72, '');
 
 -- --------------------------------------------------------
 
@@ -413,8 +433,17 @@ CREATE TABLE `client_vendor_ledger` (
 --
 
 INSERT INTO `client_vendor_ledger` (`ledger_id`, `dist_id`, `ledger_type`, `trans_type`, `history_id`, `client_vendor_id`, `amount`, `previous_due`, `dr`, `cr`, `balance`, `date`, `created_at`, `updated_at`, `updated_by`, `paymentType`) VALUES
-(1, 2, 2, 'PV19040001', 1, 1, '2180', '0', '2180', '0', '0', '2019-04-03', '2019-04-03 05:03:42', '0000-00-00 00:00:00', 2, 'Purcahses Voucher'),
-(2, 2, 2, 'PV19040002', 2, 1, '9000', '0', '9000', '0', '0', '2019-04-04', '2019-04-04 05:22:26', '0000-00-00 00:00:00', 2, 'Purcahses Voucher');
+(1, 2, 2, 'PV19040001', 1, 1, '42450', '0', '42450', '0', '0', '2019-04-07', '2019-04-07 06:34:56', '0000-00-00 00:00:00', 2, 'Purcahses Voucher'),
+(2, 2, 2, 'PV19040002', 2, 1, '25000', '0', '25000', '0', '0', '2019-04-07', '2019-04-07 06:41:51', '0000-00-00 00:00:00', 2, 'Purcahses Voucher'),
+(3, 2, 2, 'PV19040003', 3, 1, '8050', '0', '8050', '0', '0', '2019-04-07', '2019-04-07 06:44:20', '0000-00-00 00:00:00', 2, 'Purcahses Voucher'),
+(4, 2, 1, 'SID19040001', 6, 1, '450', '0', '450', '0', '0', '2019-04-07', '2019-04-07 10:03:29', '0000-00-00 00:00:00', 2, ''),
+(5, 2, 1, 'SID19040002', 7, 1, '1100', '0', '1100', '0', '0', '2019-04-07', '2019-04-07 11:43:15', '0000-00-00 00:00:00', 2, ''),
+(6, 2, 1, 'SID19040003', 8, 1, '2750', '0', '2750', '0', '0', '2019-04-08', '2019-04-08 04:37:49', '0000-00-00 00:00:00', 2, ''),
+(7, 2, 1, 'SID19040004', 9, 2, '1650', '0', '1650', '0', '0', '2019-04-08', '2019-04-08 04:39:55', '0000-00-00 00:00:00', 2, ''),
+(8, 2, 2, 'PV19040004', 10, 1, '2250', '0', '2250', '0', '0', '2019-04-09', '2019-04-09 06:18:02', '0000-00-00 00:00:00', 2, 'Purcahses Voucher'),
+(9, 2, 1, 'SID19040005', 11, 1, '2750', '0', '2750', '0', '0', '2019-04-10', '2019-04-10 12:04:13', '0000-00-00 00:00:00', 2, ''),
+(10, 2, 1, 'SID19040006', 12, 1, '2750', '0', '2750', '0', '0', '2019-04-10', '2019-04-10 12:06:40', '0000-00-00 00:00:00', 2, ''),
+(11, 2, 1, 'SID19040007', 13, 1, '1100', '0', '1100', '0', '0', '2019-04-10', '2019-04-10 12:07:26', '0000-00-00 00:00:00', 2, '');
 
 -- --------------------------------------------------------
 
@@ -837,12 +866,32 @@ CREATE TABLE `generalledger` (
 --
 
 INSERT INTO `generalledger` (`generalledger_id`, `generals_id`, `date`, `form_id`, `dist_id`, `account`, `debit`, `credit`, `memo`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 1, '2019-04-03', 11, 2, 50, '0.00', '2180.00', 'purchases', 2, '2019-04-03 04:33:42', '0000-00-00 00:00:00'),
-(2, 1, '2019-04-03', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-03 04:33:42', '0000-00-00 00:00:00'),
-(3, 1, '2019-04-03', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-03 04:33:42', '0000-00-00 00:00:00'),
-(4, 2, '2019-04-04', 11, 2, 50, '0.00', '9000.00', 'purchases', 2, '2019-04-04 04:52:26', '0000-00-00 00:00:00'),
-(5, 2, '2019-04-04', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-04 04:52:26', '0000-00-00 00:00:00'),
-(6, 2, '2019-04-04', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-04 04:52:26', '0000-00-00 00:00:00');
+(1, 1, '2019-04-07', 11, 2, 50, '0.00', '42450.00', 'purchases', 2, '2019-04-07 06:04:56', '0000-00-00 00:00:00'),
+(2, 1, '2019-04-07', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-07 06:04:56', '0000-00-00 00:00:00'),
+(3, 1, '2019-04-07', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-07 06:04:56', '0000-00-00 00:00:00'),
+(4, 2, '2019-04-07', 11, 2, 50, '0.00', '25000.00', 'purchases', 2, '2019-04-07 06:11:51', '0000-00-00 00:00:00'),
+(5, 2, '2019-04-07', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-07 06:11:51', '0000-00-00 00:00:00'),
+(6, 2, '2019-04-07', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-07 06:11:51', '0000-00-00 00:00:00'),
+(7, 3, '2019-04-07', 11, 2, 50, '0.00', '8050.00', 'purchases', 2, '2019-04-07 06:14:20', '0000-00-00 00:00:00'),
+(8, 3, '2019-04-07', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-07 06:14:20', '0000-00-00 00:00:00'),
+(9, 3, '2019-04-07', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-07 06:14:20', '0000-00-00 00:00:00'),
+(10, 6, '2019-04-07', 5, 2, 58, '450.00', '0.00', '', 2, '2019-04-07 10:03:29', '0000-00-00 00:00:00'),
+(11, 6, '2019-04-07', 5, 2, 49, '0.00', '450.00', '', 2, '2019-04-07 10:03:29', '0000-00-00 00:00:00'),
+(12, 7, '2019-04-07', 5, 2, 58, '1100.00', '0.00', '', 2, '2019-04-07 11:43:15', '0000-00-00 00:00:00'),
+(13, 7, '2019-04-07', 5, 2, 49, '0.00', '1100.00', '', 2, '2019-04-07 11:43:15', '0000-00-00 00:00:00'),
+(14, 8, '2019-04-08', 5, 2, 58, '2750.00', '0.00', '', 2, '2019-04-08 04:37:49', '0000-00-00 00:00:00'),
+(15, 8, '2019-04-08', 5, 2, 49, '0.00', '2750.00', '', 2, '2019-04-08 04:37:49', '0000-00-00 00:00:00'),
+(16, 9, '2019-04-08', 5, 2, 58, '1650.00', '0.00', '', 2, '2019-04-08 04:39:55', '0000-00-00 00:00:00'),
+(17, 9, '2019-04-08', 5, 2, 49, '0.00', '1650.00', '', 2, '2019-04-08 04:39:55', '0000-00-00 00:00:00'),
+(18, 10, '2019-04-09', 11, 2, 50, '0.00', '2250.00', 'purchases', 2, '2019-04-09 05:48:01', '0000-00-00 00:00:00'),
+(19, 10, '2019-04-09', 11, 2, 336, '0.00', '0.00', 'Loading and wages', 2, '2019-04-09 05:48:01', '0000-00-00 00:00:00'),
+(20, 10, '2019-04-09', 11, 2, 339, '0.00', '0.00', 'Transportation', 2, '2019-04-09 05:48:01', '0000-00-00 00:00:00'),
+(21, 11, '2019-04-10', 5, 2, 58, '2750.00', '0.00', '', 2, '2019-04-10 12:04:13', '0000-00-00 00:00:00'),
+(22, 11, '2019-04-10', 5, 2, 49, '0.00', '2750.00', '', 2, '2019-04-10 12:04:13', '0000-00-00 00:00:00'),
+(23, 12, '2019-04-10', 5, 2, 58, '2750.00', '0.00', '', 2, '2019-04-10 12:06:40', '0000-00-00 00:00:00'),
+(24, 12, '2019-04-10', 5, 2, 49, '0.00', '2750.00', '', 2, '2019-04-10 12:06:40', '0000-00-00 00:00:00'),
+(25, 13, '2019-04-10', 5, 2, 58, '1100.00', '0.00', '', 2, '2019-04-10 12:07:26', '0000-00-00 00:00:00'),
+(26, 13, '2019-04-10', 5, 2, 49, '0.00', '1100.00', '', 2, '2019-04-10 12:07:26', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -890,8 +939,17 @@ CREATE TABLE `generals` (
 --
 
 INSERT INTO `generals` (`generals_id`, `form_id`, `dist_id`, `payType`, `voucher_no`, `reference`, `date`, `miscellaneous`, `customer_id`, `supplier_id`, `contract_no`, `discount`, `vat`, `debit`, `credit`, `vatAmount`, `narration`, `orderStatus`, `shipAddress`, `deliveryDate`, `orderId`, `dueDate`, `qtyIn`, `qtyOut`, `loader`, `transportation`, `loaderAmount`, `transportationAmount`, `created_at`, `updated_at`, `updated_by`, `mainInvoiceId`) VALUES
-(1, 11, 2, '2', 'PV19040001', '', '2019-04-03', '', 0, 1, '', '0.00', '0.00', '2180.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-03', 0, 0, 0, 0, '0.00', '0.00', '2019-04-03 04:33:42', '0000-00-00 00:00:00', 2, ''),
-(2, 11, 2, '2', 'PV19040002', '', '2019-04-04', '', 0, 1, '', '0.00', '0.00', '9000.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-04', 0, 0, 0, 0, '0.00', '0.00', '2019-04-04 04:52:26', '0000-00-00 00:00:00', 2, '');
+(1, 11, 2, '2', 'PV19040001', '', '2019-04-07', '', 0, 1, '', '0.00', '0.00', '42450.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-07', 0, 0, 0, 0, '0.00', '0.00', '2019-04-07 06:04:56', '0000-00-00 00:00:00', 2, ''),
+(2, 11, 2, '2', 'PV19040002', '', '2019-04-07', '', 0, 1, '', '0.00', '0.00', '25000.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-07', 0, 0, 0, 0, '0.00', '0.00', '2019-04-07 06:11:51', '0000-00-00 00:00:00', 2, ''),
+(3, 11, 2, '2', 'PV19040003', '', '2019-04-07', '', 0, 1, '', '0.00', '0.00', '8050.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-07', 0, 0, 0, 0, '0.00', '0.00', '2019-04-07 06:14:20', '0000-00-00 00:00:00', 2, ''),
+(6, 5, 2, '2', 'SID19040001', '', '2019-04-07', '', 1, NULL, '', '0.00', '0.00', '450.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-07 10:03:29', '0000-00-00 00:00:00', 2, ''),
+(7, 5, 2, '2', 'SID19040002', '', '2019-04-07', '', 1, NULL, '', '0.00', '0.00', '1100.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-07 11:43:15', '0000-00-00 00:00:00', 2, ''),
+(8, 5, 2, '2', 'SID19040003', '', '2019-04-08', '', 1, NULL, '', '0.00', '0.00', '2750.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-08 04:37:49', '0000-00-00 00:00:00', 2, ''),
+(9, 5, 2, '2', 'SID19040004', '', '2019-04-08', '', 2, NULL, '', '0.00', '0.00', '1650.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-08 04:39:55', '0000-00-00 00:00:00', 2, ''),
+(10, 11, 2, '2', 'PV19040004', '', '2019-04-09', '', 0, 1, '', '0.00', '0.00', '2250.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '2019-04-09', 0, 0, 0, 0, '0.00', '0.00', '2019-04-09 05:48:01', '0000-00-00 00:00:00', 2, ''),
+(11, 5, 2, '2', 'SID19040005', '', '2019-04-10', '', 1, NULL, '', '0.00', '0.00', '2750.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-10 12:04:13', '0000-00-00 00:00:00', 2, ''),
+(12, 5, 2, '2', 'SID19040006', '', '2019-04-10', '', 1, NULL, '', '0.00', '0.00', '2750.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-10 12:06:40', '0000-00-00 00:00:00', 2, ''),
+(13, 5, 2, '2', 'SID19040007', '', '2019-04-10', '', 1, NULL, '', '0.00', '0.00', '1100.00', '0.00', '0.00', '', 1, '', '0000-00-00', 0, '0000-00-00', 0, 0, 0, 0, '0.00', '0.00', '2019-04-10 12:07:26', '0000-00-00 00:00:00', 2, '');
 
 -- --------------------------------------------------------
 
@@ -1085,7 +1143,15 @@ INSERT INTO `navigation` (`navigation_id`, `label`, `parent_id`, `url`, `icon`, 
 (93, 'Product Package', 7, 'productPackageList', '', '', '', '', '', 'administration', 1, 0),
 (94, 'Cylinder Type Report', 72, 'cylinderTypeReport', 'fa fa-share', '', '', '', '', 'administration', 1, 0),
 (95, 'Cylinder Summary Report', 72, 'cylinderSummaryReport', 'fa fa-share', '', '', '', '', 'administration', 1, 0),
-(96, 'Cylinder Details Report', 72, 'cylinderDetailsReport', 'fa fa-share', '', '', '', '', 'administration', 1, 0);
+(96, 'Cylinder Details Report', 72, 'cylinderDetailsReport', 'fa fa-share', '', '', '', '', 'administration', 1, 0),
+(97, 'Cylinder Stock Report', 72, 'full_cylinder_stock_report', '', '', '', '', '', 'administration', 1, 0),
+(98, 'Cylinder Sales Report', 12, 'cylinder_sales_report', '', '', '', '', '', 'administration', 1, 0),
+(99, 'Stock Group Report', 72, 'stock_group_report', '', '', '', '', '', 'administration', 1, 0),
+(100, 'Sales Report Brand wise', 12, 'sales_report_brand_wise', '', '', '', '', '', 'administration', 1, 0),
+(101, 'Daily Sales Statement', 12, 'daily_sales_statement', '', '', '', '', '', 'administration', 1, 0),
+(102, 'Date Wise Product Sales', 12, 'date_wise_product_sales', '', '', '', '', '', 'administration', 1, 0),
+(103, 'date_wise_product_sales_by_date', 12, 'date_wise_product_sales_by_date', '', '', '', '', '', 'administration', 1, 0),
+(104, 'Customer Due', 12, 'customer_due', '', '', '', '', '', 'administration', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1234,22 +1300,22 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`product_id`, `brand_id`, `dist_id`, `category_id`, `supplierid`, `unit_id`, `product_type_id`, `productName`, `product_code`, `purchases_price`, `salesPrice`, `retailPrice`, `alarm_qty`, `status`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 5, 1, 1, 0, 2, 1, '12', 'PID19030001', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 5, 1, 1, 0, 2, 1, '20', 'PID19030002', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 5, 1, 1, 0, 2, 1, '33', 'PID19030003', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 5, 1, 1, 0, 2, 1, '45', 'PID19030004', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 5, 1, 2, 0, 2, 1, '12', 'PID19030005', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 5, 1, 2, 0, 2, 1, '20', 'PID19030006', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 5, 1, 2, 0, 2, 1, '33', 'PID19030007', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 5, 1, 2, 0, 2, 1, '45', 'PID19030008', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 7, 1, 1, 0, 2, 1, '5.5', 'PID19030009', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 7, 1, 1, 0, 2, 1, '12', 'PID19030010', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(11, 7, 1, 1, 0, 2, 1, '33', 'PID19030011', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(12, 7, 1, 1, 0, 2, 1, '45', 'PID19030012', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(13, 7, 1, 2, 0, 2, 1, '5.5', 'PID19030013', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(14, 7, 1, 2, 0, 2, 1, '12', 'PID19030014', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(15, 7, 1, 2, 0, 2, 1, '33', 'PID19030015', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(16, 7, 1, 2, 0, 2, 1, '45', 'PID19030016', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 5, 1, 1, 0, 2, 1, '12 Kg', 'PID19030001', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 5, 1, 1, 0, 2, 1, '20 Kg', 'PID19030002', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 5, 1, 1, 0, 2, 1, '33 Kg', 'PID19030003', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 5, 1, 1, 0, 2, 1, '45 Kg', 'PID19030004', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 5, 1, 2, 0, 2, 1, '12 Kg', 'PID19030005', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 5, 1, 2, 0, 2, 1, '20 Kg', 'PID19030006', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, 5, 1, 2, 0, 2, 1, '33 Kg', 'PID19030007', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 5, 1, 2, 0, 2, 1, '45 Kg', 'PID19030008', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(9, 7, 1, 1, 0, 2, 1, '5.5 Kg', 'PID19030009', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, 7, 1, 1, 0, 2, 1, '12 Kg', 'PID19030010', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(11, 7, 1, 1, 0, 2, 1, '33 Kg', 'PID19030011', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(12, 7, 1, 1, 0, 2, 1, '45 Kg', 'PID19030012', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(13, 7, 1, 2, 0, 2, 1, '5.5 Kg', 'PID19030013', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(14, 7, 1, 2, 0, 2, 1, '12 Kg', 'PID19030014', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(15, 7, 1, 2, 0, 2, 1, '33 Kg', 'PID19030015', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(16, 7, 1, 2, 0, 2, 1, '45 Kg', 'PID19030016', '0.00', 0, 0, '0.00', 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1380,7 +1446,11 @@ CREATE TABLE `purchase_details` (
   `purchase_invoice_id` int(11) NOT NULL,
   `is_package` tinyint(1) DEFAULT '0' COMMENT 'package=1,Not package =0',
   `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
+  `returnable_quantity` int(11) NOT NULL DEFAULT '0',
+  `return_quentity` int(11) NOT NULL DEFAULT '0',
+  `supplier_due` int(11) NOT NULL DEFAULT '0',
+  `supplier_advance` int(11) NOT NULL DEFAULT '0',
+  `quantity` int(11) NOT NULL COMMENT 'purchase quantity',
   `unit_price` decimal(10,0) NOT NULL,
   `insert_by` int(11) NOT NULL,
   `insert_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -1396,11 +1466,16 @@ CREATE TABLE `purchase_details` (
 -- Dumping data for table `purchase_details`
 --
 
-INSERT INTO `purchase_details` (`purchase_details_id`, `purchase_invoice_id`, `is_package`, `product_id`, `quantity`, `unit_price`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
-(1, 1, 1, 14, 10, '100', 2, '2019-04-03 04:33:42', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(2, 1, 1, 10, 10, '100', 2, '2019-04-03 04:33:42', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(3, 1, 0, 14, 3, '30', 2, '2019-04-03 04:33:42', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(4, 2, 0, 8, 30, '300', 2, '2019-04-04 04:52:26', NULL, NULL, NULL, NULL, 'Y', 'N');
+INSERT INTO `purchase_details` (`purchase_details_id`, `purchase_invoice_id`, `is_package`, `product_id`, `returnable_quantity`, `return_quentity`, `supplier_due`, `supplier_advance`, `quantity`, `unit_price`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
+(1, 1, 0, 10, 0, 0, 0, 0, 40, '450', 2, '2019-04-07 06:04:56', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(2, 1, 0, 1, 0, 0, 0, 0, 30, '440', 2, '2019-04-07 06:04:56', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(3, 1, 0, 4, 0, 0, 0, 0, 25, '450', 2, '2019-04-07 06:04:56', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(4, 2, 0, 5, 20, 20, 0, 0, 20, '500', 2, '2019-04-07 06:11:51', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(5, 2, 0, 14, 10, 10, 0, 0, 10, '500', 2, '2019-04-07 06:11:51', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(6, 3, 1, 14, 0, 0, 0, 0, 10, '400', 2, '2019-04-07 06:14:20', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(7, 3, 1, 10, 0, 0, 0, 0, 10, '400', 2, '2019-04-07 06:14:20', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(8, 3, 0, 9, 0, 0, 0, 0, 5, '10', 2, '2019-04-07 06:14:20', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(9, 4, 0, 14, 5, 5, 0, 0, 5, '450', 2, '2019-04-09 05:48:01', NULL, NULL, NULL, NULL, 'Y', 'N');
 
 -- --------------------------------------------------------
 
@@ -1443,8 +1518,10 @@ CREATE TABLE `purchase_invoice_info` (
 --
 
 INSERT INTO `purchase_invoice_info` (`purchase_invoice_id`, `invoice_no`, `supplier_invoice_no`, `supplier_id`, `payment_type`, `refference_person_id`, `invoice_amount`, `vat_amount`, `discount_amount`, `paid_amount`, `tran_vehicle_id`, `transport_charge`, `loader_emp_id`, `loader_charge`, `due_date`, `invoice_date`, `company_id`, `branch_id`, `dist_id`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
-(1, 'PV19040001', '', 1, 2, 0, '2180.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-03', '2019-04-03', 2, 0, 2, 2, '2019-04-03', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(2, 'PV19040002', '', 1, 2, 0, '9000.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-04', '2019-04-04', 2, 0, 2, 2, '2019-04-04', NULL, NULL, NULL, NULL, 'Y', 'N');
+(1, 'PV19040001', '', 1, 2, 0, '42450.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-07', '2019-04-07', 2, 0, 2, 2, '2019-04-07', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(2, 'PV19040002', '', 1, 2, 0, '25000.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-07', '2019-04-07', 2, 0, 2, 2, '2019-04-07', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(3, 'PV19040003', '', 1, 2, 0, '8050.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-07', '2019-04-07', 2, 0, 2, 2, '2019-04-07', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(4, 'PV19040004', '', 1, 2, 0, '2250.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-09', '2019-04-09', 2, 0, 2, 2, '2019-04-09', NULL, NULL, NULL, NULL, 'Y', 'N');
 
 -- --------------------------------------------------------
 
@@ -1474,9 +1551,10 @@ CREATE TABLE `purchase_return_details` (
 --
 
 INSERT INTO `purchase_return_details` (`purchase_return_id`, `purchase_details_id`, `product_id`, `returnable_quantity`, `return_quantity`, `unit_price`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
-(1, 3, 10, 1, 1, NULL, 2, '2019-04-03 04:33:42', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(2, 3, 1, 2, 2, NULL, 2, '2019-04-03 04:33:42', NULL, NULL, NULL, NULL, 'Y', 'N'),
-(3, 4, 4, 30, 30, NULL, 2, '2019-04-04 04:52:26', NULL, NULL, NULL, NULL, 'Y', 'N');
+(1, 4, 1, 12, 12, NULL, 2, '2019-04-07 06:11:51', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(2, 4, 4, 8, 8, NULL, 2, '2019-04-07 06:11:51', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(3, 5, 10, 10, 10, NULL, 2, '2019-04-07 06:11:51', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(4, 9, 10, 5, 5, NULL, 2, '2019-04-09 05:48:01', NULL, NULL, NULL, NULL, 'Y', 'N');
 
 -- --------------------------------------------------------
 
@@ -1545,10 +1623,50 @@ CREATE TABLE `retainearning` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salse_invoice_info`
+-- Table structure for table `sales_details`
 --
 
-CREATE TABLE `salse_invoice_info` (
+CREATE TABLE `sales_details` (
+  `sales_details_id` int(11) NOT NULL,
+  `sales_invoice_id` int(11) NOT NULL,
+  `is_package` tinyint(1) DEFAULT '0' COMMENT 'package=1,Not package =0',
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit_price` decimal(10,0) NOT NULL,
+  `insert_by` int(11) NOT NULL,
+  `insert_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `returnable_quantity` int(11) DEFAULT '0',
+  `return_quentity` int(11) DEFAULT '0',
+  `customer_due` int(11) DEFAULT '0',
+  `customer_advance` int(11) DEFAULT '0',
+  `update_by` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `delete_by` int(11) DEFAULT NULL,
+  `delete_date` datetime DEFAULT NULL,
+  `is_active` enum('Y','N') DEFAULT 'Y',
+  `is_delete` enum('Y','N') DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sales_details`
+--
+
+INSERT INTO `sales_details` (`sales_details_id`, `sales_invoice_id`, `is_package`, `product_id`, `quantity`, `unit_price`, `insert_by`, `insert_date`, `returnable_quantity`, `return_quentity`, `customer_due`, `customer_advance`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
+(1, 1, 0, 14, 5, '400', 2, '2019-04-16 06:10:51', 5, 5, 0, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(2, 1, 1, 14, 2, '0', 2, '2019-04-08 04:07:49', 0, 0, 0, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(3, 1, 1, 10, 2, '0', 2, '2019-04-08 04:07:49', 0, 0, 0, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(4, 2, 0, 14, 3, '550', 2, '2019-04-08 04:09:55', 3, 3, 0, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(5, 3, 0, 5, 5, '550', 2, '2019-04-10 12:05:40', 5, 2, 3, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(6, 4, 0, 14, 5, '550', 2, '2019-04-10 11:36:40', 5, 7, 2, 0, NULL, NULL, NULL, NULL, 'Y', 'N'),
+(7, 5, 0, 14, 2, '550', 2, '2019-04-10 12:08:08', 2, 5, 0, 3, NULL, NULL, NULL, NULL, 'Y', 'N');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_invoice_info`
+--
+
+CREATE TABLE `sales_invoice_info` (
   `sales_invoice_id` int(11) NOT NULL,
   `invoice_no` varchar(15) NOT NULL,
   `customer_invoice_no` varchar(15) DEFAULT NULL,
@@ -1575,8 +1693,60 @@ CREATE TABLE `salse_invoice_info` (
   `delete_by` int(11) DEFAULT NULL,
   `delete_date` date DEFAULT NULL,
   `is_active` enum('Y','N') NOT NULL DEFAULT 'Y',
-  `is_delete` enum('Y','N') NOT NULL DEFAULT 'Y'
+  `is_delete` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `narration` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sales_invoice_info`
+--
+
+INSERT INTO `sales_invoice_info` (`sales_invoice_id`, `invoice_no`, `customer_invoice_no`, `customer_id`, `payment_type`, `refference_person_id`, `invoice_amount`, `vat_amount`, `discount_amount`, `paid_amount`, `tran_vehicle_id`, `transport_charge`, `loader_emp_id`, `loader_charge`, `due_date`, `invoice_date`, `company_id`, `branch_id`, `dist_id`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`, `narration`) VALUES
+(1, 'SID19040003', '', 1, 2, 0, '2750.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-08', 2, 0, 2, 2, '2019-04-08', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
+(2, 'SID19040004', '', 2, 2, 0, '1650.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-08', 2, 0, 2, 2, '2019-04-08', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
+(3, 'SID19040005', '', 1, 2, 0, '2750.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-08', 2, 0, 2, 2, '2019-04-10', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
+(4, 'SID19040006', '', 1, 2, 0, '2750.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-08', 2, 0, 2, 2, '2019-04-10', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
+(5, 'SID19040007', '', 1, 2, 0, '1100.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-09', 2, 0, 2, 2, '2019-04-10', NULL, NULL, NULL, NULL, 'Y', 'N', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_return_details`
+--
+
+CREATE TABLE `sales_return_details` (
+  `sales_return_id` int(11) NOT NULL,
+  `sales_details_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `returnable_quantity` int(11) DEFAULT NULL,
+  `return_quantity` int(11) DEFAULT NULL,
+  `unit_price` decimal(10,0) DEFAULT NULL,
+  `insert_by` int(11) DEFAULT NULL,
+  `insert_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_by` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `delete_by` int(11) DEFAULT NULL,
+  `delete_date` datetime DEFAULT NULL,
+  `is_active` enum('Y','N') DEFAULT 'Y',
+  `is_delete` enum('Y','N') DEFAULT 'N'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sales_return_details`
+--
+
+INSERT INTO `sales_return_details` (`sales_return_id`, `sales_details_id`, `product_id`, `returnable_quantity`, `return_quantity`, `unit_price`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`) VALUES
+(1, 1, 1, 1, 1, NULL, 2, '2019-04-08 04:07:49', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(2, 1, 10, 1, 1, NULL, 2, '2019-04-08 04:07:49', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(3, 1, 2, 2, 2, NULL, 2, '2019-04-08 04:07:49', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(4, 1, 11, 1, 1, NULL, 2, '2019-04-08 04:07:49', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(5, 4, 1, 1, 1, NULL, 2, '2019-04-08 04:09:55', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(6, 4, 10, 1, 1, NULL, 2, '2019-04-08 04:09:55', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(7, 4, 11, 1, 1, NULL, 2, '2019-04-08 04:09:55', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(8, 5, 1, 2, 2, NULL, 2, '2019-04-10 11:34:13', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(9, 6, 1, 5, 5, NULL, 2, '2019-04-10 11:36:40', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(10, 6, 10, 2, 2, NULL, 2, '2019-04-10 11:36:40', NULL, NULL, NULL, NULL, 'Y', 'N'),
+(11, 7, 1, 5, 5, NULL, 2, '2019-04-10 11:37:26', NULL, NULL, NULL, NULL, 'Y', 'N');
 
 -- --------------------------------------------------------
 
@@ -4953,10 +5123,23 @@ ALTER TABLE `retainearning`
   ADD PRIMARY KEY (`retainid`);
 
 --
--- Indexes for table `salse_invoice_info`
+-- Indexes for table `sales_details`
 --
-ALTER TABLE `salse_invoice_info`
+ALTER TABLE `sales_details`
+  ADD PRIMARY KEY (`sales_details_id`),
+  ADD KEY `sales_invoice_id` (`sales_invoice_id`);
+
+--
+-- Indexes for table `sales_invoice_info`
+--
+ALTER TABLE `sales_invoice_info`
   ADD PRIMARY KEY (`sales_invoice_id`);
+
+--
+-- Indexes for table `sales_return_details`
+--
+ALTER TABLE `sales_return_details`
+  ADD PRIMARY KEY (`sales_return_id`);
 
 --
 -- Indexes for table `stock`
@@ -5040,13 +5223,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `adminloghistory`
 --
 ALTER TABLE `adminloghistory`
-  MODIFY `logId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `logId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
 ALTER TABLE `admin_role`
-  MODIFY `admin_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=761;
+  MODIFY `admin_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1594;
 
 --
 -- AUTO_INCREMENT for table `blood_group`
@@ -5070,7 +5253,7 @@ ALTER TABLE `chartofaccount`
 -- AUTO_INCREMENT for table `client_vendor_ledger`
 --
 ALTER TABLE `client_vendor_ledger`
-  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `color`
@@ -5130,13 +5313,13 @@ ALTER TABLE `generaldata`
 -- AUTO_INCREMENT for table `generalledger`
 --
 ALTER TABLE `generalledger`
-  MODIFY `generalledger_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `generalledger_id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `generals`
 --
 ALTER TABLE `generals`
-  MODIFY `generals_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `generals_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `incentive`
@@ -5166,7 +5349,7 @@ ALTER TABLE `moneyreceit`
 -- AUTO_INCREMENT for table `navigation`
 --
 ALTER TABLE `navigation`
-  MODIFY `navigation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `navigation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `newdecision`
@@ -5232,19 +5415,19 @@ ALTER TABLE `purchase_demo`
 -- AUTO_INCREMENT for table `purchase_details`
 --
 ALTER TABLE `purchase_details`
-  MODIFY `purchase_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `purchase_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `purchase_invoice_info`
 --
 ALTER TABLE `purchase_invoice_info`
-  MODIFY `purchase_invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `purchase_invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `purchase_return_details`
 --
 ALTER TABLE `purchase_return_details`
-  MODIFY `purchase_return_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `purchase_return_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `reference`
@@ -5265,10 +5448,22 @@ ALTER TABLE `retainearning`
   MODIFY `retainid` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `salse_invoice_info`
+-- AUTO_INCREMENT for table `sales_details`
 --
-ALTER TABLE `salse_invoice_info`
-  MODIFY `sales_invoice_id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sales_details`
+  MODIFY `sales_details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `sales_invoice_info`
+--
+ALTER TABLE `sales_invoice_info`
+  MODIFY `sales_invoice_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `sales_return_details`
+--
+ALTER TABLE `sales_return_details`
+  MODIFY `sales_return_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `stock`

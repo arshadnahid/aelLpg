@@ -193,13 +193,13 @@ $(document).on("keyup", ".returnAble", function () {
         returnQty=0;
     }
 
-    //if(returnQty == ''){
-    //    swal("Please first given qty!", "Validation Error!", "error");
-    //}else if(returnQty != returnQty){
-    //    swal("Returanable must equal Quantity!", "Validation Error!", "error");
+    if(returnQty == ''){
+        swal("Please first given qty!", "Validation Error!", "error");
+    }else if(returnQty != returnQty){
+        swal("Returanable must equal Quantity!", "Validation Error!", "error");
 
-    //    $(this).val('');
-    //}
+        $(this).val('');
+    }
 
 
 });
@@ -516,16 +516,7 @@ $(document).ready(function () {
 
 
 
-        if (quantity == '') {
-            swal("Qty can't be empty.!", "Validation Error!", "error");
-            return false;
-        } else if (price == '' || price =='0.00') {
-            swal("Price can't be empty.!", "Validation Error!", "error");
-            return false;
-        } else if (productID == '') {
-            swal("Product id can't be empty.!", "Validation Error!", "error");
-            return false;
-        } else if(ispackage==0){
+        if(ispackage==0){
             //var productCatID = $('#productID').find('option:selected').attr('categoryId');
            // var productCatName = $('#productID').find('option:selected').attr('categoryName');
             //var productName = $('#productID').find('option:selected').attr('productName');
@@ -553,8 +544,6 @@ $(document).ready(function () {
                     slNo;
                 }
                 if(productCatID == 2){
-                    if($('.is_same').val()==0){
-
                     tab='<tr class="new_item' + j + '">' +
                         '<input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/>' +
                         '<input type="hidden" name="brand_id[]" value="'+brand_id+'"/>' +
@@ -575,50 +564,17 @@ $(document).ready(function () {
                         '<td align="right">' +
                         '<input type="text" class="add_price  text-right form-control" id="tprice_'+ j +'" readonly name="price[]" value="' + price + '">' +
                         '</td>' +
-                        '<td colspan="2">'+
-                        '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
-                        '<tr>'+
-                            '<td>'+
-                            '<select   class="chosen-select form-control returnedProduct_'+ slNo +'" data-placeholder="Search by product name">'+
-                            option+
-                            '</select>'+
-                            '</td>'+
-                            '<td>'+
-                                '<input type="text" class="form-control returnedProductQty_'+slNo+'" /><a href="javascript:void(0)" id="'+slNo+'" class="AddreturnedProduct"><i class="fa fa-plus"></i> </a> '+
-                            '</td>'+
-
-                        '<tr>'+
-                            '<td>'+
-                            '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
-                            productName2+
-                            '</td>'+
-                            '<td>'+
-                            '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
-                            '</td>'+
-                        '</tr>'+
-                        '</table>'+
+                        '<td align="right">' + productCatName2 +'&nbsp;'+productName2+
+                        '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
+                        '</td>' +
+                        '<td align="right">' +
+                        '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
                         '</td>' +
                         '<td>' +
-                        '<a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:void(0);" title=""><i class="fa fa-times"></i>&nbsp;</a>' +
+                        '<a del_id="' + j + '" class="delete_item btn form-control btn-danger" href="javascript:void(0);" title=""><i class="fa fa-times"></i>&nbsp;Remove</a>' +
                         '</td>' +
                         '</tr>';
                     $("#show_item tfoot").append(tab);
-                    }else {
-                        slNo;
-                        var tab2="<tr>" +
-                            "<td>" +
-                            '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
-                            productName2+
-                            "</td>" +
-                            "<td>" +
-                            '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+slNo+'[]" value="'+returnQuentity+'">' +
-
-                            "</td>" +
-                            "</tr>";
-
-                        $("#return_product_"+slNo).append(tab2);
-
-                    }
                 }else{
                     console.log(2);
                     tab='<tr class="new_item' + j + '">' +
@@ -683,7 +639,7 @@ $(document).ready(function () {
                 url:baseUrl + "lpg/PurchaseController/package_product_list",
                 data: 'package_id=' + productID,
                 success: function (data) {
-
+                    console.log(data);
                     $.each(data, function (key, value) {
                         slNo++;
                         $("#show_item tfoot").append('<tr class="new_item' + j + '"><input type="hidden" name="slNo['+slNo+']" value="'+slNo+'"/><input type="hidden" name="is_package_'+ slNo +'" value="1"><input type="hidden" name="category_id_'+ slNo +'" value="' + value['category_id'] + '">' +
@@ -717,35 +673,6 @@ $(document).ready(function () {
         //$('#productUnit').val('').trigger('chosen:updated');
 
     });
-    $(document).on('click', '.AddreturnedProduct', function () {
-        //$(".AddreturnedProduct").LoadingOverlay("show");
-
-        var id = $(this).attr("id");
-        var productName2=$('.returnedProduct_'+id).find('option:selected').attr('productName2');
-        var package_id2 = $('.returnedProduct_'+id).val();
-        var returnQuentity = $('.returnedProductQty_'+id).val();
-
-
-        if(returnQuentity==''){
-            swal("Qty can't be empty.!", "Validation Error!", "error");
-            return false;
-        }else
-        var tab2="<tr>" +
-            "<td>" +
-            '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+id+'[]" value="' + package_id2 + '">' +
-            productName2+
-            "</td>" +
-            "<td>" +
-            '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+id+'[]" value="'+returnQuentity+'">' +
-
-            "</td>" +
-            "</tr>";
-        $("#return_product_"+id).append(tab2);
-        $('.returnedProduct_'+id).val('');
-        $('.returnedProductQty_'+id).val('');
-
-    })
-    //AddreturnedProduct
     $(document).on('click', '.delete_item', function () {
         var id = $(this).attr("del_id");
         swal({
@@ -775,21 +702,13 @@ $(document).ready(function () {
 });
 //get product purchases price
 function getProductPrice(product_id) {
+alert('OK');
     $('.is_same').val('0');
     $('#productID2').removeAttr("disabled");
-    $('.quantity').val('');
-    $('.returnAble ').val('');
-    $('.rate ').val('');
-    $('.price').val('');
-    $('.returnQuentity').val('');
     var productCatID = $('#productID').find('option:selected').attr('categoryId');
     if(productCatID ==2){
         $(".returnAble").attr('readonly',false);
-        //$("#productID2").trigger("chosen:updated");
-        //$("#productID2").html("<option disabled selected></option>");
-        $('#productID2').val('').prop('disabled', false).trigger("chosen:updated");
     }else{
-        $('#productID2').val('').prop('disabled', true).trigger("chosen:updated");
         $(".returnAble").attr('readonly',true);
     }
 
@@ -812,7 +731,6 @@ function getProductList(cat_id) {
     }else{
         $(".returnAble").attr('readonly',true);
     }
-
     $.ajax({
         type: "POST",
         url:baseUrl + "InventoryController/getProductList",

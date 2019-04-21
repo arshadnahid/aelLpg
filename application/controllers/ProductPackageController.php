@@ -221,7 +221,7 @@ class ProductPackageController extends CI_Controller {
         $joins[3]['jointype'] = 'left';
 
         $condition['package.package_id'] = $package_id;
-        $condition['package.dist_id'] = $this->dist_id;
+        //$condition['package.dist_id'] = $this->dist_id;
         $condition['package.is_active'] = 'Y';
         $condition['package.is_delete'] = 'N';
         $condition['package_products.is_active'] = 'Y';

@@ -1086,6 +1086,94 @@ ON tab4.product_id=p.product_id
         return $result;
     }
 
+
+    public function  current_stock($distId){
+        $query="SELECT
+CONCAT(productcategory.title,' ',product.productName,' [ ',	brand.brandName,' ]')AS productName,
+product.product_id,
+/*	product.productName,
+	product.product_code,
+	product.category_id,
+	product.unit_id,
+	product.brand_id,
+	productcategory.title AS product_category,
+	unit.unitTtile AS product_unit,
+	brand.brandName,*/
+  IFNULL(product_purchase.product_purchase_qty,0) as product_purchase_qty,
+  IFNULL(product_purchase.purchase_price,0) AS purchase_price,
+  
+  IFNULL(product_purchase_return.product_pur_return_quantity,0) as product_pur_return_quantity,
+
+  IFNULL(product_sales.product_sales_qty,0) as product_sales_qty,
+  IFNULL(product_sales.sales_price,0) AS sales_price,
+IFNULL(product_sales_return.product_sales_return_quantity,0) as product_sales_return_quantity
+  
+
+FROM
+	product
+LEFT JOIN productcategory ON productcategory.category_id = product.category_id
+LEFT JOIN unit ON unit.unit_id = product.unit_id
+LEFT JOIN brand ON brand.brandId = product.brand_id
+LEFT JOIN (/*get all product purchase quentity sum  and average price by product id*/
+   SELECT
+    purchase_details.product_id,
+		SUM(purchase_details.quantity) AS product_purchase_qty,
+		AVG(purchase_details.unit_price)AS purchase_price
+		FROM
+			purchase_details
+		WHERE
+			purchase_details.is_active = 'Y'
+		AND purchase_details.is_delete = 'N'
+		GROUP BY  purchase_details.product_id) AS product_purchase 
+ON product_purchase.product_id=product.product_id
+LEFT JOIN (/*get all product purchase RETURN quentity sum by product id*/
+		SELECT
+			purchase_return_details.product_id,
+			SUM(purchase_return_details.return_quantity	)AS product_pur_return_quantity
+		FROM
+			purchase_return_details
+		WHERE
+			purchase_return_details.is_active = 'Y'
+		AND purchase_return_details.is_delete = 'N'
+		GROUP BY
+			purchase_return_details.product_id
+) AS product_purchase_return
+ON product_purchase_return.product_id=product.product_id
+LEFT JOIN(/*get all product sales quentity sum  and average sales price by product id*/
+		SELECT
+      sales_details.product_id,
+			SUM(sales_details.quantity) AS product_sales_qty,
+		AVG(sales_details.unit_price)AS sales_price
+		FROM
+			sales_details
+		WHERE
+			sales_details.is_active = 'Y'
+		AND sales_details.is_delete = 'N'
+		GROUP BY  sales_details.product_id
+
+) AS product_sales 
+ON product_sales.product_id=product.product_id
+
+LEFT JOIN (/*get all product purchase RETURN quentity sum by product id*/
+		SELECT
+			sales_return_details.product_id,
+			SUM(sales_return_details.return_quantity	)AS product_sales_return_quantity
+		FROM
+			sales_return_details
+		WHERE
+			sales_return_details.is_active = 'Y'
+		AND sales_return_details.is_delete = 'N'
+		GROUP BY
+			sales_return_details.product_id
+) AS product_sales_return
+ON product_sales_return.product_id=product.product_id
+WHERE
+	1 = 1";
+        $query = $this->db->query($query);
+        $result = $query->result();
+        return $result;
+    }
+
 }
 
 ?>

@@ -1238,9 +1238,9 @@ class Common_model extends CI_Model {
         if (!empty($condition)) {
             $this->db->where($condition);
         }
-        if($optional=='Y'){
-            $this->db->or_where($table.'.dist_id', 1);
-        }
+        //if($optional=='Y'){
+          //  $this->db->or_where($table.'.dist_id', 1);
+        //}
 
         $sql = $this->db->get();
         // echo $this->db->last_query(); exit;
@@ -1360,6 +1360,7 @@ class Common_model extends CI_Model {
                     product.productName,
                     product.product_code,
                     productcategory.title,
+                    product.category_id,
                     unit.unitTtile,
                     brand.brandName,
                     product2.productName AS return_product_name,

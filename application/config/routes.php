@@ -203,12 +203,16 @@ $route['purchases_list'] = 'InventoryController/purchases_list';
 //$route['purchases_add'] = 'InventoryController/purchases_add';
 
 $route['purchases_add'] = 'lpg/PurchaseController/purchases_add';
+//$route['purchases_edit/(:any)'] = 'InventoryController/purchases_edit/$1';
+$route['purchases_edit/(:any)'] = 'lpg/PurchaseController/purchases_edit/$1';
 $route['full_cylinder_stock_report'] = 'lpg/PurchaseController/cylinder_stock_report';
 $route['stock_group_report'] = 'lpg/PurchaseController/cylinder_stock_group_report';
+$route['current_stock'] = 'lpg/PurchaseController/current_stock';
+$route['current_stock_value'] = 'lpg/PurchaseController/current_stock_value';
 
 
 $route['purchases_add/(:any)'] = 'InventoryController/purchases_add/$1';
-$route['purchases_edit/(:any)'] = 'InventoryController/purchases_edit/$1';
+
 $route['viewPurchases/(:any)'] = 'InventoryController/viewPurchases/$1';
 $route['viewPurchasesWithCylinder/(:any)'] = 'InventoryController/viewPurchasesWithCylinder/$1';
 $route['editPurchases/(:any)'] = 'InventoryController/editPurchases/$1';
@@ -228,6 +232,9 @@ $route['salesReport'] = 'SalesController/salesReport';
 $route['cylinder_sales_report'] = 'lpg/SalesController/cylinder_sales_report';
 $route['sales_report_brand_wise'] = 'lpg/SalesController/sales_report_brand_wise';
 $route['daily_sales_statement']='lpg/SalesController/daily_sales_statement';
+$route['date_wise_product_sales']='lpg/SalesController/date_wise_product_sales';
+$route['date_wise_product_sales_by_date']='lpg/SalesController/date_wise_product_sales_by_date';
+$route['customer_due']='lpg/SalesController/customer_due';
 
 $route['referenceSalesReport'] = 'SalesController/referenceSalesReport';
 $route['cancelOrder'] = 'SalesController/cancelOrder';

@@ -145,12 +145,27 @@ class SalesController extends CI_Controller
                     $stock['customer_advance'] = $supplier_advance;
                     $stock['quantity'] = $_POST['quantity_'.$value];
                     $stock['unit_price'] = $_POST['rate_'.$value];
+
                     $stock['insert_by'] = $this->admin_id;
                     $stock['insert_date'] = $this->timestamp;
                     log_message('error','Insert in stock table'.print_r($stock,true));
                     //$allStock[] = $stock;
                     //$purchase_details_id=1;
                     $sales_details_id=$this->Common_model->insert_data('sales_details', $stock);
+                    //Cost of Goods Product 62
+                    $totalProductCost += ($_POST['quantity_'.$value]*$_POST['rate_'.$value]);
+                    if ($_POST['product_id_'.$value] == 1 || $_POST['product_id_'.$value]==2) {
+                        //get cylinder product cost
+                        
+                        $newCylinderProductCost=$newCylinderProductCost+($_POST['quantity_'.$value]*$_POST['rate_'.$value]);
+                       // $newCylinderProductCost += $this->input->post('quantity')[$key] * $productCost;
+                    } else {
+                        //get without cylinder product cost
+                        
+                        $otherProductCost += ($_POST['quantity_'.$value]*$_POST['rate_'.$value]);
+                    }
+
+
 
 
                     if(isset($_POST['returnproduct_'.$value])){
@@ -1231,6 +1246,7 @@ class SalesController extends CI_Controller
         $data['mainContent'] = $this->load->view('distributor/sales/report/sales_report_brand_wise', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
+
     public function  daily_sales_statement($start_date='', $end_date=''){
         $start_date=$_GET['start_date'];
         $end_date=$_GET['end_date'];
@@ -1238,19 +1254,94 @@ class SalesController extends CI_Controller
             $start_date = date('Y-m-d', strtotime($start_date));
             $end_date = date('Y-m-d', strtotime($end_date));
             $data['daily_sales_statement'] = $this->Sales_Model->daily_sales_statement($start_date, $end_date,  $this->dist_id);
-            echo $this->db->last_query();
-            echo '<pre>';
-            print_r($data['daily_sales_statement']);
-            exit;
-
-
-
+            //echo  $this->db->last_query();
         }
 
         $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
         $data['pageTitle'] = 'Customer Wise Sales Report';
         $data['title'] = 'Sales Rreport Brand Wise';
         $data['mainContent'] = $this->load->view('distributor/sales/report/daily_sales_statement', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+    public function  date_wise_product_sales($start_date='', $end_date=''){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        if($start_date!='' && $end_date!=''){
+            $start_date = date('Y-m-d', strtotime($start_date));
+            $end_date = date('Y-m-d', strtotime($end_date));
+            $data['daily_sales_statement'] = $this->Sales_Model->date_wise_product_sales($start_date, $end_date,  $this->dist_id);
+            echo $this->db->last_query();
+            echo '<pre>';
+            print_r($data['daily_sales_statement']);
+            exit;
+
+        }
+
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['pageTitle'] = 'Customer Wise Sales Report';
+        $data['title'] = 'Sales Rreport Brand Wise';
+        $data['mainContent'] = $this->load->view('distributor/sales/report/date_wise_product_sales', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+    public function  date_wise_product_sales_by_date($start_date='', $end_date=''){
+        $start_date=$_GET['start_date'];
+        $end_date=$_GET['end_date'];
+        if($start_date!='' && $end_date!=''){
+            $start_date = date('Y-m-d', strtotime($start_date));
+            $end_date = date('Y-m-d', strtotime($end_date));
+            $data['daily_sales_statement'] = $this->Sales_Model->date_wise_product_sales_by_date($start_date, $end_date,  $this->dist_id);
+            echo $this->db->last_query();
+            echo '<pre>';
+            print_r($data['daily_sales_statement']);
+            exit;
+
+        }
+
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['pageTitle'] = 'Customer Wise Sales Report';
+        $data['title'] = 'Sales Rreport Brand Wise';
+        $data['mainContent'] = $this->load->view('distributor/sales/report/date_wise_product_sales_by_date', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+ public function  customer_due($start_date='', $end_date=''){
+        $start_date=isset($_GET['start_date'])?$_GET['start_date']:'';
+        $customer_id=isset($_GET['start_date'])?$_GET['customer_id']:'All';
+        $end_date=isset($_GET['end_date'])?$_GET['end_date']:'';
+        if($start_date!='' && $end_date!=''){
+            $start_date = date('Y-m-d', strtotime($start_date));
+            $end_date = date('Y-m-d', strtotime($end_date));
+            $data['customer_due'] = $this->Sales_Model->customer_due($customer_id,$start_date, $end_date,  $this->dist_id);
+            echo $this->db->last_query();
+            echo '<pre>';
+            print_r($data['customer_due']);
+            exit;
+
+        }
+        $customerList=array();
+        $data['companyInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $cus_list = $this->Sales_Model->customer_list($this->dist_id);
+
+
+
+
+     $cus_items_array[] = array(
+         'label' => "All",
+         'value' => 'All'
+     );
+         foreach ($cus_list as $key => $value) {
+             $cus_items_array[] = array(
+                 'label' => $value->customerName,
+                 'value' => $value->customer_id,
+                 'have_invoice' => $value->customer_id,
+             );
+         };
+     $data['pageName'] = 'salePosAdd';
+       $data['customer_info'] = json_encode($cus_items_array);
+         //echo '<pre>';
+         //print_r($page_data['customer_info']);exit;
+        $data['pageTitle'] = 'Customer Wise Sales Report';
+        $data['title'] = 'Sales Rreport Brand Wise';
+        $data['mainContent'] = $this->load->view('distributor/sales/report/customer_due', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
 
