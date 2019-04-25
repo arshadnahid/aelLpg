@@ -332,6 +332,15 @@ var findVatAmount = function () {
     if(isNaN(vatForwardAmount)){
         vatForwardAmount=0;
     }
+    console.log('p');
+    console.log(vatForwardAmount);
+    console.log(grandTotal);
+    console.log(loader);
+    console.log(transportation);
+
+
+
+
     $(".totalVatAmount").html(parseFloat(Math.round(vatForwardAmount)).toFixed(2));
     $("#netAmount").val(parseFloat(Math.round(vatForwardAmount) + grandTotal + loader + transportation).toFixed(2));
 };

@@ -282,12 +282,20 @@
 
                                                         <?php
                                                         $totalEditPrice = 0;
-                                                        foreach ($stockListEdit as $key => $eachStock) :
+                                                        foreach ($stockListEdit[2] as $key => $eachStock) :
 
                                                              ?>
                                                             <tr class="new_item<?php echo $key + 767; ?>">
                                                                 <td>
-                                                                    <input type="hidden" name="category_id[]" value="<?php echo $eachStock->category_id; ?>">
+                                                                    <input type="hidden" name="category_id[]" value="<?php echo $eachStock['category_id']; ?>">
+                                                                    <input type="hidden" name="product_id[]" value="<?php echo $eachStock['product_id']; ?>">
+
+                                                                    <?php echo '  [ ' . $eachStock['category'] . ' ] - ' . $eachStock['productName'] . ' [ ' . $eachStock['brandName'] . ' ] ';?>
+                                                                </td>
+                                                                <td>
+
+                                                                    <input type="text" class="add_quantity form-control text-right decimal" id="qty_<?php echo $key + 767 ?>" name="quantity[]" value="<?php echo $eachStock['quantity'
+                                                                    ]; ?>">
 
                                                                 </td>
 
@@ -314,12 +322,12 @@
                                                                 $cateogry = $this->Common_model->tableRow('productcategory', 'category_id', $eachStock->category_id)->title;
                                                                 $productInfo = $this->Common_model->tableRow('product', 'product_id', $eachStock->product_id);
                                                                 $brandInfo = $this->Common_model->tableRow('brand', 'brandId', $productInfo->brand_id);
-                                                                echo '  [ ' . $cateogry . ' ] - ' . $productInfo->productName . ' [ ' . $brandInfo->brandName . ' ] ';
+
                                                                 ?>
-                                                                <input type="hidden" name="product_id[]" value="<?php echo $eachStock->product_id; ?>">
+
                                                             </td>
 
-                                                            <td align="right"><input type="text" class="add_quantity form-control text-right decimal" id="qty_<?php echo $key + 767 ?>" name="quantity[]" value="<?php echo $eachStock->quantity; ?>"></td>
+                                                            <td align="right"></td>
                                                             <td align="right"><input type="text" <?php
                                                         if ($eachStock->category_id == 2) {
                                                             echo "readonly";

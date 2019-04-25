@@ -1124,6 +1124,7 @@ LEFT JOIN (/*get all product purchase quentity sum  and average price by product
 		WHERE
 			purchase_details.is_active = 'Y'
 		AND purchase_details.is_delete = 'N'
+		AND purchase_details.is_package = 0
 		GROUP BY  purchase_details.product_id) AS product_purchase 
 ON product_purchase.product_id=product.product_id
 LEFT JOIN (/*get all product purchase RETURN quentity sum by product id*/
@@ -1149,6 +1150,7 @@ LEFT JOIN(/*get all product sales quentity sum  and average sales price by produ
 		WHERE
 			sales_details.is_active = 'Y'
 		AND sales_details.is_delete = 'N'
+		AND sales_details.is_package = 0
 		GROUP BY  sales_details.product_id
 
 ) AS product_sales 

@@ -76,7 +76,7 @@
                                                 <input type="text" id="form-field-1" name="userInvoiceId" value="<?php echo $editInvoice->mainInvoiceId; ?>" class="form-control" placeholder="Invoice No"/>
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="text" id="form-field-1" name="voucherid" readonly value="<?php echo $editInvoice->voucher_no; ?>" class="form-control" placeholder="Voucher ID" />
+                                                <input type="text" id="form-field-1" name="voucherid" readonly value="<?php echo $editInvoice->invoice_no; ?>" class="form-control" placeholder="Voucher ID" />
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@
                                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Sales Date  <span style="color:red;"> *</span></label>
                                             <div class="col-sm-7">
                                                 <div class="input-group">
-                                                    <input class="form-control date-picker" name="saleDate" id="id-date-picker-1" type="text" value="<?php echo date('d-m-Y', strtotime($editInvoice->date)); ?>" data-date-format="dd-mm-yyyy" />
+                                                    <input class="form-control date-picker" name="saleDate" id="id-date-picker-1" type="text" value="<?php echo date('d-m-Y', strtotime($editInvoice->invoice_date)); ?>" data-date-format="dd-mm-yyyy" />
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-calendar bigger-110"></i>
                                                     </span>
@@ -119,7 +119,7 @@
                                                 <select  name="loader"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Loader">
                                                     <option></option>
                                                     <?php foreach ($employeeList as $key => $eachEmp): ?>
-                                                        <option <?php if($editInvoice->loader == $eachEmp->id){ echo "selected";}?> value="<?php echo $eachEmp->id; ?>"><?php echo $eachEmp->personalMobile . ' [ ' . $eachEmp->name . ']'; ?></option>
+                                                        <option <?php if($editInvoice->loader_emp_id == $eachEmp->id){ echo "selected";}?> value="<?php echo $eachEmp->id; ?>"><?php echo $eachEmp->personalMobile . ' [ ' . $eachEmp->name . ']'; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -132,7 +132,7 @@
                                                 <select  name="transportation"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by Transportation">
                                                     <option></option>
                                                     <?php foreach ($vehicleList as $key => $eachVehicle): ?>
-                                                        <option <?php if($editInvoice->transportation == $eachVehicle->id){ echo "selected";}?> value="<?php echo $eachVehicle->id; ?>"><?php echo $eachVehicle->vehicleName . ' [ ' . $eachVehicle->vehicleModel . ' ]'; ?></option>
+                                                        <option <?php if($editInvoice->tran_vehicle_id == $eachVehicle->id){ echo "selected";}?> value="<?php echo $eachVehicle->id; ?>"><?php echo $eachVehicle->vehicleName . ' [ ' . $eachVehicle->vehicleModel . ' ]'; ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -149,22 +149,22 @@
                                                 <select onchange="showBankinfo(this.value)"  name="paymentType"  class="chosen-select form-control" id="paymentType" data-placeholder="Select Payment Type">
                                                     <option></option>
                                                     <!--                                                    <option <?php
-                                                if ($editInvoice->payType == 1) {
+                                                if ($editInvoice->payment_type == 1) {
                                                     echo "selected";
                                                 }
                                                 ?> value="1"  >Full Cash</option>-->
                                                     <option <?php
-                                                    if ($editInvoice->payType == 4) {
+                                                    if ($editInvoice->payment_type == 4) {
                                                         echo "selected";
                                                     }
                                                 ?>  value="4">Cash</option>
                                                     <option <?php
-                                                        if ($editInvoice->payType == 2) {
+                                                        if ($editInvoice->payment_type == 2) {
                                                             echo "selected";
                                                         }
                                                 ?>  value="2">Credit</option>
                                                     <option <?php
-                                                        if ($editInvoice->payType == 3) {
+                                                        if ($editInvoice->payment_type == 3) {
                                                             echo "selected";
                                                         }
                                                 ?>  value="3">Cheque / DD/ PO</option>
@@ -206,6 +206,7 @@
                             <input type="hidden" id="invoiceAmount" value="<?php echo $creditAmount->credit; ?>">
                             <input type="hidden" id="editCustomer" value="<?php echo $editInvoice->customer_id; ?>">
                             <input type="hidden" id="paymentType" value="<?php echo $editInvoice->payType; ?>">
+                            <input type="hidden" id="sales_invoice_id" name="sales_invoice_id" value="<?php echo $editInvoice->sales_invoice_id; ?>">
                             <tr>
                                 <td style="padding: 10px!important;">
                                     <div class="col-md-12">
@@ -223,6 +224,8 @@
                                                                 <th nowrap style="width:7%" align="center"><strong>Receivable Cylinder(Qty)</strong></th>
                                                                 <th nowrap style="width:10%" align="center"><strong>Unit Price(BDT)  <span style="color:red;"> *</span></strong></th>
                                                                 <th nowrap style="width:13%" align="center"><strong>Total Price(BDT) <span style="color:red;"> *</span></strong></th>
+                                                                <th nowrap style="width:20%;border-radius:10px;" align="center"><strong>Returned Cylinder <span style="color:red;"> </th>
+                                                                <th nowrap style="width:10%;border-radius:10px;" align="center"><strong>Returned Qty <span style="color:red;"></th>
                                                                 <th style="width:8%" align="center"><strong>Action</strong></th>
                                                             </tr>
                                                         </thead>
@@ -236,24 +239,56 @@
                                                                             <optgroup label="<?php echo $eachProduct['categoryName']; ?>">
                                                                                 <?php
                                                                                 foreach ($eachProduct['productInfo'] as $eachInfo) :
+
                                                                                     $productPreFix = substr($eachInfo->productName, 0, 5);
-                                                                                    if ($productPreFix != 'Empty'):
-                                                                                        ?>
-                                                                                        <option categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
-                                                                                        <?php
-                                                                                    endif;
+                                                                                    //  if ($productPreFix != 'Empty'):
+                                                                                    ?>
+                                                                                    <option ispackage="0" categoryName="<?php echo $eachProduct['categoryName']; ?>" categoryId="<?php echo $eachProduct['categoryId']; ?>" productName="<?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?>" value="<?php echo $eachInfo->product_id; ?>"><?php echo $eachInfo->productName . " [ " . $eachInfo->brandName . " ] "; ?></option>
+                                                                                    <?php
+                                                                                    //  endif;
                                                                                 endforeach;
                                                                                 ?>
                                                                             </optgroup>
+
                                                                             <?php
                                                                         endforeach;
                                                                         ?>
+                                                                        <optgroup label="Package">
+                                                                            <?php
+                                                                            foreach ($productList['packageList'] as $eachInfo) :
+
+
+                                                                                ?>
+                                                                                <option ispackage="1" categoryId="<?php echo $eachInfo->category_id; ?>"  product_id="<?php echo $eachInfo->product_id;?>"  value="<?php echo $eachInfo->package_id; ?>"><?php echo $eachInfo->package_name . " [ " . $eachInfo->package_code . " ] "; ?></option>
+                                                                                <?php
+                                                                                // endif;
+                                                                            endforeach;
+                                                                            ?>
+                                                                        </optgroup>
                                                                     </select>
                                                                 </td>
                                                                 <td><input type="hidden" value="" id="stockQty"/><input type="text"  onkeyup="checkStockOverQty(this.value)" class="form-control text-right quantity decimal" placeholder="0"></td>
                                                                 <td><input type="hidden" value="" id="returnStockQty"/><input type="text"  onkeyup="checkReturnStockOverQty(this.value)" class="form-control text-right returnQuantity decimal"   placeholder="0"></td>
                                                                 <td><input type="text" class="form-control text-right rate decimal" placeholder="0.00"  ></td>
                                                                 <td><input type="text" class="form-control text-right price decimal" placeholder="0.00" readonly="readonly"></td>
+                                                                <td>
+                                                                    <select  id="productID2"  class="chosen-select form-control" id="form-field-select-3" data-placeholder="Search by product name">
+                                                                        <option value=""></option>
+                                                                        <?php
+                                                                        foreach ($cylinderProduct as $eachProduct):
+                                                                            $productPreFix = substr($eachProduct->productName, 0, 5);
+                                                                            if ($eachProduct->category_id == 1):
+                                                                                ?>
+                                                                                <option  categoryName2="<?php echo $eachProduct->productCat; ?>" brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName .' '. $eachProduct->unitTtile .' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                                                    <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
+                                                                                </option>
+                                                                                <?php
+                                                                            endif;
+                                                                        endforeach;
+                                                                        ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td><input type="text" class="form-control text-right returnQuentity decimal" placeholder="0.00" ></td>
                                                                 <td><a id="add_item" class="btn btn-info form-control" href="javascript:;" title="Add Item"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Item</a></td>
                                                             </tr>
                                                         </tbody>
@@ -261,33 +296,92 @@
 
                                                             <?php
                                                             $totalEditPrice = 0;
-                                                            foreach ($editStock as $key => $eachStock):
-                                                                if ($eachStock->type == 'Out') {
-                                                                    $returnQtyedit = $this->Sales_Model->getReturnAbleCylinder2($this->dist_id, $eachStock->generals_id, $eachStock->product_id,$eachStock->quantity);
+                                                            foreach ($editStock[$editInvoice->sales_invoice_id] as $key => $eachStock):
+                                                                //echo '<pre>';
+                                                                //print_r($eachStock);
+                                                              //  if ($eachStock->type == 'Out') {
+                                                                  //  $returnQtyedit = $this->Sales_Model->getReturnAbleCylinder2($this->dist_id, $eachStock->generals_id, $eachStock->product_id,$eachStock->quantity);
                                                                     // echo $this->db->last_query();
                                                                     ?>
                                                                     <tr class="new_item<?php echo $key + 100; ?>">
                                                                         <td style="padding-left:15px;">
-                                                                            <input type="hidden" name="category_id[]" value="<?php echo $eachStock->category_id; ?>">
+                                                                            <input type="hidden" name="category_id[]" value="<?php echo $eachStock['category_id']; ?>"/>
+                                                                            <input type="hidden" name="sales_details_id[]" value="<?php echo $eachStock['sales_details_id']; ?>"/>
+                                                                            <input type="hidden" name="is_package_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $eachStock['is_package']; ?>"/>
                                                                             <?php
-                                                                            $catName = $this->Common_model->tableRow('productcategory', 'category_id', $eachStock->category_id)->title;
-                                                                            $productInfo = $this->Common_model->tableRow('product', 'product_id', $eachStock->product_id);
-                                                                            $brandInfo = $this->Common_model->tableRow('brand', 'brandId', $productInfo->brand_id);
-                                                                            echo ' [ ' . $catName . ' ] ' . $productInfo->productName . ' [ ' . $brandInfo->brandName . ' ] ';
-                                                                            ?><input type="hidden" name="product_id[]" value="<?php echo $eachStock->product_id; ?>">
+
+                                                                            echo ' [ ' . $eachStock['title'] . ' ] ' . $eachStock['productName'] . ' [ ' . $eachStock['brandName'] . ' ] ';
+                                                                            ?>
+                                                                            <input type="hidden" name="product_id_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $eachStock['product_id']; ?>">
                                                                         </td>
-                                                                        <td align="right"><input type="text" id="qty_<?php echo $key + 100; ?>" class="add_quantity text-right form-control decimal" name="quantity[]" value="<?php echo $eachStock->quantity; ?>"></td>
-                                                                        <?php if ($eachStock->category_id == 2): ?>
-                                                                            <td align="right"><input type="text" class="add_ReturnQuantity text-right form-control decimal"  name="returnQuantity[]" value="<?php echo $returnQtyedit->quantity; ?>"></td>
+                                                                        <td align="right">
+                                                                            <input type="text" id="qty_<?php echo $key + 100; ?>" autocomplete="off" class="add_quantity text-right form-control decimal" name="quantity_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $eachStock['quantity']; ?>">
+                                                                        </td>
+                                                                        <?php if ($eachStock['category_id'] == 2): ?>
+                                                                            <td align="right">
+                                                                                <input type="text" autocomplete="off" class="add_ReturnQuantity text-right form-control decimal"  name="returnAbleQuantity_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $returnQtyedit->quantity; ?>">
+                                                                            </td>
                                                                         <?php else: ?>
-                                                                            <td align="right"><input type="text" class="add_ReturnQuantity text-right form-control decimal "  readonly="readonly" name="returnQuantity[]" value="<?php echo $returnQtyedit->quantity; ?>"></td>
+                                                                            <td align="right">
+                                                                                <input type="text" autocomplete="off" class="add_ReturnQuantity text-right form-control decimal "  readonly="readonly" name="returnAbleQuantity_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $returnQtyedit->quantity; ?>">
+                                                                            </td>
                                                                         <?php endif; ?>
-                                                                        <td align="right"><input type="text" id="rate_<?php echo $key + 100; ?>" class="add_rate  text-right form-control decimal" name="rate[]" value="<?php echo $eachStock->rate; ?>"></td>
-                                                                        <td align="right"><?php $totalEditPrice += $eachStock->price; ?><input type="text" class="add_price form-control text-right" id="tprice_<?php echo $key + 100; ?>" readonly name="price[]" value="<?php echo $eachStock->price; ?>"></td>
-                                                                        <td><a del_id="<?php echo $key + 100; ?>" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td>
+                                                                        <td align="right">
+                                                                            <input type="text" id="rate_<?php echo $key + 100; ?>" autocomplete="off" class="add_rate  text-right form-control decimal" name="unit_price_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo $eachStock['unit_price']; ?>">
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <?php
+                                                                            $totalEditPrice += ($eachStock['quantity']*$eachStock['unit_price']);
+                                                                            ?>
+                                                                            <input type="text" autocomplete="off" class="add_price form-control text-right" id="tprice_<?php echo $key + 100; ?>" readonly name="price_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo ($eachStock['quantity']*$eachStock['unit_price']); ?>">
+                                                                        </td>
+                                                                        <td colspan="2">
+                                                                            <table class="table table-border" id="return_product_edit_<?php echo $eachStock['sales_details_id']; ?>">
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <select    class="chosen-select form-control   Add returnedProductEdit_<?php echo $eachStock['sales_details_id']?> "  data-placeholder="Search by product name">
+                                                                                            <option value=""></option>
+                                                                                            <?php
+                                                                                            foreach ($cylinderProduct as $eachProduct):
+                                                                                                $productPreFix = substr($eachProduct->productName, 0, 5);
+                                                                                                if ($eachProduct->category_id == 1):
+                                                                                                    ?>
+                                                                                                    <option  categoryName2="<?php echo $eachProduct->productCat; ?>" brand_id="<?php echo $eachProduct->brand_id?>" productName2="<?php echo $eachProduct->productName .' '. $eachProduct->unitTtile .' [ ' . $eachProduct->brandName . ']'; ?>" value="<?php echo $eachProduct->product_id; ?>">
+                                                                                                        <?php echo $eachProduct->productName . ' [ ' . $eachProduct->brandName . ' ] '; ?>
+                                                                                                    </option>
+                                                                                                    <?php
+                                                                                                endif;
+                                                                                            endforeach;
+                                                                                            ?>
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control returnedProductQtyEdit_<?php echo $eachStock['sales_details_id']; ?>" /><a href="javascript:void(0)" id="<?php echo $eachStock['sales_details_id']; ?>" class="AddreturnedProductEdit"><i class="fa fa-plus"></i> </a>
+                                                                                    </td>
+
+
+                                                                                </tr>
+                                                                                <?php
+                                                                                foreach ($eachStock['return'] as $key1 =>$value1){
+                                                                                    foreach ($value1 as $key2 =>$value2){
+
+                                                                                        ?>
+                                                                                        <tr>
+                                                                                            <td>
+
+                                                                                                <input type="hidden" class="text-right form-control" id="" readonly name="returnproductEdit_<?php echo $eachStock['sales_details_id']?>[]" value="<?php echo $value2['sales_return_id']?>">
+                                                                                                <?php echo $value2['return_product_cat'].' '. $value2['return_product_name'] .' '. $value2['return_product_unit'] .'[ '. $value2['return_product_brand'] .' ]'?></td>
+                                                                                            <td><input type="text" class="text-right form-control" id="" readonly name="returnQuentityEdit_<?php echo $eachStock['sales_details_id']?>[]" value="<?php echo $value2['returnable_quantity']?>"></td>
+                                                                                        </tr>
+
+
+                                                                                    <?php }}?>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td><a del_id="<?php echo $key + 100; ?>" autocomplete="off" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td>
                                                                     </tr>
                                                                     <?php
-                                                                }
+                                                               // }
                                                             endforeach;
                                                             ?>
                                                     </table>
@@ -316,15 +410,17 @@
 
                                                         <tr>
                                                             <td  nowrap align="right"><strong>Discount ( - ) </strong></td>
-                                                            <td><input type="text"  onkeyup="calDiscount()" id="disCount" style="text-align: right" name="discount" value="<?php
-                                                            if (!empty($editInvoice->discount) && $editInvoice->discount >= 1): echo $editInvoice->discount;
+                                                            <td>
+                                                                <input type="text" autocomplete="off"  onkeyup="calDiscount()" id="disCount" style="text-align: right" name="discount" value="<?php
+                                                            if (!empty($editInvoice->discount_amount) && $editInvoice->discount_amount >= 1): echo $editInvoice->discount_amount;
                                                             endif;
                                                             ?>" class="form-control decimal" placeholder="0.00"    />
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td nowrap  align="right"><strong>Grand Total</strong></td>
-                                                            <td><input readonly id="grandTotal" type="text" style="text-align: right" name="grandtotal" value="<?php echo number_format($totalEditPrice - $editInvoice->discount, 2); ?>" class="form-control"  placeholder="0.00"/></td>
+                                                            <td>
+                                                                <input readonly id="grandTotal" type="text" style="text-align: right" name="grandtotal" value="<?php echo $totalEditPrice - $editInvoice->discount_amount; ?>" class="form-control"  placeholder="0.00"/></td>
                                                         </tr>
                                                         <tr>
                                                             <td nowrap align="right"><strong>VAT(%) ( + )</strong></td>
@@ -335,24 +431,29 @@
                                                         </tr>
                                                         <tr>
                                                             <td nowrap  align="right"><strong>Loader ( + )</strong></td>
-                                                            <td><input type="text" id="loader" onkeyup="calcutateFinal()"   style="text-align: right" name="loaderAmount" value="<?php echo $editInvoice->loaderAmount;?>"  class="form-control"  placeholder="0.00"/></td>
+                                                            <td>
+                                                                <input type="text" id="loader" class="form-control" autocomplete="off" onkeyup="calcutateFinal()"   style="text-align: right" name="loaderAmount" value="<?php echo $editInvoice->loader_charge>0?$editInvoice->loader_charge:'';?>"    placeholder="0.00"/></td>
                                                         </tr>
                                                         <tr>
                                                             <td nowrap  align="right"><strong>Transportation ( + )</strong></td>
-                                                            <td><input type="text" id="transportation" onkeyup="calcutateFinal()" value="<?php echo $editInvoice->transportationAmount;?>"   style="text-align: right" name="transportationAmount" value=""  class="form-control"  placeholder="0.00"/></td>
+                                                            <td>
+                                                                <input type="text" name="transportationAmount"   class="form-control" id="transportation" autocomplete="off" onkeyup="calcutateFinal()" value="<?php echo $editInvoice->transport_charge>0?$editInvoice->transport_charge:'';?>"   style="text-align: right"   placeholder="0.00"/>
+                                                            </td>
                                                         </tr>
                                                         <?php
                                                         //vat deduction
-                                                        $totalAmount = $totalEditPrice - $editInvoice->discount;
+                                                        $totalAmount = $totalEditPrice - $editInvoice->discount_amount;
                                                         if (!empty($configInfo->VAT)):
                                                             $newAmount = ($configInfo->VAT / 100) * $totalAmount;
                                                         else:
-                                                            $newAmount = $totalEditPrice - $editInvoice->discount;
+                                                            $newAmount = $totalEditPrice - $editInvoice->discount_amount;
                                                         endif;
                                                         ?>
                                                         <tr>
                                                             <td  nowrap  align="right"><strong>Net Total</strong></td>
-                                                            <td><input type="text" id="netAmount"  style="text-align: right" name="netTotal" value="<?php echo $newAmount; ?>" readonly class="form-control"  placeholder="0.00"/></td>
+                                                            <td>
+                                                                <input type="text" id="netAmount"  style="text-align: right" name="netTotal" value="<?php echo $newAmount; ?>" readonly class="form-control"  placeholder="0.00"/>
+                                                            </td>
 
                                                         </tr>
                                                         <tr class="chaque_amount_class" style="display:none">
@@ -399,7 +500,7 @@
                                                         <tr  class="partisals">
                                                             <td  nowrap align="right"><strong> Payment ( - )<span style="color:red;"> * </span></strong></td>
                                                             <td><input type="text" id="payment" onkeyup="calculatePartialPayment()" style="text-align: right" name="partialPayment" value="<?php echo $creditAmount->credit; ?>"  class="form-control"  placeholder="0.00"  oninput="this.value = this.value.replace(/[^0-9.]/g, ''); this.value = this.value.replace(/(\..*)\./g, '$1');" /></td>
-                                                        <input type="hidden" id="duePayment"  style="text-align: right" name="duePayment" value="<?php echo number_format($newAmount - $creditAmount->credit, 2); ?>" readonly  class="form-control"  placeholder="0.00"/>
+                                                        <input type="hidden" id="duePayment"  style="text-align: right" name="duePayment" value="<?php echo $newAmount - $creditAmount->credit; ?>" readonly  class="form-control"  placeholder="0.00"/>
                                                         </tr>
 
                                                         <tr>
@@ -525,6 +626,42 @@
     </div><!-- /.page-content -->
 </div>
 <script>
+
+
+    $(document).on('click', '.AddreturnedProductEdit', function () {
+        //alert('ok');
+        //$(".AddreturnedProduct").LoadingOverlay("show");
+
+        var id = $(this).attr("id");
+        console.log(id);
+        var productName2=$('.returnedProductEdit_'+id).find('option:selected').attr('productName2');
+        var package_id2 = $('.returnedProductEdit_'+id).val();
+        var returnQuentity = $('.returnedProductQtyEdit_'+id).val();
+
+
+        if(returnQuentity==''){
+            swal("Qty can't be empty.!", "Validation Error!", "error");
+            return false;
+        }else
+            var tab2="<tr>" +
+                "<td>" +
+                '<input type="hidden" class="text-right form-control" id="" readonly name="returnproductAdd_'+id+'[]" value="' + package_id2 + '">' +
+                productName2+
+                "</td>" +
+                "<td>" +
+                '<input type="text" class="text-right form-control" id="" readonly name="returnQuentityAdd_'+id+'[]" value="'+returnQuentity+'">' +
+
+                "</td>" +
+                "</tr>";
+        $("#return_product_edit_"+id).append(tab2);
+        $('.returnedProductEdit_'+id).val('');
+        $('.returnedProductQtyEdit_'+id).val('');
+
+    })
+
+
+
+
     function isconfirm2() {
         var customerid = $("#customerid").val();
         var saleDate = $("#saleDate").val();

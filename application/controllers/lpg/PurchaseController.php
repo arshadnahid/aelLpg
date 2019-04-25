@@ -1019,6 +1019,7 @@ class PurchaseController extends CI_Controller
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['purchase_invoice_id'] = $element->purchase_invoice_id;
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['purchase_details_id'] = $element->purchase_details_id;
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['category_id'] = $element->category_id;
+            $result[$element->purchase_invoice_id][$element->purchase_details_id]['category'] = $element->title;
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['is_package'] = $element->is_package;
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['product_id'] = $element->product_id;
             $result[$element->purchase_invoice_id][$element->purchase_details_id]['productName'] = $element->productName;
@@ -1044,7 +1045,7 @@ class PurchaseController extends CI_Controller
         }
         $data['stockListEdit'] = $result;
         //echo '<pre>';
-        //print_r($result);
+        //print_r($stockList);
         //exit;
 
 

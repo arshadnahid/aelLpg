@@ -458,7 +458,15 @@
 <script>
 
 
-
+    var cylinderProduct;
+    window.cylinderProduct='<?php echo json_encode($cylinderProduct); ?>';
+    var option = "";
+    option += "<option value='" + '' + "'>---Select Name---</option>";
+    $.each(JSON.parse( cylinderProduct), function (key, value) {
+        if(value.category_id==1){
+            option+="<option categoryName2='"+value.productCat+"' brand_id='"+value.brand_id +"' productName2='"+value.productName+' ['+ value.brandName+']'+"' value='"+value.product_id+"'  >"+ value.productName+' ['+ value.brandName  +' ]'+"</option>";
+        }
+    });
 
     function isconfirm2() {
 
@@ -587,6 +595,16 @@
                             '<table class="table table-bordered table-hover" style="margin-bottom: 0px;" id="return_product_'+slNo+'">'+
                             '<tr>'+
                             '<td>'+
+                            '<select   class="chosen-select form-control returnedProduct_'+ slNo +'" data-placeholder="Search by product name">'+
+                            option+
+                            '</select>'+
+                            '</td>'+
+                            '<td>'+
+                            '<input type="text" class="form-control returnedProductQty_'+slNo+'" /><a href="javascript:void(0)" id="'+slNo+'" class="AddreturnedProduct"><i class="fa fa-plus"></i> </a> '+
+                            '</td>'+
+                            '</tr>'+
+                            '<tr>'+
+                            '<td>'+
                             '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +
                             productName2+
                             '</td>'+
@@ -706,7 +724,34 @@
 
 
     });
+    $(document).on('click', '.AddreturnedProduct', function () {
+        //$(".AddreturnedProduct").LoadingOverlay("show");
 
+        var id = $(this).attr("id");
+        var productName2=$('.returnedProduct_'+id).find('option:selected').attr('productName2');
+        var package_id2 = $('.returnedProduct_'+id).val();
+        var returnQuentity = $('.returnedProductQty_'+id).val();
+
+
+        if(returnQuentity==''){
+            swal("Qty can't be empty.!", "Validation Error!", "error");
+            return false;
+        }else
+            var tab2="<tr>" +
+                "<td>" +
+                '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+id+'[]" value="' + package_id2 + '">' +
+                productName2+
+                "</td>" +
+                "<td>" +
+                '<input type="text" class="text-right form-control" id="" readonly name="returnQuentity_'+id+'[]" value="'+returnQuentity+'">' +
+
+                "</td>" +
+                "</tr>";
+        $("#return_product_"+id).append(tab2);
+        $('.returnedProduct_'+id).val('');
+        $('.returnedProductQty_'+id).val('');
+
+    })
 
     function getProductPrice(product_id) {
         $("#stockQty").val('');

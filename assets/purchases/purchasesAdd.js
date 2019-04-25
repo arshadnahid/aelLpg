@@ -587,6 +587,7 @@ $(document).ready(function () {
                                 '<input type="text" class="form-control returnedProductQty_'+slNo+'" /><a href="javascript:void(0)" id="'+slNo+'" class="AddreturnedProduct"><i class="fa fa-plus"></i> </a> '+
                             '</td>'+
 
+                        '</tr>'+
                         '<tr>'+
                             '<td>'+
                             '<input type="hidden" class="text-right form-control" id="" readonly name="returnproduct_'+slNo+'[]" value="' + package_id2 + '">' +

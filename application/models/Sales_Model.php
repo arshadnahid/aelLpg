@@ -386,10 +386,6 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
         return $totalStockIn->totalStockIn - $totalStockOut->totalStockOut;
     }*/
     function getProductStock($productId,$category_id=null,$ispackage=null) {
-
-
-
-
             $this->db->select("category_id");
             $this->db->from("product");
             $this->db->where("product.product_id", $productId);
@@ -399,36 +395,99 @@ on tab1.reference_id=tab2.reference_id ORDER BY tab2.totalOpening DESC";
 
 
             if($category_id->category_id==1){
-                $query="SELECT(SUM(purchase_details.quantity)- IFNULL(SUM(purchase_return_details.return_quantity),0))AS purchase_qty
+                $query="SELECT
+                            IFNULL(purchase_details.purchase_qty,0) AS purchase_qty,
+                            IFNULL(purchase_return_details.purchase_return_quantity,0) AS purchase_return_quantity,
+                            IFNULL(sales_details.sales_qty,0) AS sales_qty,
+                            IFNULL(sales_return_details.sales_return_quantity,0) AS sales_return_quantity,
+                            (IFNULL(purchase_details.purchase_qty,0) -IFNULL(purchase_return_details.purchase_return_quantity,0) )-(IFNULL(sales_details.sales_qty,0)-IFNULL(sales_return_details.sales_return_quantity,0)) AS qty
                         FROM
                             product
-                        LEFT JOIN purchase_details ON purchase_details.product_id=product.product_id
-                        LEFT JOIN purchase_return_details ON purchase_return_details.product_id = purchase_details.product_id
+                        LEFT JOIN(
+                            SELECT
+                                purchase_details.product_id,
+                                SUM(purchase_details.quantity)AS purchase_qty
+                            FROM
+                                purchase_details
+                            WHERE
+                                purchase_details.is_package = 0
+                                AND purchase_details.is_active='Y'
+                                AND purchase_details.is_delete='N'
+                            GROUP BY
+                                purchase_details.product_id
+                        )AS purchase_details ON purchase_details.product_id = product.product_id
+                        LEFT JOIN(
+                            SELECT
+                                purchase_return_details.product_id,
+                                SUM(purchase_return_details.return_quantity)AS purchase_return_quantity
+                            FROM
+                                purchase_return_details
+                            WHERE
+                                1 = 1
+                            AND purchase_return_details.is_active='Y'
+                                AND purchase_return_details.is_delete='N'
+                            GROUP BY
+                                purchase_return_details.product_id
+                        )AS purchase_return_details ON purchase_return_details.product_id = product.product_id
+                        LEFT JOIN(
+                            SELECT
+                                sales_details.product_id,
+                                SUM(sales_details.quantity)AS sales_qty
+                            FROM
+                                sales_details
+                            WHERE
+                                sales_details.is_package = 0
+                            AND sales_details.is_active='Y'
+                                AND sales_details.is_delete='N'
+                            GROUP BY
+                                sales_details.product_id
+                        )AS sales_details ON sales_details.product_id = product.product_id
+                        LEFT JOIN(
+                            SELECT
+                                sales_return_details.product_id,
+                                IFNULL(SUM(sales_return_details.return_quantity),0)AS sales_return_quantity
+                            FROM
+                                sales_return_details
+                            WHERE
+                                1 = 1
+                            AND sales_return_details.is_active='Y'
+                                AND sales_return_details.is_delete='N'
+                            GROUP BY
+                                sales_return_details.product_id
+                        )AS sales_return_details ON sales_return_details.product_id = product.product_id
                         WHERE
-                            purchase_details.is_package =".$is_package." AND purchase_details.product_id = ".$productId;
+                            product.product_id = ".$productId;
 
                 //$query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
                 $query = $this->db->query($query);
                 $result = $query->row();
                 log_message('error','getProductStock '.print_r($this->db->last_query(),true));
-                log_message('error','getProductStock '.print_r('NAHID 1',true));
-                return $result->purchase_qty;
+                //log_message('error','getProductStock '.print_r('NAHID 1',true));
+                return $result->qty;
 
             }else if($category_id->category_id==2){
                 //$query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE purchase_details.is_package=".$is_package."  AND  purchase_details.product_id=".$productId;
-                $query="select sum(purchase_details.quantity) AS purchase_qty FROM purchase_details WHERE   purchase_details.product_id=".$productId;
+                $query="select sum(purchase_details.quantity) AS purchase_qty,sales_details.sales_qty 
+                          FROM 
+                          purchase_details 
+                          LEFT JOIN(
+                                SELECT
+                                sales_details.product_id,	
+                                sum(sales_details.quantity)AS sales_qty
+                                FROM
+                                    sales_details 
+                                GROUP BY sales_details.product_id
+                        ) AS sales_details  ON sales_details.product_id=purchase_details.product_id
+                          WHERE   purchase_details.product_id=".$productId;
+                if($ispackage!=null && $ispackage=='1'){
+                    $query.="  AND purchase_details.is_package=".$ispackage;
+                }
                 $query = $this->db->query($query);
                 $result = $query->row();
-                log_message('error','getProductStock '.print_r($this->db->last_query(),true));
-                log_message('error','getProductStock '.print_r('NAHID 2',true));
-                return $result->purchase_qty;
+                //log_message('error','getProductStock '.print_r($this->db->last_query(),true));
+                //log_message('error','getProductStock '.print_r('NAHID 2',true));
+                return $result->purchase_qty-$result->sales_qty;
             }
-
-
-
-
-
-
     }
 
     function generals_customer($customer_id) {

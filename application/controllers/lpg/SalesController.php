@@ -110,7 +110,7 @@ class SalesController extends CI_Controller
                 $sales_inv['dist_id'] = $this->dist_id;
                 $sales_inv['branch_id'] = 0;
                 $sales_inv['due_date'] = date('Y-m-d', strtotime($this->input->post('dueDate')));
-                $sales_inv['invoice_date'] = date('Y-m-d', strtotime($this->input->post('purchasesDate')));
+                $sales_inv['invoice_date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
                 $sales_inv['insert_date'] = $this->timestamp;
                 $sales_inv['insert_by'] = $this->admin_id;
                 $sales_inv['is_active'] = 'Y';
@@ -1345,6 +1345,439 @@ class SalesController extends CI_Controller
         $this->load->view('distributor/masterDashboard', $data);
     }
 
+    public function salesInvoice_edit($invoiceId = null) {
+        /* check Invoice id valid ? or not */
+        if (is_numeric($invoiceId)) {
+            //is invoice id is valid
+            $validInvoiecId = $this->Sales_Model->checkInvoiceIdAndDistributor($this->dist_id, $invoiceId);
+            if ($validInvoiecId === FALSE) {
+                exception("Sorry invoice id is invalid!!");
+                redirect(site_url('salesInvoice'));
+            }
+        } else {
+            exception("Sorry invoice id is invalid!!");
+            redirect(site_url('salesInvoice_edit/' . $invoiceId));
+        }
+        /* check Invoice id valid ? or not */
+        if (isPostBack()) {
+            // dumpVar($_POST);
+            $this->form_validation->set_rules('netTotal', 'Net Total', 'required');
+            $this->form_validation->set_rules('customer_id', 'Customer ID', 'required');
+            $this->form_validation->set_rules('voucherid', 'Voucehr ID', 'required');
+            $this->form_validation->set_rules('saleDate', 'Sales Date', 'required');
+            $this->form_validation->set_rules('paymentType', 'Payment Type', 'required');
+            $this->form_validation->set_rules('category_id[]', 'Category ID', 'required');
+            //$this->form_validation->set_rules('product_id[]', 'Product', 'required');
+            //$this->form_validation->set_rules('quantity[]', 'Product Quantity', 'required');
+            //$this->form_validation->set_rules('rate[]', 'Product Rate', 'required');
+            //$this->form_validation->set_rules('price[]', 'Product Price', 'required');
+            $allData = $this->input->post();
+            if ($this->form_validation->run() == FALSE) {
+                exception("Required field can't be empty.");
+                redirect(site_url('salesInvoice_add'));
+            } else {
+                $payType = $this->input->post('paymentType');
+                $sales_inv['invoice_no'] = $this->input->post('voucherid');
+                $sales_inv['sales_invoice_id'] = $this->input->post('sales_invoice_id');
+                $sales_inv['customer_invoice_no'] = $this->input->post('userInvoiceId');
+                $sales_inv['customer_id'] = $this->input->post('customer_id');
+                $sales_inv['payment_type'] = $payType;
+                $sales_inv['invoice_amount'] = array_sum($this->input->post('price'));
+                $sales_inv['vat_amount'] = $this->input->post('vat');
+                $sales_inv['discount_amount'] = $this->input->post('discount')!=''?$this->input->post('discount'):0;
+                $sales_inv['paid_amount'] = $this->input->post('partialPayment')!=''?$this->input->post('partialPayment'):0;
+                $sales_inv['tran_vehicle_id'] = $this->input->post('transportation')!=''?$this->input->post('transportation'):0;
+                $sales_inv['transport_charge'] = $this->input->post('transportationAmount')!=''?$this->input->post('transportationAmount'):0;
+                $sales_inv['loader_charge'] = $this->input->post('loaderAmount')!=''?$this->input->post('loaderAmount'):0;
+                $sales_inv['loader_emp_id'] = $this->input->post('loader')!=''?$this->input->post('loader'):0;
+                $sales_inv['refference_person_id'] = $this->input->post('reference');
+                $sales_inv['company_id'] = $this->dist_id;
+                $sales_inv['dist_id'] = $this->dist_id;
+                $sales_inv['branch_id'] = 0;
+                $sales_inv['due_date'] = date('Y-m-d', strtotime($this->input->post('dueDate')));
+                $sales_inv['invoice_date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                $sales_inv['insert_date'] = $this->timestamp;
+                $sales_inv['insert_by'] = $this->admin_id;
+                $sales_inv['is_active'] = 'Y';
+                $sales_inv['is_delete'] = 'N';
 
+
+
+
+
+
+
+
+                $this->invoice_id = $this->input->post('sales_invoice_id');
+                $this->Common_model->update_data('sales_invoice_info', $sales_inv, 'sales_invoice_id', $this->invoice_id);
+                $allStock = array();
+                $stockUpdate = array();
+
+                foreach ($_POST['sales_details_id'] as $key => $value){
+                    $returnable_quantity=$_POST['returnAbleQuantity_'.$value] !=''?$_POST['returnAbleQuantity_'.$value] :0;
+                    $return_quentity=empty($_POST['returnQuentity_'.$value])?0:array_sum($_POST['returnQuentity_'.$value]);
+                    $supplier_advance=0;
+                    $supplier_due=0;
+                    unset($stock);
+                    $stock['sales_invoice_id'] = $this->invoice_id;
+                    $stock['sales_details_id'] =$value;
+                    $stock['product_id'] = $_POST['product_id_'.$value];
+                    $stock['is_package '] = $_POST['is_package_'.$value];
+                    $stock['returnable_quantity '] = $returnable_quantity;
+                    $stock['return_quentity '] = $return_quentity;
+                    if($return_quentity<$returnable_quantity){
+                        $supplier_advance=$returnable_quantity-$return_quentity;
+                    }else{
+                        $supplier_due=$return_quentity-$returnable_quantity;
+                    }
+                    $stock['customer_due'] = $supplier_due;
+                    $stock['customer_advance'] = $supplier_advance;
+                    $stock['quantity'] = $_POST['quantity_'.$value];
+                    $stock['unit_price'] = $_POST['unit_price_'.$value];
+                    $stock['update_by'] = $this->admin_id;
+                    $stock['update_date'] = $this->timestamp;
+                    $stock['is_active'] = 'Y';
+                    $stock['is_delete'] = 'N';
+                    $stockUpdate[]=$stock;
+
+                    if(isset($_POST['returnproductEdit_'.$value])){
+                        foreach ($_POST['returnproductEdit_'.$value] as $key1 => $value1){
+                            unset($stock2);
+                            $stock2['sales_details_id'] = $value1;
+                            //$stock2['product_id'] = $value1;
+                            $stock2['returnable_quantity'] = $_POST['returnQuentityEdit_'.$value][$key1];
+                            $stock2['return_quantity'] = $_POST['returnQuentityEdit_'.$value][$key1];
+                            $stock2['update_by'] = $this->admin_id;
+                            $stock2['update_date'] = $this->timestamp;
+                            $allEditStock[] = $stock2;
+                        }
+                    }
+                    if(isset($_POST['returnproductAdd_'.$value])){
+                        foreach ($_POST['returnproductAdd_'.$value] as $key1 => $value1){
+                            unset($stock2);
+                            $stock2['sales_details_id'] = $value;
+                            $stock2['product_id'] = $value1;
+                            $stock2['returnable_quantity'] = $_POST['returnQuentityAdd_'.$value][$key1];
+                            $stock2['return_quantity'] = $_POST['returnQuentityAdd_'.$value][$key1];
+                            $stock2['update_by'] = $this->admin_id;
+                            $stock2['update_date'] = $this->timestamp;
+                            $alladdStock[] = $stock2;
+                        }
+                    }
+                }
+
+
+                echo  '<pre>';
+                print_r($_POST);
+                print_r($stockUpdate);
+                print_r($allEditStock);
+                print_r($alladdStock);
+                exit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                $productId = $this->input->post('product_id');
+                $pmtype = $this->input->post('paymentType');
+                $ppAmount = $this->input->post('partialPayment');
+                $this->db->trans_start();
+
+                // echo $payType;die;
+                $data['customer_id'] = $this->input->post('customer_id');
+                $data['voucher_no'] = $this->input->post('voucherid');
+                $data['reference'] = $this->input->post('reference');
+                $data['payType'] = $this->input->post('paymentType');
+                $data['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                $data['discount'] = $this->input->post('discount');
+                $data['vat'] = $this->input->post('vat');
+                $data['narration'] = $this->input->post('narration');
+                $data['shipAddress'] = $this->input->post('shippingAddress');
+                $data['loader'] = $this->input->post('loader');
+                $data['loaderAmount'] = $this->input->post('loaderAmount');
+                $data['transportation'] = $this->input->post('transportation');
+                $data['transportationAmount'] = $this->input->post('transportationAmount');
+                $data['form_id'] = 5;
+                $data['debit'] = $this->input->post('netTotal');
+                $data['dist_id'] = $this->dist_id;
+                $data['updated_at'] = $this->timestamp;
+                $data['updated_by'] = $this->admin_id;
+                $data['mainInvoiceId'] = $this->input->post('userInvoiceId');
+                $grandtotal = $this->input->post('grandtotal');
+                $data['vatAmount'] = ($grandtotal / 100) * $data['vat'];
+                $returnQty = array_sum($this->input->post('returnQuantity'));
+                $this->Common_model->update_data('generals', $data, 'generals_id', $invoiceId);
+                $generals_id = $invoiceId;
+                /* Delete query fro this invoice id */
+                //delete stock table
+                $this->Common_model->delete_data('stock', 'generals_id', $invoiceId);
+                $this->Common_model->delete_data('generalledger', 'generals_id', $invoiceId);
+                $this->Common_model->delete_data('client_vendor_ledger', 'history_id', $invoiceId);
+                $this->Common_model->delete_data('moneyreceit', 'mainInvoiceId', $invoiceId);
+                $invoiceList = $this->Sales_Model->getInvoiceIdList($this->dist_id, $invoiceId);
+                //delete general table
+                if (!empty($invoiceList)) {
+                    foreach ($invoiceList as $eachId):
+                        $this->Common_model->delete_data('generals', 'generals_id', $eachId->generals_id);
+                        $this->Common_model->delete_data('stock', 'generals_id', $eachId->generals_id);
+                        $this->Common_model->delete_data('generalledger', 'generals_id', $eachId->generals_id);
+                        $this->Common_model->delete_data('client_vendor_ledger', 'history_id', $eachId->generals_id);
+                        $this->Common_model->delete_data('moneyreceit', 'mainInvoiceId', $eachId->generals_id);
+                    endforeach;
+                }
+                if (!empty($returnQty)) {
+                    /*
+                     * Edit By Nahid
+                     * or Stop Inserting data to general table
+                     *
+                     *
+                     * $cylinder['customer_id'] = $this->input->post('customer_id');
+                      $cylinder['voucher_no'] = $this->input->post('voucherid');
+                      $cylinder['reference'] = $this->input->post('reference');
+                      $cylinder['payType'] = $this->input->post('paymentType');
+                      $cylinder['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                      $cylinder['discount'] = $this->input->post('discount');
+                      $cylinder['vat'] = $this->input->post('vat');
+                      $cylinder['narration'] = $this->input->post('narration');
+                      $cylinder['shipAddress'] = $this->input->post('shippingAddress');
+                      $cylinder['form_id'] = 23;
+                      $cylinder['debit'] = $this->input->post('netTotal');
+                      $cylinder['dist_id'] = $this->dist_id;
+                      $cylinder['mainInvoiceId'] = $generals_id;
+                      $cylinder['updated_by'] = $this->admin_id;
+                      $cylinder['vatAmount'] = ($grandtotal / 100) * $data['vat'];
+                      $cylinderId = $this->Common_model->insert_data('generals', $cylinder); */
+                }
+                $customerName = $this->Common_model->tableRow('customer', 'customer_id', $data['customer_id'])->customerName;
+                $mobile = $this->Common_model->tableRow('customer', 'customer_id', $data['customer_id'])->customerPhone;
+                $category_cat = $this->input->post('category_id');
+                $allStock = array();
+                $allStock1 = array();
+                $totalProductCost = 0;
+                $newCylinderProductCost = 0;
+                $otherProductCost = 0;
+                foreach ($category_cat as $key => $value):
+                    unset($stock);
+                    $productCost = $this->Sales_Model->productCost($this->input->post('product_id')[$key], $this->dist_id);
+                    $totalProductCost += $this->input->post('quantity')[$key] * $productCost;
+                    if ($value == 1) {
+                        //get cylinder product cost
+                        $newCylinderProductCost += $this->input->post('quantity')[$key] * $productCost;
+                    } else {
+                        //get without cylinder product cost
+                        $otherProductCost += $this->input->post('quantity')[$key] * $productCost;
+                    }
+                    $stock['generals_id'] = $generals_id;
+                    $stock['category_id'] = $value;
+                    $stock['product_id'] = $this->input->post('product_id')[$key];
+                    $stock['unit'] = getProductUnit($this->input->post('product_id')[$key]);
+                    $stock['quantity'] = $this->input->post('quantity')[$key];
+                    $stock['rate'] = $this->input->post('rate')[$key];
+                    $stock['price'] = $this->input->post('price')[$key];
+                    $stock['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                    $stock['form_id'] = 5;
+                    $stock['type'] = 'Out';
+                    $stock['dist_id'] = $this->dist_id;
+                    $stock['updated_by'] = $this->admin_id;
+                    $stock['created_at'] = $this->timestamp;
+                    $allStock[] = $stock;
+                    $returnQty = $this->input->post('returnQuantity')[$key];
+                    //If cylinder stock out than transaction store here.
+                    if (!empty($returnQty)) {
+                        // $productCost = $this->Sales_Model->productCost($this->input->post('product_id')[$key], $this->dist_id);
+                        //$stock1['generals_id'] = $cylinderId;
+                        $stock1['generals_id'] = $generals_id;
+                        $stock1['category_id'] = $value;
+                        $stock1['product_id'] = $this->input->post('product_id')[$key];
+                        $stock1['unit'] = getProductUnit($this->input->post('product_id')[$key]);
+                        $stock1['quantity'] = $this->input->post('returnQuantity')[$key];
+                        $stock1['rate'] = $this->input->post('rate')[$key];
+                        $stock1['price'] = $this->input->post('price')[$key];
+                        $stock1['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                        $stock1['form_id'] = 23;
+                        $stock1['type'] = 'Cout';
+                        $stock1['dist_id'] = $this->dist_id;
+                        $stock1['customerId'] = $this->input->post('customer_id');
+                        $stock1['updated_by'] = $this->admin_id;
+                        $stock1['created_at'] = $this->timestamp;
+                        $allStock1[] = $stock1;
+                    }
+                endforeach;
+                $cylinderRecive = $this->input->post('category_id2');
+                $cylinderAllStock = array();
+                if (!empty($cylinderRecive)):
+                    /*
+                     * Edit By Nahid
+                     * or Stop Inserting data to general table
+                     *
+                     *
+                     * $cylinderData['customer_id'] = $this->input->post('customer_id');
+                      $cylinderData['voucher_no'] = $this->input->post('voucherid');
+                      $cylinderData['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                      $cylinderData['narration'] = $this->input->post('narration');
+                      $cylinderData['form_id'] = 24;
+                      $cylinderData['dist_id'] = $this->dist_id;
+                      $cylinderData['mainInvoiceId'] = $generals_id;
+                      $cylinderData['updated_by'] = $this->admin_id;
+                      $CylinderReceive = $this->Common_model->insert_data('generals', $cylinderData); */
+                    foreach ($cylinderRecive as $key => $value) :
+                        //$stock1['generals_id'] = $cylinderId;
+                        $stockReceive['generals_id'] = $generals_id;
+                        //$stockReceive['generals_id'] = $CylinderReceive;
+                        $stockReceive['category_id'] = $value;
+                        $stockReceive['product_id'] = $this->input->post('product_id2')[$key];
+                        $stockReceive['unit'] = getProductUnit($this->input->post('product_id2')[$key]);
+                        $stockReceive['quantity'] = $this->input->post('quantity2')[$key];
+                        $stockReceive['date'] = date('Y-m-d', strtotime($this->input->post('saleDate')));
+                        $stockReceive['form_id'] = 24;
+                        $stockReceive['type'] = 'Cin';
+                        $stockReceive['dist_id'] = $this->dist_id;
+                        $stockReceive['customerId'] = $this->input->post('customer_id');
+                        $stockReceive['updated_by'] = $this->admin_id;
+                        $stockReceive['created_at'] = $this->timestamp;
+                        $cylinderAllStock[] = $stockReceive;
+                    endforeach;
+                    //insert for culinder receive
+                    $this->db->insert_batch('stock', $cylinderAllStock);
+                endif;
+                //insert for quantity out stock
+                $this->db->insert_batch('stock', $allStock);
+                //insert for cylinder stock out
+                $this->db->insert_batch('stock', $allStock1);
+                //insert in stock table
+                $customerLedger = array(
+                    'ledger_type' => 1,
+                    'trans_type' => 'Sales',
+                    'history_id' => $generals_id,
+                    'trans_type' => $this->input->post('voucherid'),
+                    'client_vendor_id' => $this->input->post('customer_id'),
+                    'updated_by' => $this->admin_id,
+                    'dist_id' => $this->dist_id,
+                    'amount' => $this->input->post('netTotal'),
+                    'dr' => $this->input->post('netTotal'),
+                    'date' => date('Y-m-d', strtotime($this->input->post('saleDate'))),
+                );
+                $this->db->insert('client_vendor_ledger', $customerLedger);
+                $mrCondition = array(
+                    'dist_id' => $this->dist_id,
+                    'receiveType' => 1,
+                );
+                $totalMoneyReceite = $this->Common_model->get_data_list_by_many_columns('moneyreceit', $mrCondition);
+                $mrid = "CMR" . date("y") . date("m") . str_pad(count($totalMoneyReceite) + 1, 4, "0", STR_PAD_LEFT);
+                if ($payType == 1) {
+                    //when payment type cash
+                    $this->cashTransactionInsert($generals_id, $data, $totalProductCost, $otherProductCost, $newCylinderProductCost, $mrid);
+                } elseif ($payType == 2) {
+                    //when paymnet type credit
+                    $this->creditTransactionInsert($generals_id, $data, $totalProductCost, $otherProductCost, $newCylinderProductCost, $mrid);
+                } elseif ($payType == 3) {
+                    //when payment type cheque
+                    $this->chequeTransactionInsert($generals_id, $data, $totalProductCost, $otherProductCost, $newCylinderProductCost, $mrid);
+                } else {
+                    //when payment transaction is partial.but now it use as cash.
+                    $this->partialTransactionInsert($generals_id, $data, $totalProductCost, $otherProductCost, $newCylinderProductCost, $mrid);
+                }
+                $this->db->trans_complete();
+                if ($this->db->trans_status() === FALSE) {
+                    notification("Your sales can't be inserted.Something is wrong.");
+                    redirect('salesInvoice_edit/' . $generals_id, 'refresh');
+                } else {
+                    message("Your data successfully inserted into database.");
+                    redirect('salesInvoice_view/' . $generals_id, 'refresh');
+                }
+                /* Delete query fro this invoice id */
+            }
+        }
+        $data['title'] = 'Sale Invoice Edit';
+        $data['editInvoice'] = $this->Common_model->get_single_data_by_single_column('sales_invoice_info', 'sales_invoice_id', $invoiceId);
+
+        $data['bank_check_details'] = array();
+        if ($data['editInvoice']->payment_type == 3) {
+            $data['bank_check_details'] = $this->Common_model->get_single_data_by_single_column('moneyreceit', 'mainInvoiceId', $data['editInvoice']->sales_invoice_id);
+        }
+
+
+        //$data['editStock'] = $this->Common_model->get_data_list_by_single_column('stock', 'generals_id', $invoiceId);
+
+        $stockList = $this->Common_model->get_sales_product_detaild2($invoiceId);
+
+
+        foreach ($stockList  as $ind => $element) {
+            $result[$element->sales_invoice_id][$element->sales_details_id]['sales_invoice_id'] = $element->sales_invoice_id;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['sales_details_id'] = $element->sales_details_id;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['is_package'] = $element->is_package;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['category_id'] = $element->category_id;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['product_id'] = $element->product_id;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['productName'] = $element->productName;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['product_code'] = $element->product_code;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['title'] = $element->title;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['unitTtile'] = $element->unitTtile;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['brandName'] = $element->brandName;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['quantity'] = $element->quantity;
+            $result[$element->sales_invoice_id][$element->sales_details_id]['unit_price'] = $element->unit_price;
+            //$result[$element->sales_invoice_id][$element->sales_details_id]['unit_price'] = $element->unit_price;
+            if($element->returnable_quantity >0 ){
+                $result[$element->sales_invoice_id][$element->sales_details_id]['return'][$element->sales_details_id][] = array('return_product_name'=>$element->return_product_name,
+                    'return_product_id'=>$element->return_product_id,
+                    'sales_return_id'=>$element->sales_return_id,
+                    'return_product_cat'=>$element->return_product_cat,
+                    'return_product_name'=>$element->return_product_name,
+                    'return_product_unit'=>$element->return_product_unit,
+                    'return_product_brand'=>$element->return_product_brand,
+                    'returnable_quantity'=>$element->returnable_quantity,
+                );
+            }else{
+                $result[$element->sales_invoice_id][$element->sales_details_id]['return'][$element->sales_details_id]='';
+            }
+
+        }
+
+        $data['editStock']=$result;
+
+        //echo '<pre>';
+        //print_r($stockList);exit;
+
+
+
+        $data['configInfo'] = $this->Common_model->get_single_data_by_single_column('system_config', 'dist_id', $this->dist_id);
+        $data['accountHeadList'] = $this->Common_model->getAccountHead();
+        //get only cylinder product
+        $data['productList'] = $this->Common_model->getPublicProductList($this->dist_id);
+        // dumpVar($data['accountHeadList']);
+        $data['cylinderProduct'] = $this->Common_model->getPublicProduct($this->dist_id, 1);
+        //echo '<pre>';
+        //print_r($data['cylinderProduct']);exit;
+        $data['productCat'] = $this->Common_model->getPublicProductCat($this->dist_id);
+        $data['unitList'] = $this->Common_model->getPublicUnit($this->dist_id);
+        $data['referenceList'] = $this->Sales_Model->getReferenceList($this->dist_id);
+        $data['customerList'] = $this->Sales_Model->getCustomerList($this->dist_id);
+        $data['cylinserOut'] = $this->Sales_Model->getCylinderInOutResult($this->dist_id, $invoiceId, 23);
+        $data['cylinderReceive'] = $this->Sales_Model->getCylinderInOutResult2($this->dist_id, $invoiceId, 24);
+        //echo $this->db->last_query();exit;
+        $data['creditAmount'] = $paymentInfo = $this->Sales_Model->getCreditAmount($invoiceId);
+        $condition = array(
+            'dist_id' => $this->dist_id,
+            'isActive' => 'Y',
+            'isDelete' => 'N',
+        );
+        $data['employeeList'] = $this->Common_model->get_data_list_by_many_columns('employee', $condition);
+        $data['vehicleList'] = $this->Common_model->get_data_list_by_many_columns('vehicle', $condition);
+        $data['accountId'] = $this->Sales_Model->getAccountId($paymentInfo->generals_id);
+        // echo $this->db->last_query();die;
+        $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/editInvoice', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
 
 }

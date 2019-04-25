@@ -106,6 +106,14 @@ class ProductPackageController extends CI_Controller {
             $this->form_validation->set_rules('package_name', 'Package Name', 'required');
             $this->form_validation->set_rules('product_id[]', 'Product ', 'required');
             $this->form_validation->set_rules('package_id', 'Package ', 'required');
+
+            //echo '<pre>';
+            //print_r($_POST);
+            //exit;
+
+
+
+
             if ($this->form_validation->run() == FALSE) {
                 exception("Required field can't be empty.");
                 redirect(site_url('productPackageAdd'));
@@ -115,7 +123,7 @@ class ProductPackageController extends CI_Controller {
 
                 $data['package_name'] = $this->input->post('package_name');
                 $data['description'] = $this->input->post('description');
-                //$data['package_id'] = $this->input->post('package_id');
+                $data['package_id'] = $this->input->post('package_id');
                 $data['dist_id'] = $this->dist_id;
                 $data['update_by'] = $this->admin_id;
                 $data['update_date'] = $this->timestamp;

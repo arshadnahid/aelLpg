@@ -1305,6 +1305,8 @@ class Common_model extends CI_Model {
         $this->db->join('unit', 'unit.unit_id=product.unit_id','left');
         $this->db->join('brand', 'brand.brandId=product.brand_id','left');
         $this->db->where('package.package_id='.$package_id);
+        $this->db->where('package_products.is_active="Y"');
+        $this->db->where('package_products.is_delete="N"');
         $sql = $this->db->get();
         return $sql->result();
     }
@@ -1401,6 +1403,7 @@ class Common_model extends CI_Model {
                     sales_details.is_package,
                     sales_details.product_id,
                     product.productName,
+                    product.category_id,
                     product.product_code,
                     productcategory.title,
                     unit.unitTtile,
@@ -1414,6 +1417,7 @@ class Common_model extends CI_Model {
                     sales_details.unit_price,
                     sales_return_details.product_id AS return_product_id,
                     sales_return_details.returnable_quantity,
+                    sales_return_details.sales_return_id,
                     sales_return_details.return_quantity
                 FROM
                     sales_details

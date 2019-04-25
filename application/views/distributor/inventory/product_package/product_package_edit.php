@@ -118,7 +118,7 @@
                                             ?>
                                             <tr class='trClass'>
                                                 <td>
-                                                    <input type='hidden' name='product_id[]' id='productID_<?php echo $value->product_id ?>' value='<?php echo $value->product_id ?>'/>
+                                                    <input type='hidden' name='product_id[]' id='productID_<?php echo $value->product_id ?>' value='<?php echo $value->package_products_id ?>'/>
                                                     <input type='hidden' name='package_products_id_<?php echo $value->package_products_id ?>' id='productID_<?php echo $value->product_id ?>' value='<?php echo $value->package_products_id ?>'/>
                                                     <?php echo $value->productName . ' [ ' . $value->brandName . ' ]' ?>
                                                 </td>

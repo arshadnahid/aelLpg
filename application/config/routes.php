@@ -233,6 +233,7 @@ $route['cylinder_sales_report'] = 'lpg/SalesController/cylinder_sales_report';
 $route['sales_report_brand_wise'] = 'lpg/SalesController/sales_report_brand_wise';
 $route['daily_sales_statement']='lpg/SalesController/daily_sales_statement';
 $route['date_wise_product_sales']='lpg/SalesController/date_wise_product_sales';
+$route['salesInvoice_edit/(:any)'] = 'lpg/SalesController/salesInvoice_edit/$1';
 $route['date_wise_product_sales_by_date']='lpg/SalesController/date_wise_product_sales_by_date';
 $route['customer_due']='lpg/SalesController/customer_due';
 
@@ -271,7 +272,7 @@ $route['salesInvoice'] = 'SalesController/salesInvoice';
 //$route['salesInvoice_add'] = 'SalesController/salesInvoice_add';
 $route['salesInvoice_add'] = 'lpg/SalesController/salesInvoice_add';
 $route['salesInvoice_add/(:any)'] = 'SalesController/salesInvoice_add/$1';
-$route['salesInvoice_edit/(:any)'] = 'SalesController/salesInvoice_edit/$1';
+
 $route['salesInvoice_view/(:any)'] = 'lpg/SalesController/salesInvoice_view/$1';
 $route['salesInvoicViewWithCylinder/(:any)'] = 'SalesController/salesInvoicViewWithCylinder/$1';
 
