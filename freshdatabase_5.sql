@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2019 at 06:21 AM
+-- Generation Time: Apr 30, 2019 at 01:22 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.0
 
@@ -107,7 +107,13 @@ INSERT INTO `adminloghistory` (`logId`, `adminId`, `logIn`, `logOut`, `date`, `d
 (29, 2, '2019-04-24 09:25:01', NULL, '2019-04-24', 2, '::1'),
 (30, 2, '2019-04-24 12:12:16', NULL, '2019-04-24', 2, '::1'),
 (31, 2, '2019-04-24 14:25:35', NULL, '2019-04-24', 2, '::1'),
-(32, 2, '2019-04-25 08:35:57', NULL, '2019-04-25', 2, '::1');
+(32, 2, '2019-04-25 08:35:57', NULL, '2019-04-25', 2, '::1'),
+(33, 2, '2019-04-27 08:57:16', '2019-04-27 10:30:30', '2019-04-27', 2, '::1'),
+(34, 2, '2019-04-27 10:30:33', NULL, '2019-04-27', 2, '::1'),
+(35, 2, '2019-04-28 08:47:32', NULL, '2019-04-28', 2, '::1'),
+(36, 2, '2019-04-29 08:18:38', NULL, '2019-04-29', 2, '::1'),
+(37, 2, '2019-04-29 13:01:16', NULL, '2019-04-29', 2, '::1'),
+(38, 2, '2019-04-30 08:15:41', NULL, '2019-04-30', 2, '::1');
 
 -- --------------------------------------------------------
 
@@ -128,104 +134,101 @@ CREATE TABLE `admin_role` (
 --
 
 INSERT INTO `admin_role` (`admin_role_id`, `admin_id`, `navigation_id`, `parent_id`, `test`) VALUES
-(1594, 2, 101, 12, ''),
-(1595, 2, 102, 12, ''),
-(1596, 2, 103, 12, ''),
-(1597, 2, 104, 12, ''),
-(1598, 2, 105, 11, ''),
-(1599, 2, 106, 11, ''),
-(1600, 2, 107, 0, ''),
-(1601, 2, 108, 0, ''),
-(1602, 2, 109, 0, ''),
-(1603, 2, 119, 0, ''),
-(1604, 2, 3, 2, ''),
-(1605, 2, 17, 2, ''),
-(1606, 2, 49, 2, ''),
-(1607, 2, 76, 2, ''),
-(1608, 2, 87, 2, ''),
-(1609, 2, 89, 2, ''),
-(1610, 2, 90, 2, ''),
-(1611, 2, 58, 80, ''),
-(1612, 2, 59, 80, ''),
-(1613, 2, 60, 80, ''),
-(1614, 2, 75, 80, ''),
-(1615, 2, 88, 80, ''),
-(1616, 2, 22, 81, ''),
-(1617, 2, 40, 81, ''),
-(1618, 2, 55, 81, ''),
-(1619, 2, 56, 81, ''),
-(1620, 2, 74, 81, ''),
-(1621, 2, 110, 0, ''),
-(1622, 2, 111, 0, ''),
-(1623, 2, 112, 0, ''),
-(1624, 2, 16, 9, ''),
-(1625, 2, 51, 9, ''),
-(1626, 2, 38, 10, ''),
-(1627, 2, 39, 10, ''),
-(1628, 2, 42, 10, ''),
-(1629, 2, 79, 10, ''),
-(1630, 2, 45, 12, ''),
-(1631, 2, 48, 12, ''),
-(1632, 2, 69, 12, ''),
-(1633, 2, 85, 12, ''),
-(1634, 2, 91, 12, ''),
-(1635, 2, 98, 12, ''),
-(1636, 2, 100, 12, ''),
-(1637, 2, 101, 12, ''),
-(1638, 2, 102, 12, ''),
-(1639, 2, 103, 12, ''),
-(1640, 2, 104, 12, ''),
-(1641, 2, 113, 0, ''),
-(1642, 2, 114, 0, ''),
-(1643, 2, 115, 0, ''),
-(1644, 2, 19, 13, ''),
-(1645, 2, 20, 13, ''),
-(1646, 2, 23, 14, ''),
-(1647, 2, 24, 14, ''),
-(1648, 2, 25, 14, ''),
-(1649, 2, 62, 14, ''),
-(1650, 2, 27, 15, ''),
-(1651, 2, 30, 15, ''),
-(1652, 2, 31, 15, ''),
-(1653, 2, 32, 15, ''),
-(1654, 2, 33, 15, ''),
-(1655, 2, 34, 15, ''),
-(1656, 2, 35, 15, ''),
-(1657, 2, 36, 15, ''),
-(1658, 2, 57, 15, ''),
-(1659, 2, 116, 0, ''),
-(1660, 2, 117, 0, ''),
-(1661, 2, 118, 0, ''),
-(1662, 2, 4, 7, ''),
-(1663, 2, 5, 7, ''),
-(1664, 2, 6, 7, ''),
-(1665, 2, 43, 7, ''),
-(1666, 2, 44, 7, ''),
-(1667, 2, 52, 7, ''),
-(1668, 2, 92, 7, ''),
-(1669, 2, 93, 7, ''),
-(1670, 2, 21, 8, ''),
-(1671, 2, 37, 8, ''),
-(1672, 2, 65, 8, ''),
-(1673, 2, 28, 11, ''),
-(1674, 2, 47, 11, ''),
-(1675, 2, 70, 11, ''),
-(1676, 2, 71, 11, ''),
-(1677, 2, 77, 11, ''),
-(1678, 2, 83, 11, ''),
-(1679, 2, 105, 11, ''),
-(1680, 2, 106, 11, ''),
-(1681, 2, 46, 72, ''),
-(1682, 2, 67, 72, ''),
-(1683, 2, 68, 72, ''),
-(1684, 2, 73, 72, ''),
-(1685, 2, 82, 72, ''),
-(1686, 2, 84, 72, ''),
-(1687, 2, 94, 72, ''),
-(1688, 2, 95, 72, ''),
-(1689, 2, 96, 72, ''),
-(1690, 2, 97, 72, ''),
-(1691, 2, 99, 72, '');
+(2080, 2, 101, 12, ''),
+(2081, 2, 102, 12, ''),
+(2082, 2, 103, 12, ''),
+(2083, 2, 104, 12, ''),
+(2084, 2, 105, 11, ''),
+(2085, 2, 106, 11, ''),
+(2086, 2, 107, 10, ''),
+(2087, 2, 108, 0, ''),
+(2088, 2, 109, 0, ''),
+(2089, 2, 119, 0, ''),
+(2090, 2, 3, 2, ''),
+(2091, 2, 17, 2, ''),
+(2092, 2, 49, 2, ''),
+(2093, 2, 76, 2, ''),
+(2094, 2, 87, 2, ''),
+(2095, 2, 89, 2, ''),
+(2096, 2, 90, 2, ''),
+(2097, 2, 58, 80, ''),
+(2098, 2, 59, 80, ''),
+(2099, 2, 60, 80, ''),
+(2100, 2, 75, 80, ''),
+(2101, 2, 88, 80, ''),
+(2102, 2, 22, 81, ''),
+(2103, 2, 40, 81, ''),
+(2104, 2, 55, 81, ''),
+(2105, 2, 56, 81, ''),
+(2106, 2, 74, 81, ''),
+(2107, 2, 110, 0, ''),
+(2108, 2, 111, 0, ''),
+(2109, 2, 112, 0, ''),
+(2110, 2, 16, 9, ''),
+(2111, 2, 51, 9, ''),
+(2112, 2, 38, 10, ''),
+(2113, 2, 39, 10, ''),
+(2114, 2, 42, 10, ''),
+(2115, 2, 79, 10, ''),
+(2116, 2, 107, 10, ''),
+(2117, 2, 45, 12, ''),
+(2118, 2, 48, 12, ''),
+(2119, 2, 69, 12, ''),
+(2120, 2, 85, 12, ''),
+(2121, 2, 91, 12, ''),
+(2122, 2, 98, 12, ''),
+(2123, 2, 100, 12, ''),
+(2124, 2, 113, 0, ''),
+(2125, 2, 114, 0, ''),
+(2126, 2, 115, 0, ''),
+(2127, 2, 19, 13, ''),
+(2128, 2, 20, 13, ''),
+(2129, 2, 23, 14, ''),
+(2130, 2, 24, 14, ''),
+(2131, 2, 25, 14, ''),
+(2132, 2, 62, 14, ''),
+(2133, 2, 27, 15, ''),
+(2134, 2, 30, 15, ''),
+(2135, 2, 31, 15, ''),
+(2136, 2, 32, 15, ''),
+(2137, 2, 33, 15, ''),
+(2138, 2, 34, 15, ''),
+(2139, 2, 35, 15, ''),
+(2140, 2, 36, 15, ''),
+(2141, 2, 57, 15, ''),
+(2142, 2, 116, 0, ''),
+(2143, 2, 117, 0, ''),
+(2144, 2, 118, 0, ''),
+(2145, 2, 4, 7, ''),
+(2146, 2, 5, 7, ''),
+(2147, 2, 6, 7, ''),
+(2148, 2, 43, 7, ''),
+(2149, 2, 44, 7, ''),
+(2150, 2, 52, 7, ''),
+(2151, 2, 92, 7, ''),
+(2152, 2, 93, 7, ''),
+(2153, 2, 21, 8, ''),
+(2154, 2, 37, 8, ''),
+(2155, 2, 65, 8, ''),
+(2156, 2, 28, 11, ''),
+(2157, 2, 47, 11, ''),
+(2158, 2, 70, 11, ''),
+(2159, 2, 71, 11, ''),
+(2160, 2, 77, 11, ''),
+(2161, 2, 83, 11, ''),
+(2162, 2, 105, 11, ''),
+(2163, 2, 106, 11, ''),
+(2164, 2, 46, 72, ''),
+(2165, 2, 67, 72, ''),
+(2166, 2, 68, 72, ''),
+(2167, 2, 73, 72, ''),
+(2168, 2, 82, 72, ''),
+(2169, 2, 84, 72, ''),
+(2170, 2, 94, 72, ''),
+(2171, 2, 95, 72, ''),
+(2172, 2, 96, 72, ''),
+(2173, 2, 97, 72, ''),
+(2174, 2, 99, 72, '');
 
 -- --------------------------------------------------------
 
@@ -514,6 +517,107 @@ INSERT INTO `customertype` (`type_id`, `typeTitle`, `dist_id`) VALUES
 (2, 'Retailer', '1'),
 (3, 'Wholesaler', '1'),
 (4, 'Local', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_advance`
+--
+
+CREATE TABLE `customer_advance` (
+  `customer_advance_id` int(11) NOT NULL,
+  `advance_recive_voucher` varchar(255) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `advance_amount` decimal(10,2) NOT NULL,
+  `advance_date` date NOT NULL,
+  `payment_type` int(11) NOT NULL,
+  `due_collection_id` int(11) DEFAULT '0' COMMENT '0 = dont have any due collection id',
+  `is_active` enum('Y','N') NOT NULL,
+  `is_delete` enum('Y','N') NOT NULL,
+  `update_by` int(11) DEFAULT NULL,
+  `insert_by` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `insert_date` datetime DEFAULT NULL,
+  `bank_name` varchar(255) DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `check_no` varchar(255) DEFAULT NULL,
+  `check_date` date DEFAULT NULL,
+  `dist_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customer_advance`
+--
+
+INSERT INTO `customer_advance` (`customer_advance_id`, `advance_recive_voucher`, `customer_id`, `advance_amount`, `advance_date`, `payment_type`, `due_collection_id`, `is_active`, `is_delete`, `update_by`, `insert_by`, `update_date`, `insert_date`, `bank_name`, `branch_name`, `check_no`, `check_date`, `dist_id`) VALUES
+(1, 'CMA19040001', 2, '1000.00', '2019-04-29', 2, 2, 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:24:36', NULL, NULL, NULL, NULL, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cus_due_collection_details`
+--
+
+CREATE TABLE `cus_due_collection_details` (
+  `id` int(11) NOT NULL,
+  `sales_invoice_id` int(11) DEFAULT NULL,
+  `due_collection_info_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `payment_type` int(11) NOT NULL,
+  `paid_amount` decimal(10,2) NOT NULL,
+  `narration` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `is_active` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `is_delete` enum('Y','N') NOT NULL DEFAULT 'N',
+  `update_by` int(11) DEFAULT NULL,
+  `insert_by` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `insert_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cus_due_collection_details`
+--
+
+INSERT INTO `cus_due_collection_details` (`id`, `sales_invoice_id`, `due_collection_info_id`, `customer_id`, `payment_type`, `paid_amount`, `narration`, `date`, `is_active`, `is_delete`, `update_by`, `insert_by`, `update_date`, `insert_date`) VALUES
+(1, 1, 1, 2, 2, '800.00', '', '0000-00-00', 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:22:07'),
+(2, 1, 2, 2, 2, '1000.00', '', '0000-00-00', 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:24:36'),
+(3, 2, 2, 2, 2, '1000.00', '', '0000-00-00', 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:24:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cus_due_collection_info`
+--
+
+CREATE TABLE `cus_due_collection_info` (
+  `id` int(11) NOT NULL,
+  `cus_due_coll_no` varchar(255) NOT NULL,
+  `total_paid_amount` decimal(10,2) NOT NULL,
+  `payment_type` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `ref_invoice_ids` varchar(255) DEFAULT '0',
+  `date` date NOT NULL,
+  `dist_id` smallint(6) NOT NULL,
+  `is_active` enum('Y','N') NOT NULL DEFAULT 'Y',
+  `is_delete` enum('Y','N') NOT NULL DEFAULT 'N',
+  `update_by` int(11) DEFAULT NULL,
+  `insert_by` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `insert_date` datetime DEFAULT NULL,
+  `bank_name` varchar(255) DEFAULT NULL,
+  `branch_name` varchar(255) DEFAULT NULL,
+  `check_no` varchar(255) DEFAULT NULL,
+  `check_date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cus_due_collection_info`
+--
+
+INSERT INTO `cus_due_collection_info` (`id`, `cus_due_coll_no`, `total_paid_amount`, `payment_type`, `customer_id`, `ref_invoice_ids`, `date`, `dist_id`, `is_active`, `is_delete`, `update_by`, `insert_by`, `update_date`, `insert_date`, `bank_name`, `branch_name`, `check_no`, `check_date`) VALUES
+(1, 'CMR19040001', '800.00', 2, 2, '1', '2019-04-29', 2, 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:22:07', NULL, NULL, NULL, NULL),
+(2, 'CMR19040002', '3000.00', 3, 2, '1,2', '2019-04-29', 2, 'Y', 'N', NULL, 2, NULL, '2019-04-29 10:24:36', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1143,7 +1247,8 @@ INSERT INTO `navigation` (`navigation_id`, `label`, `parent_id`, `url`, `icon`, 
 (103, 'date_wise_product_sales_by_date', 12, 'date_wise_product_sales_by_date', '', '', '', '', '', 'administration', 1, 0),
 (104, 'Customer Due', 12, 'customer_due', '', '', '', '', '', 'administration', 1, 0),
 (105, 'Current Stock', 11, 'current_stock', '', '', '', '', '', 'administration', 1, 0),
-(106, 'Current Stock Value', 11, 'current_stock_value', '', '', '', '', '', 'administration', 1, 0);
+(106, 'Current Stock Value', 11, 'current_stock_value', '', '', '', '', '', 'administration', 1, 0),
+(107, 'Customer Due Collection', 10, 'customer_due_collection', '', '', '', '', '', 'administration', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1679,8 +1784,8 @@ CREATE TABLE `sales_invoice_info` (
 --
 
 INSERT INTO `sales_invoice_info` (`sales_invoice_id`, `invoice_no`, `customer_invoice_no`, `customer_id`, `payment_type`, `refference_person_id`, `invoice_amount`, `vat_amount`, `discount_amount`, `paid_amount`, `tran_vehicle_id`, `transport_charge`, `loader_emp_id`, `loader_charge`, `due_date`, `invoice_date`, `company_id`, `branch_id`, `dist_id`, `insert_by`, `insert_date`, `update_by`, `update_date`, `delete_by`, `delete_date`, `is_active`, `is_delete`, `narration`) VALUES
-(1, 'SID19040001', '', 1, 2, 0, '1800.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '2019-04-23', '2019-04-23', 2, 0, 2, 2, '2019-04-23', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
-(2, 'SID19040002', '', 1, 2, 0, '3000.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-24', 2, 0, 2, 2, '2019-04-24', NULL, NULL, NULL, NULL, 'Y', 'N', NULL);
+(1, 'SID19040001', '', 1, 2, 0, '1800.00', '0.00', '0.00', '0.00', 0, '0.00', 1, '400.00', '2019-04-23', '2019-04-23', 2, 0, 2, 2, '2019-04-23', NULL, NULL, NULL, NULL, 'Y', 'N', NULL),
+(2, 'SID19040002', '', 1, 2, 0, '1000.00', '0.00', '0.00', '0.00', 0, '0.00', 0, '0.00', '1970-01-01', '2019-04-24', 2, 0, 2, 2, '2019-04-25', NULL, NULL, NULL, NULL, 'Y', 'N', NULL);
 
 -- --------------------------------------------------------
 
@@ -4928,6 +5033,24 @@ ALTER TABLE `customertype`
   ADD PRIMARY KEY (`type_id`);
 
 --
+-- Indexes for table `customer_advance`
+--
+ALTER TABLE `customer_advance`
+  ADD PRIMARY KEY (`customer_advance_id`);
+
+--
+-- Indexes for table `cus_due_collection_details`
+--
+ALTER TABLE `cus_due_collection_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `cus_due_collection_info`
+--
+ALTER TABLE `cus_due_collection_info`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `district`
 --
 ALTER TABLE `district`
@@ -5210,13 +5333,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `adminloghistory`
 --
 ALTER TABLE `adminloghistory`
-  MODIFY `logId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `logId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `admin_role`
 --
 ALTER TABLE `admin_role`
-  MODIFY `admin_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1692;
+  MODIFY `admin_role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2175;
 
 --
 -- AUTO_INCREMENT for table `blood_group`
@@ -5259,6 +5382,24 @@ ALTER TABLE `customer`
 --
 ALTER TABLE `customertype`
   MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `customer_advance`
+--
+ALTER TABLE `customer_advance`
+  MODIFY `customer_advance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `cus_due_collection_details`
+--
+ALTER TABLE `cus_due_collection_details`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `cus_due_collection_info`
+--
+ALTER TABLE `cus_due_collection_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `district`
@@ -5336,7 +5477,7 @@ ALTER TABLE `moneyreceit`
 -- AUTO_INCREMENT for table `navigation`
 --
 ALTER TABLE `navigation`
-  MODIFY `navigation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `navigation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `newdecision`

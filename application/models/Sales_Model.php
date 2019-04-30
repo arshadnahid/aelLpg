@@ -707,6 +707,82 @@ WHERE
         return $result;
     }
 
+    public function  customer_due_invoice_list($customer_id,$dist_id){
+
+        $query="SELECT
+                    sales_invoice_info.invoice_no,
+                    sales_invoice_info.sales_invoice_id,
+                    sales_invoice_info.invoice_amount,
+                    sales_invoice_info.paid_amount,
+                    IFNULL(cus_due_collection_details.due_paid_amount,0) AS due_paid_amount
+                FROM
+                    sales_invoice_info
+                LEFT JOIN(
+                    SELECT
+                        sales_invoice_id,
+                        SUM(cus_due_collection_details.paid_amount)AS due_paid_amount
+                    FROM
+                        cus_due_collection_details /*WHERE
+                        cus_due_collection_details.sales_invoice_id = 1*/
+                    GROUP BY
+                        cus_due_collection_details.sales_invoice_id
+                )AS cus_due_collection_details 
+                ON cus_due_collection_details.sales_invoice_id = sales_invoice_info.sales_invoice_id
+                WHERE
+                    sales_invoice_info.payment_type IN(2, 4)/*payment type chash and full credit*/
+                AND sales_invoice_info.customer_id =1";
+        $query = $this->db->query($query);
+        $result['invoice_list'] = $query->result();
+        return $result;
+
+
+
+    } public function  customer_due_invoice_data($cus_due_collection_info_id,$dist_id){
+
+        $query="SELECT
+	cus_due_collection_info.id,
+	cus_due_collection_info.total_paid_amount,
+	cus_due_collection_info.cus_due_coll_no,
+	cus_due_collection_info.customer_id,
+	cus_due_collection_info.date,
+	cus_due_collection_info.bank_name,
+	cus_due_collection_info.branch_name,
+	cus_due_collection_info.check_no,
+	cus_due_collection_info.check_date,
+	customer.customerID,
+	customer.customerName,
+	cus_due_collection_details.sales_invoice_id,
+	sales_invoice_info.invoice_no,
+	cus_due_collection_details.paid_amount,
+	customer_advance.advance_amount,
+	customer_advance.advance_recive_voucher
+FROM
+	cus_due_collection_info
+LEFT JOIN customer ON customer.customer_id = cus_due_collection_info.customer_id
+LEFT JOIN cus_due_collection_details ON cus_due_collection_details.due_collection_info_id = cus_due_collection_info.id
+LEFT JOIN sales_invoice_info ON sales_invoice_info.sales_invoice_id = cus_due_collection_details.sales_invoice_id
+LEFT JOIN(
+	SELECT
+		customer_advance.advance_amount,
+		customer_advance.advance_recive_voucher,
+		customer_advance.due_collection_id
+	FROM
+		customer_advance
+	WHERE
+		customer_advance.is_active = 'Y'
+	AND customer_advance.is_delete = 'N'
+)AS customer_advance ON customer_advance.due_collection_id = cus_due_collection_info.id
+WHERE
+	cus_due_collection_info.is_active = 'Y'
+AND cus_due_collection_info.is_delete = 'N'
+AND cus_due_collection_info.id = ".$cus_due_collection_info_id;
+        $query = $this->db->query($query);
+        $result['invoice_list'] = $query->result();
+        return $result;
+
+
+
+    }
 
 
 

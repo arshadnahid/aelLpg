@@ -336,6 +336,7 @@
                                                                             <input type="text" autocomplete="off" class="add_price form-control text-right" id="tprice_<?php echo $key + 100; ?>" readonly name="price_<?php echo $eachStock['sales_details_id']; ?>" value="<?php echo ($eachStock['quantity']*$eachStock['unit_price']); ?>">
                                                                         </td>
                                                                         <td colspan="2">
+                                                                            <?php if($eachStock['category_id']==2){?>
                                                                             <table class="table table-border" id="return_product_edit_<?php echo $eachStock['sales_details_id']; ?>">
                                                                                 <tr>
                                                                                     <td>
@@ -364,19 +365,18 @@
                                                                                 <?php
                                                                                 foreach ($eachStock['return'] as $key1 =>$value1){
                                                                                     foreach ($value1 as $key2 =>$value2){
-
                                                                                         ?>
                                                                                         <tr>
                                                                                             <td>
-
                                                                                                 <input type="hidden" class="text-right form-control" id="" readonly name="returnproductEdit_<?php echo $eachStock['sales_details_id']?>[]" value="<?php echo $value2['sales_return_id']?>">
                                                                                                 <?php echo $value2['return_product_cat'].' '. $value2['return_product_name'] .' '. $value2['return_product_unit'] .'[ '. $value2['return_product_brand'] .' ]'?></td>
                                                                                             <td><input type="text" class="text-right form-control" id="" readonly name="returnQuentityEdit_<?php echo $eachStock['sales_details_id']?>[]" value="<?php echo $value2['returnable_quantity']?>"></td>
                                                                                         </tr>
-
-
-                                                                                    <?php }}?>
+                                                                                    <?php }
+                                                                                }
+                                                                                ?>
                                                                             </table>
+                                                                            <?php }?>
                                                                         </td>
                                                                         <td><a del_id="<?php echo $key + 100; ?>" autocomplete="off" class="delete_item btn form-control btn-danger" href="javascript:;" title=""><i class="fa fa-times"></i>&nbsp;Remove</a></td>
                                                                     </tr>

@@ -385,7 +385,12 @@ class SalesController extends CI_Controller
             'isDelete' => 'N',
         );
         $data['employeeList'] = $this->Common_model->get_data_list_by_many_columns('employee', $condition);
+        echo $this->db->last_query();
+        echo '<pre>';
+        print_r($data['vehicleList']);
+        exit;
         $data['vehicleList'] = $this->Common_model->get_data_list_by_many_columns('vehicle', $condition);
+
 
         $data['voucherID'] = "SID" . date("y") . date("m") . str_pad(count($totalSale) + 1, 4, "0", STR_PAD_LEFT);
         $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/sale_add', $data, true);
@@ -1467,12 +1472,18 @@ class SalesController extends CI_Controller
                 }
 
 
-                echo  '<pre>';
-                print_r($_POST);
-                print_r($stockUpdate);
-                print_r($allEditStock);
-                print_r($alladdStock);
-                exit;
+
+
+
+
+
+
+                //echo  '<pre>';
+                //print_r($_POST);
+                //print_r($stockUpdate);
+                //print_r($allEditStock);
+                //print_r($alladdStock);
+                //exit;
 
 
 
@@ -1650,7 +1661,7 @@ class SalesController extends CI_Controller
                         $cylinderAllStock[] = $stockReceive;
                     endforeach;
                     //insert for culinder receive
-                    $this->db->insert_batch('stock', $cylinderAllStock);
+                    $this->db->insert_batch('stock', $cylinderAllStock);$this->db->insert_batch('stock', $cylinderAllStock);
                 endif;
                 //insert for quantity out stock
                 $this->db->insert_batch('stock', $allStock);
@@ -1779,5 +1790,148 @@ class SalesController extends CI_Controller
         $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/editInvoice', $data, true);
         $this->load->view('distributor/masterDashboard', $data);
     }
+    public function  customer_due_collection($start_date='', $end_date=''){
 
+        if (isPostBack()) {
+            $this->db->trans_start();
+
+            $moneyReceitNo = $this->db->where(array('dist_id' => $this->dist_id))->count_all_results('cus_due_collection_info') + 1;
+            $ReceitVoucher = "CMR" . date("y") . date("m") . str_pad($moneyReceitNo, 4, "0", STR_PAD_LEFT);
+            $due_collection_info['total_paid_amount'] =$this->input->post('paid_amount');
+            $due_collection_info['customer_id'] = $this->input->post('customer_id');
+            $due_collection_info['cus_due_coll_no'] = $ReceitVoucher;
+            $due_collection_info['payment_type'] = $this->input->post('paymentType');
+
+
+            $due_collection_info['bank_name'] = $this->input->post('bankName');
+            $due_collection_info['branch_name'] = $this->input->post('branchName');
+            $due_collection_info['check_no'] = $this->input->post('checkNo');
+            $due_collection_info['check_date'] = date('Y-m-d', strtotime($this->input->post('checkDate')));
+
+            $due_collection_info['date'] = date('Y-m-d', strtotime($this->input->post('date')));
+            $due_collection_info['dist_id'] = $this->dist_id;
+            $due_collection_info['insert_date'] = $this->timestamp;
+            $due_collection_info['insert_by'] = $this->admin_id;
+            $due_collection_info['is_active'] = 'Y';
+            $due_collection_info['is_delete'] = 'N';
+
+            $cus_due_collection_info_id=$this->Common_model->insert_data('cus_due_collection_info', $due_collection_info);
+
+            foreach ($this->input->post('invoiceId') as $key => $value):
+                if(isset($_POST['posted_'.$value])){
+                $due_collection['sales_invoice_id'] =$value;
+                $due_collection['due_collection_info_id'] =$cus_due_collection_info_id;
+                $due_collection['customer_id'] = $this->input->post('customer_id');
+                $due_collection['payment_type'] = $this->input->post('paymentType');
+                $due_collection['paid_amount'] =$_POST['paidAmount_'.$value];
+                $due_collection['insert_date'] = $this->timestamp;
+                $due_collection['insert_by'] = $this->admin_id;
+                $due_collection['is_active'] = 'Y';
+                $due_collection['is_delete'] = 'N';
+                $allStock[] = $due_collection;
+                $postedInvoiceNo[]=$value;
+                }
+            endforeach;
+            $this->db->insert_batch('cus_due_collection_details', $allStock);
+
+            $cus_due_collection_info['ref_invoice_ids']=implode(",",$postedInvoiceNo);
+            $this->Common_model->update_data('cus_due_collection_info', $cus_due_collection_info, 'id', $cus_due_collection_info_id);
+
+            if($this->input->post('advance_amount')>0){
+                $moneyReceitNo = $this->db->where(array('dist_id' => $this->dist_id))->count_all_results('customer_advance') + 1;
+                $ReceitVoucher = "CMA" . date("y") . date("m") . str_pad($moneyReceitNo, 4, "0", STR_PAD_LEFT);
+                $customer_advance['due_collection_id'] =$cus_due_collection_info_id;
+                $customer_advance['advance_amount'] =$this->input->post('advance_amount');
+                $customer_advance['advance_recive_voucher'] =$ReceitVoucher;
+                $customer_advance['customer_id'] = $this->input->post('customer_id');
+                $customer_advance['payment_type'] = $this->input->post('paymentType');
+                $customer_advance['advance_date'] = date('Y-m-d', strtotime($this->input->post('date')));
+                $customer_advance['insert_date'] = $this->timestamp;
+                $customer_advance['insert_by'] = $this->admin_id;
+                $customer_advance['is_active'] = 'Y';
+                $customer_advance['is_delete'] = 'N';
+                $customer_advance['dist_id'] = $this->dist_id;
+
+
+                $customer_advance['bank_name'] = $this->input->post('bankName');
+                $customer_advance['branch_name'] = $this->input->post('branchName');
+                $customer_advance['check_no'] = $this->input->post('checkNo');
+                $customer_advance['check_date'] = date('Y-m-d', strtotime($this->input->post('checkDate')));
+
+
+                $this->Common_model->insert_data('customer_advance', $customer_advance);
+            }
+
+
+
+
+
+
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                notification("Your sales can't be inserted.Something is wrong.");
+                redirect('customer_due_collection', 'refresh');
+            } else {
+                message("Your data successfully inserted into database.");
+                redirect('customer_due_collection' , 'refresh');
+            }
+
+
+
+        }
+
+
+
+
+        $cus_list = $this->Sales_Model->customer_list($this->dist_id);
+        foreach ($cus_list as $key => $value) {
+            $cus_items_array[] = array(
+                'label' => $value->customerName,
+                'value' => $value->customer_id,
+                'have_invoice' => $value->customer_id,
+            );
+        };
+        $moneyReceitNo = $this->db->where(array('dist_id' => $this->dist_id))->count_all_results('cus_due_collection_info') + 1;
+        $data['moneyReceitVoucher'] = "CMR" . date("y") . date("m") . str_pad($moneyReceitNo, 4, "0", STR_PAD_LEFT);
+
+
+        //echo '<pre>';
+        //print_r($data['moneyReceitVoucher']);exit;
+        $data['pageName'] = 'salePosAdd';
+        $data['customer_info'] = json_encode($cus_items_array);
+
+        $data['pageTitle'] = 'Customer Due Collection';
+        $data['title'] = 'Customer Due Collection';
+        $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/customer_due_collection', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+
+
+    public function  get_customer_due_invoice_list(){
+        //log_message('error','POST DATA '.print_r($_POST,true));
+        $this->form_validation->set_rules('customer_id', 'Customer Need To Selected', 'required');
+        if ($this->form_validation->run() == FALSE) {
+            exception("Required field can't be empty.");
+            redirect(site_url('salesInvoice_add'));
+        } else {
+            $customer_id = $this->input->post('customer_id');
+            $cus_list = $this->Sales_Model->customer_due_invoice_list($customer_id,$this->dist_id);
+            echo json_encode($cus_list);
+
+        }
+    }
+    public  function cus_due_coll_list(){
+        $data['pageTitle'] = 'Customer Due Collection';
+        $data['title'] = 'Customer Due Collection';
+        $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/customer_due_collection_list', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
+    public  function customer_due_collection_inv($id){
+
+        $data['due_collectuon_data']=$this->Sales_Model->customer_due_invoice_data($id,$this->dist_id);
+        $data['pageTitle'] = 'Customer Due Collection';
+        $data['title'] = 'Customer Due Collection';
+        $data['mainContent'] = $this->load->view('distributor/sales/saleInvoice/customer_due_collection_inv', $data, true);
+        $this->load->view('distributor/masterDashboard', $data);
+    }
 }

@@ -343,8 +343,12 @@ $route['journalVoucherView/(:any)'] = 'FinaneController/journalVoucherView/$1';
 
 /* Pos routign */
 $route['salesPos'] = 'PosController/salesPosAdd';
+$route['customer_due_collection'] = 'lpg/SalesController/customer_due_collection';
+$route['cus_due_coll_list'] = 'lpg/SalesController/cus_due_coll_list';
+$route['customer_due_collection_inv/(:any)'] = 'lpg/SalesController/customer_due_collection_inv/$1';
 $route['salesPosList'] = 'PosController/salesPosList';
 /* Pos routign */
+
 
 
 /* Product Type */

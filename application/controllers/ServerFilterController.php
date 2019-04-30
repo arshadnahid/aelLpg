@@ -211,6 +211,11 @@ class ServerFilterController extends CI_Controller {
         echo json_encode($output);
     }
 
+
+
+
+
+
     public function productList() {
         $this->Filter_Model->filterData('product', array('productcategory.title', 'brand.brandName', 'product.product_code', 'product.productName', 'product.purchases_price', 'product.retailPrice', 'product.salesPrice', 'product.status'), array('productcategory.title', 'brand.brandName', 'product.product_code', 'product.productName', 'product.purchases_price', 'product.retailPrice', 'product.salesPrice', 'product.status'), array('productcategory.title', 'brand.brandName', 'product.product_code', 'product.productName', 'product.purchases_price', 'product.retailPrice', 'product.salesPrice', 'product.status'), $this->dist_id);
         $list = $this->Filter_Model->get_product_datatables();
@@ -292,6 +297,45 @@ class ServerFilterController extends CI_Controller {
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->Filter_Model->count_all_sales(),
             "recordsFiltered" => $this->Filter_Model->count_filtered_sales(),
+            "data" => $data,
+        );
+//output to json format
+        echo json_encode($output);
+    }
+    public function customer_due_collection_list() {
+
+        $this->Filter_Model->filterData('cus_due_collection_info',
+            array('cus_due_collection_info.id', 'cus_due_collection_info.date', 'cus_due_collection_info.cus_due_coll_no', 'customer.customerID', 'customer.customerName', 'cus_due_collection_info.payment_type', 'cus_due_collection_info.total_paid_amount'),
+            array('cus_due_collection_info.id', 'cus_due_collection_info.date', 'cus_due_collection_info.cus_due_coll_no', 'customer.customerID', 'customer.customerName', 'cus_due_collection_info.payment_type', 'cus_due_collection_info.total_paid_amount'),
+            array('cus_due_collection_info.id', 'cus_due_collection_info.date', 'cus_due_collection_info.cus_due_coll_no', 'customer.customerID', 'customer.customerName', 'cus_due_collection_info.payment_type', 'cus_due_collection_info.total_paid_amount'), $this->dist_id);
+        $list = $this->Filter_Model->get_customer_due_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $sale) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = date('M d, Y', strtotime($sale->date));
+            $row[] = '<a title="View Customer Dashboard" href="' . site_url('customerDashboard/' . $sale->customer_id) . '">' . $sale->customerID . ' [ ' . $sale->customerName . ' ] ' . '</a>';
+            $row[] = $sale->cus_due_coll_no;
+            $row[] =   $sale->payment_type==2?' Cash ':' Chaque ' ;
+            $row[] = $sale->total_paid_amount;
+
+
+
+
+            $row[] = '<a class="green saleEditPermission" href="' . site_url('customer_due_collection_inv/' . $sale->id) . '">
+    <i class="ace-icon fa fa-pencil bigger-130"></i></a>
+    ';
+            $data[] = $row;
+        }
+
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => 1,
+            "recordsFiltered" => 1,
+            "recordsTotal" => $this->Filter_Model->count_all_sales(),
+            "recordsFiltered" => $this->Filter_Model->count_filtered_cus_due_payment(),
             "data" => $data,
         );
 //output to json format

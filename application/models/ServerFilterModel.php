@@ -206,6 +206,36 @@ class ServerFilterModel extends CI_Model {
             $this->db->order_by('sales_invoice_info.invoice_date', 'desc');
         }
     }
+  private function _get_customer_due_datatables_query() {
+        $this->db->select("cus_due_collection_info.id,cus_due_collection_info.cus_due_coll_no,cus_due_collection_info.payment_type,cus_due_collection_info.date,cus_due_collection_info.total_paid_amount,customer.customerID,customer.customerName,customer.customer_id");
+        $this->db->from("cus_due_collection_info");
+        $this->db->join('customer', 'customer.customer_id=cus_due_collection_info.customer_id');
+
+        $this->db->where('cus_due_collection_info.dist_id', $this->dist_id);
+
+        $i = 0;
+        foreach ($this->column_search as $item) { // loop column
+            if ($_POST['search']['value']) { // if datatable send POST for search
+                if ($i === 0) { // first loop
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+
+                if (count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+            }
+            $i++;
+        }
+
+        if (isset($_POST['order'])) { // here order processing
+            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else if (isset($this->order)) {
+            //$order = $this->order;
+            $this->db->order_by('cus_due_collection_info.date', 'desc');
+        }
+    }
 
     private function _get_purchases_datatables_query() {
 
@@ -517,6 +547,13 @@ class ServerFilterModel extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
+    function get_customer_due_datatables() {
+        $this->_get_customer_due_datatables_query();
+        if ($_POST['length'] != -1)
+            $this->db->limit($_POST['length'], $_POST['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
 
     function get_purchases_datatables() {
         $this->_get_purchases_datatables_query();
@@ -608,6 +645,11 @@ class ServerFilterModel extends CI_Model {
 
     function count_filtered_sales() {
         $this->_get_sales_datatables_query();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    function count_filtered_cus_due_payment() {
+        $this->_get_customer_due_datatables_query();
         $query = $this->db->get();
         return $query->num_rows();
     }
