@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00194fa4-f875-4a6c-a1d5-1e97723f70c6" name="Default" comment="" />
+    <list default="true" id="00194fa4-f875-4a6c-a1d5-1e97723f70c6" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/gitTest.php" afterPath="$PROJECT_DIR$/application/views/gitTest.php" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,8 +76,8 @@
       <file leaf-file-name="gitTest.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/views/gitTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="68">
+              <caret line="9" column="35" lean-forward="false" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -163,7 +165,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/application/controllers/FinaneController.php" />
         <option value="$PROJECT_DIR$/application/logs/log-2019-04-04.php" />
         <option value="$PROJECT_DIR$/assets/sales/saleInvoice.js" />
         <option value="$PROJECT_DIR$/application/logs/log-2019-04-07.php" />
@@ -214,6 +215,7 @@
         <option value="$PROJECT_DIR$/application/views/distributor/sales/saleInvoice/customer_due_collection.php" />
         <option value="$PROJECT_DIR$/application/controllers/lpg/SalesController.php" />
         <option value="$PROJECT_DIR$/application/views/abc.html" />
+        <option value="$PROJECT_DIR$/application/views/gitTest.php" />
       </list>
     </option>
   </component>
@@ -352,12 +354,12 @@
       <workItem from="1556421474553" duration="24042000" />
       <workItem from="1556506036071" duration="24351000" />
       <workItem from="1556592400971" duration="6695000" />
-      <workItem from="1587181938433" duration="262000" />
+      <workItem from="1587181938433" duration="347000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="439466000" />
+    <option name="totallyTimeSpent" value="439551000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -735,8 +737,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/gitTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="68">
+          <caret line="9" column="35" lean-forward="false" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
           <folding />
         </state>
       </provider>
